@@ -37,6 +37,8 @@ bun run dev:firefox            # dev server (Firefox)
 bun run build                  # production build (Chrome)
 bun run build:firefox          # production build (Firefox)
 bun run zip                    # package for store submission
+bun run test                   # run all tests (Vitest)
+bun run test:watch             # tests in watch mode
 bun run check                  # svelte-check type checking
 bun run lint                   # biome lint + format check
 bun run lint:fix               # biome auto-fix

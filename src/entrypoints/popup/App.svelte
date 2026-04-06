@@ -1,7 +1,7 @@
 <script lang="ts">
 import { cacheGet } from '@/lib/cache';
 import { discoverDiscussions } from '@/lib/discovery';
-import { settings } from '@/lib/settings';
+import { type Settings, settings } from '@/lib/settings';
 import { type SummaryResult, summarizeDiscussions } from '@/lib/summarize';
 import type { Discussion } from '@/lib/types';
 import DiscussionRow from './DiscussionRow.svelte';
@@ -19,18 +19,17 @@ let summaryResult = $state<SummaryResult | null>(null);
 let summarizing = $state(false);
 let summaryError = $state('');
 let hasApiKey = $state(false);
+let userSettings = $state<Settings | null>(null);
 
 async function load() {
 	loading = true;
 	try {
 		const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
-		console.log('[discussed] popup tab:', tab?.url ?? 'no url');
 		if (!tab?.url) return;
 		currentUrl = tab.url;
 		discussions = await discoverDiscussions(tab.url);
-		console.log('[discussed] found:', discussions.length, 'discussions');
 
-		const userSettings = await settings.getValue();
+		userSettings = await settings.getValue();
 		hasApiKey = !!userSettings.apiKey;
 
 		const cached = await cacheGet<SummaryResult>(`summary:${tab.url}`);
@@ -99,7 +98,11 @@ load();
 
       <div class="divide-y divide-gray-100 max-h-72 overflow-y-auto">
         {#each sorted as discussion (discussion.externalId)}
-          <DiscussionRow {discussion} />
+          <DiscussionRow
+            {discussion}
+            useOldReddit={userSettings?.useOldReddit}
+            openInNewTab={userSettings?.openLinksInNewTab}
+          />
         {/each}
       </div>
 

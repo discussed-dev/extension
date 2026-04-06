@@ -3,9 +3,11 @@ import type { Discussion, Platform } from '@/lib/types';
 
 interface Props {
 	discussion: Discussion;
+	useOldReddit?: boolean;
+	openInNewTab?: boolean;
 }
 
-let { discussion }: Props = $props();
+let { discussion, useOldReddit = false, openInNewTab = true }: Props = $props();
 
 const PLATFORM_COLORS: Record<Platform, string> = {
 	hn: 'bg-orange-100 text-orange-700',
@@ -31,11 +33,17 @@ function timeAgo(iso: string): string {
 const label = $derived(
 	discussion.subreddit ? `r/${discussion.subreddit}` : PLATFORM_LABELS[discussion.platform],
 );
+
+const href = $derived(
+	useOldReddit && discussion.platform === 'reddit'
+		? discussion.url.replace('www.reddit.com', 'old.reddit.com')
+		: discussion.url,
+);
 </script>
 
 <a
-  href={discussion.url}
-  target="_blank"
+  {href}
+  target={openInNewTab ? '_blank' : '_self'}
   rel="noopener noreferrer"
   class="flex items-center gap-2 px-4 py-2.5 hover:bg-gray-50 transition-colors"
 >

@@ -48,6 +48,9 @@ export function normalizeUrl(raw: string, options: NormalizeUrlOptions = {}): st
 		url.search = '';
 	}
 
+	// Strip index files
+	url.pathname = url.pathname.replace(/\/(index\.(html?|php|asp|aspx|jsp))$/i, '/');
+
 	// Remove trailing slash (but preserve root "/")
 	if (url.pathname.length > 1 && url.pathname.endsWith('/')) {
 		url.pathname = url.pathname.slice(0, -1);

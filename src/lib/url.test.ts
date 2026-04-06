@@ -86,6 +86,26 @@ describe('normalizeUrl', () => {
 		});
 	});
 
+	describe('index file stripping', () => {
+		it('strips index.html', () => {
+			expect(normalizeUrl('https://example.com/page/index.html')).toBe('https://example.com/page');
+		});
+
+		it('strips index.htm', () => {
+			expect(normalizeUrl('https://example.com/page/index.htm')).toBe('https://example.com/page');
+		});
+
+		it('strips index.php', () => {
+			expect(normalizeUrl('https://example.com/page/index.php')).toBe('https://example.com/page');
+		});
+
+		it('does not strip non-index files', () => {
+			expect(normalizeUrl('https://example.com/page/about.html')).toBe(
+				'https://example.com/page/about.html',
+			);
+		});
+	});
+
 	describe('combined transformations', () => {
 		it('applies all normalizations together', () => {
 			expect(normalizeUrl('http://www.example.com/page/?utm_source=x#top')).toBe(

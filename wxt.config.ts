@@ -11,6 +11,8 @@ export default defineConfig({
 			'https://www.reddit.com/*',
 			'https://lobste.rs/*',
 			'https://api.anthropic.com/*',
+			'https://api.openai.com/*',
+			'https://generativelanguage.googleapis.com/*',
 			'https://api.github.com/*',
 		],
 		browser_specific_settings: {

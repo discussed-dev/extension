@@ -83,6 +83,10 @@ def _normalize_url_inner(raw: str) -> str | None:
             return f"https://youtube.com/watch?v={video_id}"
 
     path = parsed.path or "/"
+    # Strip index files
+    import re
+
+    path = re.sub(r"/(index\.(html?|php|asp|aspx|jsp))$", "/", path, flags=re.IGNORECASE)
     if len(path) > 1 and path.endswith("/"):
         path = path.rstrip("/")
 

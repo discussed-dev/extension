@@ -65,10 +65,12 @@ export async function summarizeDiscussions(
 	const commentsText = formatCommentsForPrompt(processed);
 
 	const result = await summarize(commentsText, {
+		provider: userSettings.llmProvider,
 		apiKey: userSettings.apiKey,
 		model: userSettings.model,
 		pageUrl,
 		language: userSettings.summaryLanguage,
+		openaiBaseUrl: userSettings.openaiBaseUrl,
 		discussions: discussions.map((d) => ({
 			platform: d.platform,
 			title: d.title,

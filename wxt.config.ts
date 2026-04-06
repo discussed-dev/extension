@@ -5,7 +5,17 @@ export default defineConfig({
 	srcDir: 'src',
 	modules: ['@wxt-dev/module-svelte'],
 	manifest: {
+		default_locale: 'en',
 		permissions: ['tabs', 'activeTab', 'storage'],
+		commands: {
+			_execute_action: {
+				suggested_key: {
+					default: 'Alt+D',
+					mac: 'Alt+D',
+				},
+				description: 'Open Discussed popup',
+			},
+		},
 		host_permissions: [
 			'https://hn.algolia.com/*',
 			'https://www.reddit.com/*',

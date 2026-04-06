@@ -1,0 +1,60 @@
+{
+	"extensionName": { "message": "Discussed" },
+	"extensionDescription": {
+		"message": "Auto-discover community discussions about the current page and summarize with AI"
+	},
+	"popupTitle": { "message": "Discussed" },
+	"overview": { "message": "Overview" },
+	"summary": { "message": "Summary" },
+	"settings": { "message": "Settings" },
+	"searching": { "message": "Scanning discussion sources..." },
+	"searchingHint": { "message": "Checking Hacker News, Reddit, and Lobsters for this page." },
+	"noDiscussions": { "message": "No discussion signal yet" },
+	"noDiscussionsHint": {
+		"message": "Discussed did not find matching threads for this page. Try a fresh scan, or search beyond the built-in sources."
+	},
+	"discussions": { "message": "discussions" },
+	"comments": { "message": "comments" },
+	"points": { "message": "points" },
+	"threads": { "message": "Threads" },
+	"refresh": { "message": "Refresh" },
+	"scanAgain": { "message": "Scan again" },
+	"reviewSources": { "message": "Review sources" },
+	"summarizeAll": { "message": "Summarize All" },
+	"summarizing": { "message": "Summarizing..." },
+	"viewSummary": { "message": "View Summary" },
+	"regenerate": { "message": "Regenerate" },
+	"generating": { "message": "Generating..." },
+	"copy": { "message": "Copy" },
+	"copied": { "message": "Copied!" },
+	"searchElsewhere": { "message": "Search elsewhere" },
+	"verdict": { "message": "Verdict" },
+	"communityRead": { "message": "Community read, condensed." },
+	"communityReadHint": { "message": "Start with the verdict, then skim the supporting themes." },
+	"window": { "message": "Window" },
+	"heavySignal": { "message": "Heavy discussion signal" },
+	"healthySignal": { "message": "Healthy discussion signal" },
+	"earlySignal": { "message": "Early discussion signal" },
+	"discussionSignalFor": {
+		"message": "Discussion signal for $HOST$",
+		"placeholders": { "HOST": { "content": "$1" } }
+	},
+	"scanDescription": {
+		"message": "Scan what technical communities are saying before you leave the page."
+	},
+	"configureApiKey": { "message": "Configure an API key in settings to enable" },
+	"save": { "message": "Save settings" },
+	"saved": { "message": "Settings saved." },
+	"sources": { "message": "Sources" },
+	"searchBehavior": { "message": "Search Behavior" },
+	"autoSearch": { "message": "Auto-search" },
+	"badgeDisplay": { "message": "Badge Display" },
+	"domainFilter": { "message": "Domain Filter" },
+	"cache": { "message": "Cache" },
+	"aiSummarization": { "message": "AI Summarization" },
+	"provider": { "message": "Provider" },
+	"model": { "message": "Model" },
+	"apiKey": { "message": "API Key" },
+	"test": { "message": "Test" },
+	"reportIssue": { "message": "Report an issue" }
+}

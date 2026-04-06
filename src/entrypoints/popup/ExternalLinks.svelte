@@ -1,4 +1,6 @@
 <script lang="ts">
+import { t } from '@/lib/i18n';
+
 interface Props {
 	url: string;
 }
@@ -18,7 +20,7 @@ const links = $derived([
 </script>
 
 <div class="mt-4 flex flex-wrap items-center gap-2">
-  <span class="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-stone-500">Search elsewhere</span>
+  <span class="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-stone-500">{t('searchElsewhere')}</span>
   {#each links as link}
     <a
       href={link.href}

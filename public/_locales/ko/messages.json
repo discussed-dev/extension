@@ -1,0 +1,62 @@
+{
+	"extensionName": { "message": "Discussed" },
+	"extensionDescription": {
+		"message": "현재 페이지에 대한 커뮤니티 토론을 자동으로 찾고 AI로 요약합니다"
+	},
+	"popupTitle": { "message": "Discussed" },
+	"overview": { "message": "개요" },
+	"summary": { "message": "요약" },
+	"settings": { "message": "설정" },
+	"searching": { "message": "토론 소스를 검색 중..." },
+	"searchingHint": {
+		"message": "이 페이지에 대해 Hacker News, Reddit, Lobsters를 확인하고 있습니다."
+	},
+	"noDiscussions": { "message": "아직 토론 신호 없음" },
+	"noDiscussionsHint": {
+		"message": "Discussed가 이 페이지와 관련된 스레드를 찾지 못했습니다. 다시 검색하거나 내장 소스 외의 곳에서 찾아보세요."
+	},
+	"discussions": { "message": "토론" },
+	"comments": { "message": "댓글" },
+	"points": { "message": "포인트" },
+	"threads": { "message": "스레드" },
+	"refresh": { "message": "새로고침" },
+	"scanAgain": { "message": "다시 검색" },
+	"reviewSources": { "message": "소스 확인" },
+	"summarizeAll": { "message": "전체 요약" },
+	"summarizing": { "message": "요약 중..." },
+	"viewSummary": { "message": "요약 보기" },
+	"regenerate": { "message": "다시 생성" },
+	"generating": { "message": "생성 중..." },
+	"copy": { "message": "복사" },
+	"copied": { "message": "복사됨!" },
+	"searchElsewhere": { "message": "다른 곳에서 검색" },
+	"verdict": { "message": "종합 평가" },
+	"communityRead": { "message": "커뮤니티 의견, 요약본." },
+	"communityReadHint": { "message": "종합 평가부터 시작한 뒤 주요 주제를 살펴보세요." },
+	"window": { "message": "기간" },
+	"heavySignal": { "message": "활발한 토론 신호" },
+	"healthySignal": { "message": "양호한 토론 신호" },
+	"earlySignal": { "message": "초기 토론 신호" },
+	"discussionSignalFor": {
+		"message": "$HOST$에 대한 토론 신호",
+		"placeholders": { "HOST": { "content": "$1" } }
+	},
+	"scanDescription": {
+		"message": "페이지를 떠나기 전에 기술 커뮤니티에서 어떤 이야기를 하는지 확인하세요."
+	},
+	"configureApiKey": { "message": "활성화하려면 설정에서 API 키를 구성하세요" },
+	"save": { "message": "설정 저장" },
+	"saved": { "message": "설정이 저장되었습니다." },
+	"sources": { "message": "소스" },
+	"searchBehavior": { "message": "검색 동작" },
+	"autoSearch": { "message": "자동 검색" },
+	"badgeDisplay": { "message": "배지 표시" },
+	"domainFilter": { "message": "도메인 필터" },
+	"cache": { "message": "캐시" },
+	"aiSummarization": { "message": "AI 요약" },
+	"provider": { "message": "제공자" },
+	"model": { "message": "모델" },
+	"apiKey": { "message": "API 키" },
+	"test": { "message": "테스트" },
+	"reportIssue": { "message": "문제 신고" }
+}

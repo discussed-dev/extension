@@ -1,0 +1,64 @@
+{
+	"extensionName": { "message": "Discussed" },
+	"extensionDescription": {
+		"message": "Découvrez automatiquement les discussions communautaires sur la page actuelle et résumez-les avec l'IA"
+	},
+	"popupTitle": { "message": "Discussed" },
+	"overview": { "message": "Aperçu" },
+	"summary": { "message": "Résumé" },
+	"settings": { "message": "Paramètres" },
+	"searching": { "message": "Analyse des sources de discussion..." },
+	"searchingHint": {
+		"message": "Vérification de Hacker News, Reddit et Lobsters pour cette page."
+	},
+	"noDiscussions": { "message": "Aucun signal de discussion" },
+	"noDiscussionsHint": {
+		"message": "Discussed n'a pas trouvé de fils de discussion pour cette page. Relancez une analyse ou cherchez au-delà des sources intégrées."
+	},
+	"discussions": { "message": "discussions" },
+	"comments": { "message": "commentaires" },
+	"points": { "message": "points" },
+	"threads": { "message": "Fils" },
+	"refresh": { "message": "Actualiser" },
+	"scanAgain": { "message": "Relancer l'analyse" },
+	"reviewSources": { "message": "Consulter les sources" },
+	"summarizeAll": { "message": "Tout résumer" },
+	"summarizing": { "message": "Résumé en cours..." },
+	"viewSummary": { "message": "Voir le résumé" },
+	"regenerate": { "message": "Régénérer" },
+	"generating": { "message": "Génération..." },
+	"copy": { "message": "Copier" },
+	"copied": { "message": "Copié !" },
+	"searchElsewhere": { "message": "Chercher ailleurs" },
+	"verdict": { "message": "Verdict" },
+	"communityRead": { "message": "Lecture communautaire, condensée." },
+	"communityReadHint": {
+		"message": "Commencez par le verdict, puis parcourez les thèmes principaux."
+	},
+	"window": { "message": "Période" },
+	"heavySignal": { "message": "Signal de discussion intense" },
+	"healthySignal": { "message": "Signal de discussion sain" },
+	"earlySignal": { "message": "Signal de discussion naissant" },
+	"discussionSignalFor": {
+		"message": "Signal de discussion pour $HOST$",
+		"placeholders": { "HOST": { "content": "$1" } }
+	},
+	"scanDescription": {
+		"message": "Consultez ce que disent les communautés techniques avant de quitter la page."
+	},
+	"configureApiKey": { "message": "Configurez une clé API dans les paramètres pour activer" },
+	"save": { "message": "Enregistrer les paramètres" },
+	"saved": { "message": "Paramètres enregistrés." },
+	"sources": { "message": "Sources" },
+	"searchBehavior": { "message": "Comportement de recherche" },
+	"autoSearch": { "message": "Recherche automatique" },
+	"badgeDisplay": { "message": "Affichage du badge" },
+	"domainFilter": { "message": "Filtre de domaine" },
+	"cache": { "message": "Cache" },
+	"aiSummarization": { "message": "Résumé par IA" },
+	"provider": { "message": "Fournisseur" },
+	"model": { "message": "Modèle" },
+	"apiKey": { "message": "Clé API" },
+	"test": { "message": "Tester" },
+	"reportIssue": { "message": "Signaler un problème" }
+}

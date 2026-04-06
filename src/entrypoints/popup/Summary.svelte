@@ -1,4 +1,5 @@
 <script lang="ts">
+import { t } from '@/lib/i18n';
 import type { TokenUsage } from '@/lib/llm';
 
 interface Props {
@@ -13,9 +14,19 @@ interface Props {
 
 let { summary, model, createdAt, usage, onBack, onRegenerate, regenerating }: Props = $props();
 
+let copied = $state(false);
+
 const tokenInfo = $derived(
 	usage ? `${(usage.inputTokens + usage.outputTokens).toLocaleString()} tokens` : '',
 );
+
+async function copyMarkdown() {
+	await navigator.clipboard.writeText(summary);
+	copied = true;
+	setTimeout(() => {
+		copied = false;
+	}, 2000);
+}
 
 const blocks = $derived(
 	summary
@@ -61,25 +72,35 @@ function renderMarkdown(text: string): string {
         </svg>
       </button>
       <div class="min-w-0">
-        <p class="text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-stone-500">Summary</p>
-        <h1 class="mt-2 text-lg font-semibold tracking-tight text-stone-950">Community read, condensed.</h1>
-        <p class="mt-1 text-sm leading-5 text-stone-600">Start with the verdict, then skim the supporting themes.</p>
+        <p class="text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-stone-500">{t('summary')}</p>
+        <h1 class="mt-2 text-lg font-semibold tracking-tight text-stone-950">{t('communityRead')}</h1>
+        <p class="mt-1 text-sm leading-5 text-stone-600">{t('communityReadHint')}</p>
       </div>
     </div>
 
-    <button
-      type="button"
-      onclick={onRegenerate}
-      disabled={regenerating}
-      class="inline-flex min-h-11 shrink-0 items-center justify-center rounded-full border border-stone-200 bg-white px-4 text-sm font-medium text-stone-700 transition-colors hover:border-stone-300 hover:text-stone-950 disabled:cursor-not-allowed disabled:opacity-50"
-    >
-      {regenerating ? 'Generating...' : 'Regenerate'}
-    </button>
+    <div class="flex shrink-0 gap-2">
+      <button
+        type="button"
+        onclick={copyMarkdown}
+        class="inline-flex min-h-11 items-center justify-center rounded-full border border-stone-200 bg-white px-4 text-sm font-medium text-stone-700 transition-colors hover:border-stone-300 hover:text-stone-950"
+        title="Copy summary as markdown"
+      >
+        {copied ? t('copied') : t('copy')}
+      </button>
+      <button
+        type="button"
+        onclick={onRegenerate}
+        disabled={regenerating}
+        class="inline-flex min-h-11 items-center justify-center rounded-full border border-stone-200 bg-white px-4 text-sm font-medium text-stone-700 transition-colors hover:border-stone-300 hover:text-stone-950 disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        {regenerating ? t('generating') : t('regenerate')}
+      </button>
+    </div>
   </div>
 
   <div class="max-h-[28rem] space-y-4 overflow-y-auto px-4 py-4">
     <section class="rounded-[1.5rem] border border-stone-200 bg-stone-50 px-4 py-4">
-      <p class="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-stone-500">Verdict</p>
+      <p class="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-stone-500">{t('verdict')}</p>
       <div class="mt-3 text-[0.95rem] font-medium leading-7 text-stone-900">
         {@html renderMarkdown(verdict)}
       </div>

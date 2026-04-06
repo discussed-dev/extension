@@ -1,0 +1,66 @@
+{
+	"extensionName": { "message": "Discussed" },
+	"extensionDescription": {
+		"message": "Entdecke automatisch Community-Diskussionen zur aktuellen Seite und fasse sie mit KI zusammen"
+	},
+	"popupTitle": { "message": "Discussed" },
+	"overview": { "message": "Übersicht" },
+	"summary": { "message": "Zusammenfassung" },
+	"settings": { "message": "Einstellungen" },
+	"searching": { "message": "Diskussionsquellen werden durchsucht..." },
+	"searchingHint": {
+		"message": "Hacker News, Reddit und Lobsters werden für diese Seite überprüft."
+	},
+	"noDiscussions": { "message": "Noch kein Diskussionssignal" },
+	"noDiscussionsHint": {
+		"message": "Discussed hat keine passenden Threads für diese Seite gefunden. Versuche einen neuen Scan oder suche über die integrierten Quellen hinaus."
+	},
+	"discussions": { "message": "Diskussionen" },
+	"comments": { "message": "Kommentare" },
+	"points": { "message": "Punkte" },
+	"threads": { "message": "Threads" },
+	"refresh": { "message": "Aktualisieren" },
+	"scanAgain": { "message": "Erneut scannen" },
+	"reviewSources": { "message": "Quellen prüfen" },
+	"summarizeAll": { "message": "Alle zusammenfassen" },
+	"summarizing": { "message": "Wird zusammengefasst..." },
+	"viewSummary": { "message": "Zusammenfassung anzeigen" },
+	"regenerate": { "message": "Neu generieren" },
+	"generating": { "message": "Wird generiert..." },
+	"copy": { "message": "Kopieren" },
+	"copied": { "message": "Kopiert!" },
+	"searchElsewhere": { "message": "Anderswo suchen" },
+	"verdict": { "message": "Fazit" },
+	"communityRead": { "message": "Community-Meinungen, komprimiert." },
+	"communityReadHint": {
+		"message": "Beginne mit dem Fazit und überblicke dann die zentralen Themen."
+	},
+	"window": { "message": "Zeitraum" },
+	"heavySignal": { "message": "Starkes Diskussionssignal" },
+	"healthySignal": { "message": "Gesundes Diskussionssignal" },
+	"earlySignal": { "message": "Frühes Diskussionssignal" },
+	"discussionSignalFor": {
+		"message": "Diskussionssignal für $HOST$",
+		"placeholders": { "HOST": { "content": "$1" } }
+	},
+	"scanDescription": {
+		"message": "Erfahre, was technische Communitys sagen, bevor du die Seite verlässt."
+	},
+	"configureApiKey": {
+		"message": "Konfiguriere einen API-Schlüssel in den Einstellungen zum Aktivieren"
+	},
+	"save": { "message": "Einstellungen speichern" },
+	"saved": { "message": "Einstellungen gespeichert." },
+	"sources": { "message": "Quellen" },
+	"searchBehavior": { "message": "Suchverhalten" },
+	"autoSearch": { "message": "Automatische Suche" },
+	"badgeDisplay": { "message": "Badge-Anzeige" },
+	"domainFilter": { "message": "Domain-Filter" },
+	"cache": { "message": "Cache" },
+	"aiSummarization": { "message": "KI-Zusammenfassung" },
+	"provider": { "message": "Anbieter" },
+	"model": { "message": "Modell" },
+	"apiKey": { "message": "API-Schlüssel" },
+	"test": { "message": "Testen" },
+	"reportIssue": { "message": "Problem melden" }
+}

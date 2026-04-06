@@ -1,4 +1,5 @@
 <script lang="ts">
+import { t } from '@/lib/i18n';
 import type { Discussion, Platform } from '@/lib/types';
 import PlatformMark from './PlatformMark.svelte';
 
@@ -55,7 +56,7 @@ const timeSpanLabel = $derived.by(() => {
 <section class="border-b border-stone-200/80 bg-stone-50/80 px-4 py-2">
   <div class="flex items-center justify-between gap-3">
     <p class="min-w-0 text-[0.82rem] font-medium text-stone-900">
-      {discussions.length} threads, {totalComments.toLocaleString()} comments, {totalPoints.toLocaleString()} points
+      {discussions.length} {t('threads')}, {totalComments.toLocaleString()} {t('comments')}, {totalPoints.toLocaleString()} {t('points')}
     </p>
 
     <div class="shrink-0 rounded-full border border-stone-200 bg-white px-2 py-0.5 text-[0.7rem] font-medium text-stone-700">

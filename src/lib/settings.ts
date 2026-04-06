@@ -30,6 +30,7 @@ export interface Settings {
 	apiKey: string;
 	model: string;
 	maxCommentsForSummary: number;
+	summaryLanguage: string;
 }
 
 const DEFAULTS: Settings = {
@@ -57,6 +58,7 @@ const DEFAULTS: Settings = {
 	apiKey: '',
 	model: 'claude-sonnet-4-20250514',
 	maxCommentsForSummary: 40,
+	summaryLanguage: 'en',
 };
 
 const STORAGE_KEY = 'discussed:settings';

@@ -1,14 +1,21 @@
 <script lang="ts">
+import type { TokenUsage } from '@/lib/llm';
+
 interface Props {
 	summary: string;
 	model: string;
 	createdAt: string;
+	usage?: TokenUsage;
 	onBack: () => void;
 	onRegenerate: () => void;
 	regenerating: boolean;
 }
 
-let { summary, model, createdAt, onBack, onRegenerate, regenerating }: Props = $props();
+let { summary, model, createdAt, usage, onBack, onRegenerate, regenerating }: Props = $props();
+
+const tokenInfo = $derived(
+	usage ? `${(usage.inputTokens + usage.outputTokens).toLocaleString()} tokens` : '',
+);
 </script>
 
 <div class="w-96 bg-white text-gray-900">
@@ -30,7 +37,12 @@ let { summary, model, createdAt, onBack, onRegenerate, regenerating }: Props = $
   </div>
 
   <div class="flex items-center justify-between px-4 py-2.5 border-t border-gray-100 text-xs text-gray-400">
-    <span>{model} &middot; {new Date(createdAt).toLocaleDateString()}</span>
+    <span>
+      {model} &middot; {new Date(createdAt).toLocaleDateString()}
+      {#if tokenInfo}
+        &middot; {tokenInfo}
+      {/if}
+    </span>
     <button
       onclick={onRegenerate}
       disabled={regenerating}

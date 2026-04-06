@@ -1,5 +1,6 @@
 import { cacheGet, cacheSet } from './cache';
 import { type Comment, fetchHnComments, fetchRedditComments } from './comments';
+import type { TokenUsage } from './llm';
 import { summarize } from './llm';
 import { formatCommentsForPrompt, preprocessComments } from './preprocess';
 import { settings } from './settings';
@@ -11,6 +12,7 @@ export interface SummaryResult {
 	summary: string;
 	model: string;
 	createdAt: string;
+	usage?: TokenUsage;
 }
 
 function extractPermalink(redditUrl: string): string {
@@ -66,12 +68,14 @@ export async function summarizeDiscussions(
 		apiKey: userSettings.apiKey,
 		model: userSettings.model,
 		pageUrl,
+		language: userSettings.summaryLanguage,
 	});
 
 	const summaryResult: SummaryResult = {
 		summary: result.summary,
 		model: result.model,
 		createdAt: new Date().toISOString(),
+		usage: result.usage,
 	};
 
 	await cacheSet(cacheKey, summaryResult, SUMMARY_CACHE_TTL_MS);

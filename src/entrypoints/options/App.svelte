@@ -167,7 +167,7 @@ load();
         </p>
       {/if}
     </div>
-    <label class="flex items-center gap-2">
+    <label class="flex items-center gap-2 mb-3">
       <span class="text-sm">Max comments for summary</span>
       <input
         type="number"
@@ -176,6 +176,18 @@ load();
         max="100"
         class="w-24 px-2 py-1.5 border border-gray-300 rounded text-sm"
       />
+    </label>
+    <label class="block">
+      <span class="block text-sm mb-1">Summary language</span>
+      <select bind:value={current.summaryLanguage} class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm">
+        <option value="en">English</option>
+        <option value="Chinese">Chinese (中文)</option>
+        <option value="Spanish">Spanish (Español)</option>
+        <option value="Japanese">Japanese (日本語)</option>
+        <option value="Korean">Korean (한국어)</option>
+        <option value="French">French (Français)</option>
+        <option value="German">German (Deutsch)</option>
+      </select>
     </label>
   </section>
 

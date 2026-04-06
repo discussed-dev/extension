@@ -75,6 +75,7 @@ load();
     summary={summaryResult.summary}
     model={summaryResult.model}
     createdAt={summaryResult.createdAt}
+    usage={summaryResult.usage}
     onBack={() => { view = 'overview'; }}
     onRegenerate={() => doSummarize(true)}
     regenerating={summarizing}

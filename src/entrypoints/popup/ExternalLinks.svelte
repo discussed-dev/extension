@@ -11,7 +11,7 @@ const links = $derived([
 		href: `https://x.com/search?q=url%3A${encodeURIComponent(url)}&f=live`,
 	},
 	{
-		label: 'Google Discussions',
+		label: 'Google Forums',
 		href: `https://www.google.com/search?q=${encodeURIComponent(url)}&udm=18`,
 	},
 ]);

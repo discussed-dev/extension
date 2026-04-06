@@ -1,24 +1,35 @@
 const ANTHROPIC_API = 'https://api.anthropic.com/v1/messages';
 
-const SYSTEM_PROMPT = `You are a discussion summarizer. Given community comments about a web page from Hacker News and/or Reddit, produce a concise summary.
+function buildSystemPrompt(language: string): string {
+	const langInstruction = language !== 'en' ? `\nRespond in ${language}.` : '';
+	return `You summarize online discussions. Be direct and concise — no filler.${langInstruction}
 
-Structure your response as:
-1. A one-line verdict (overall reception/sentiment)
-2. 2-4 short paragraphs covering key themes, insights, and notable perspectives
-3. If comments come from multiple platforms, note where perspectives diverged
+Format:
+- One sentence: overall sentiment/verdict
+- 2-3 short paragraphs: key points, disagreements, notable insights
+- Use [HN] or [Reddit] tags to attribute claims
+- If multiple platforms: one sentence on where they diverged
 
-Use inline tags like [HN] or [Reddit] to attribute specific claims. Be concise and direct.`;
+Keep it under 200 words.`;
+}
 
 export interface SummarizeOptions {
 	apiKey: string;
 	model: string;
 	pageUrl: string;
 	pageTitle?: string;
+	language?: string;
+}
+
+export interface TokenUsage {
+	inputTokens: number;
+	outputTokens: number;
 }
 
 export interface SummarizeResult {
 	summary: string;
 	model: string;
+	usage: TokenUsage;
 }
 
 export async function summarize(
@@ -40,7 +51,7 @@ export async function summarize(
 		body: JSON.stringify({
 			model: options.model,
 			max_tokens: 1024,
-			system: SYSTEM_PROMPT,
+			system: buildSystemPrompt(options.language ?? 'en'),
 			messages: [{ role: 'user', content: userMessage }],
 		}),
 	});
@@ -50,10 +61,20 @@ export async function summarize(
 		throw new Error(`Anthropic API error (${response.status}): ${error}`);
 	}
 
-	const data: { content: Array<{ type: string; text: string }> } = await response.json();
+	const data: {
+		content: Array<{ type: string; text: string }>;
+		usage: { input_tokens: number; output_tokens: number };
+	} = await response.json();
 	const text = data.content.find((c) => c.type === 'text')?.text;
 
 	if (!text) throw new Error('No text in Anthropic response');
 
-	return { summary: text, model: options.model };
+	return {
+		summary: text,
+		model: options.model,
+		usage: {
+			inputTokens: data.usage.input_tokens,
+			outputTokens: data.usage.output_tokens,
+		},
+	};
 }

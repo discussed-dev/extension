@@ -43,17 +43,19 @@ WHERE url IS NOT NULL
 def normalize_url(raw: str) -> str | None:
     """Normalize a URL using the same rules as the extension."""
     try:
-        parsed = urlparse(raw)
+        return _normalize_url_inner(raw)
     except Exception:
         return None
+
+
+def _normalize_url_inner(raw: str) -> str | None:
+    parsed = urlparse(raw)
 
     if parsed.scheme not in ("http", "https"):
         return None
 
-    # Upgrade to https
     scheme = "https"
 
-    # Remove www prefix, lowercase hostname
     hostname = parsed.hostname
     if not hostname:
         return None
@@ -70,9 +72,9 @@ def normalize_url(raw: str) -> str | None:
             video_id = params.get("v", [None])[0]
             if video_id:
                 return f"https://youtube.com/watch?v={video_id}"
-        match_embed = parsed.path.startswith("/embed/")
-        if match_embed:
-            video_id = parsed.path.split("/")[2] if len(parsed.path.split("/")) > 2 else None
+        if parsed.path.startswith("/embed/"):
+            parts = parsed.path.split("/")
+            video_id = parts[2] if len(parts) > 2 else None
             if video_id:
                 return f"https://youtube.com/watch?v={video_id}"
     elif hostname == "youtu.be":
@@ -80,13 +82,10 @@ def normalize_url(raw: str) -> str | None:
         if video_id:
             return f"https://youtube.com/watch?v={video_id}"
 
-    # Remove query string and fragment
-    # Remove trailing slash (but keep root /)
     path = parsed.path or "/"
     if len(path) > 1 and path.endswith("/"):
         path = path.rstrip("/")
 
-    # Reconstruct with port if present
     port = parsed.port
     netloc = f"{hostname}:{port}" if port and port not in (80, 443) else hostname
 

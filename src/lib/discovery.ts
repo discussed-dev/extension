@@ -31,10 +31,14 @@ function withTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T> {
 	});
 }
 
+const INTERNAL_URL_RE = /^(about:|chrome:|chrome-extension:|edge:|moz-extension:|file:|data:|blob:)/i;
+
 export async function discoverDiscussions(
 	rawUrl: string,
 	options: DiscoverOptions = {},
 ): Promise<Discussion[]> {
+	if (INTERNAL_URL_RE.test(rawUrl)) return [];
+
 	const userSettings = await settings.getValue();
 	const keepQuery = !userSettings.ignoreQueryString;
 	const url = normalizeUrl(rawUrl, { keepQueryString: keepQuery });

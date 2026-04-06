@@ -1,0 +1,55 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build and zip Chrome
+        run: bun run zip
+
+      - name: Build and zip Firefox
+        run: bun run zip:firefox
+
+      - name: Prepare release assets
+        id: assets
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          CHROME_ZIP=".output/discussed-${VERSION}-chrome.zip"
+          FIREFOX_ZIP=".output/discussed-${VERSION}-firefox.zip"
+          FIREFOX_XPI=".output/discussed-${VERSION}-firefox.xpi"
+          SOURCES_ZIP=".output/discussed-${VERSION}-sources.zip"
+
+          # Rename Firefox zip to xpi
+          cp "$FIREFOX_ZIP" "$FIREFOX_XPI"
+
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "chrome_zip=${CHROME_ZIP}" >> "$GITHUB_OUTPUT"
+          echo "firefox_xpi=${FIREFOX_XPI}" >> "$GITHUB_OUTPUT"
+          echo "sources_zip=${SOURCES_ZIP}" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Discussed v${{ steps.assets.outputs.version }}
+          generate_release_notes: true
+          files: |
+            ${{ steps.assets.outputs.chrome_zip }}
+            ${{ steps.assets.outputs.firefox_xpi }}
+            ${{ steps.assets.outputs.sources_zip }}

@@ -85,7 +85,7 @@ export async function fetchRedditComments(permalink: string): Promise<Comment[]>
 	try {
 		const url = `https://www.reddit.com${permalink}.json?limit=100`;
 		const response = await fetch(url, {
-			headers: { 'User-Agent': 'discussed/0.1' },
+			headers: { 'User-Agent': 'web:discussed:v0.1.0 (by /u/discussed_dev)' },
 		});
 		if (!response.ok) return [];
 		const data: Array<{ data: { children: Array<{ kind: string; data: RedditCommentData }> } }> =

@@ -69,6 +69,12 @@ export async function summarizeDiscussions(
 		model: userSettings.model,
 		pageUrl,
 		language: userSettings.summaryLanguage,
+		discussions: discussions.map((d) => ({
+			platform: d.platform,
+			title: d.title,
+			url: d.url,
+			subreddit: d.subreddit,
+		})),
 	});
 
 	const summaryResult: SummaryResult = {

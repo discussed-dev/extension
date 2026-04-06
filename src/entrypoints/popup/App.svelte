@@ -24,16 +24,19 @@ async function load() {
 	loading = true;
 	try {
 		const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
+		console.log('[discussed] popup tab:', tab?.url ?? 'no url');
 		if (!tab?.url) return;
 		currentUrl = tab.url;
 		discussions = await discoverDiscussions(tab.url);
+		console.log('[discussed] found:', discussions.length, 'discussions');
 
 		const userSettings = await settings.getValue();
 		hasApiKey = !!userSettings.apiKey;
 
-		// Check for cached summary
 		const cached = await cacheGet<SummaryResult>(`summary:${tab.url}`);
 		if (cached) summaryResult = cached;
+	} catch (e) {
+		console.error('[discussed] popup load error:', e);
 	} finally {
 		loading = false;
 	}

@@ -16,6 +16,15 @@ let { summary, model, createdAt, usage, onBack, onRegenerate, regenerating }: Pr
 const tokenInfo = $derived(
 	usage ? `${(usage.inputTokens + usage.outputTokens).toLocaleString()} tokens` : '',
 );
+
+function renderMarkdown(text: string): string {
+	return text
+		.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+		.replace(
+			/\[([^\]]+)\]\(([^)]+)\)/g,
+			'<a href="$2" target="_blank" rel="noopener noreferrer" class="text-indigo-500 hover:text-indigo-700 underline">$1</a>',
+		);
+}
 </script>
 
 <div class="w-96 bg-white text-gray-900">
@@ -33,7 +42,7 @@ const tokenInfo = $derived(
   </div>
 
   <div class="px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap max-h-96 overflow-y-auto">
-    {summary}
+    {@html renderMarkdown(summary)}
   </div>
 
   <div class="flex items-center justify-between px-4 py-2.5 border-t border-gray-100 text-xs text-gray-400">

@@ -7,10 +7,17 @@ function buildSystemPrompt(language: string): string {
 Format:
 - One sentence: overall sentiment/verdict
 - 2-3 short paragraphs: key points, disagreements, notable insights
-- Use [HN] or [Reddit] tags to attribute claims
+- Reference specific discussions using markdown links like [HN thread](url) or [r/subreddit](url)
 - If multiple platforms: one sentence on where they diverged
 
-Keep it under 200 words.`;
+Keep it under 200 words. Use markdown formatting.`;
+}
+
+export interface DiscussionSource {
+	platform: string;
+	title: string;
+	url: string;
+	subreddit?: string;
 }
 
 export interface SummarizeOptions {
@@ -19,6 +26,7 @@ export interface SummarizeOptions {
 	pageUrl: string;
 	pageTitle?: string;
 	language?: string;
+	discussions?: DiscussionSource[];
 }
 
 export interface TokenUsage {
@@ -32,13 +40,25 @@ export interface SummarizeResult {
 	usage: TokenUsage;
 }
 
+function formatDiscussionSources(discussions: DiscussionSource[]): string {
+	return discussions
+		.map((d) => {
+			const label =
+				d.platform === 'reddit' && d.subreddit ? `r/${d.subreddit}` : d.platform.toUpperCase();
+			return `- [${label}: ${d.title}](${d.url})`;
+		})
+		.join('\n');
+}
+
 export async function summarize(
 	commentsText: string,
 	options: SummarizeOptions,
 ): Promise<SummarizeResult> {
-	const userMessage = options.pageTitle
-		? `Page: ${options.pageTitle}\nURL: ${options.pageUrl}\n\nComments:\n${commentsText}`
-		: `URL: ${options.pageUrl}\n\nComments:\n${commentsText}`;
+	const sourcesSection = options.discussions?.length
+		? `\n\nDiscussion threads (use these URLs when referencing discussions):\n${formatDiscussionSources(options.discussions)}`
+		: '';
+
+	const userMessage = `${options.pageTitle ? `Page: ${options.pageTitle}\n` : ''}URL: ${options.pageUrl}${sourcesSection}\n\nComments:\n${commentsText}`;
 
 	const response = await fetch(ANTHROPIC_API, {
 		method: 'POST',

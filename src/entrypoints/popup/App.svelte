@@ -115,9 +115,9 @@ const ctaDescription = $derived.by(() => {
 		return 'Cached summary ready.';
 	}
 	if (!hasApiKey) {
-		return 'Add your own API key in Settings. It stays in your browser — we never see it.';
+		return 'Add your API key in Settings. It stays in your browser.';
 	}
-	return `${discussions.length} discussion${discussions.length === 1 ? '' : 's'}, one short read.`;
+	return `${discussions.length} discussion${discussions.length === 1 ? '' : 's'} ready to summarize.`;
 });
 
 load();
@@ -134,7 +134,7 @@ load();
     regenerating={summarizing}
   />
 {:else}
-  <main class="w-[28rem] min-h-48 overflow-hidden border border-stone-200/80 bg-white/95 text-stone-900 shadow-[0_18px_45px_rgba(15,23,42,0.08)] backdrop-blur-sm">
+  <main class="flex max-h-[42rem] w-[28rem] min-h-48 flex-col overflow-hidden border border-stone-200/80 bg-white/95 text-stone-900 shadow-[0_18px_45px_rgba(15,23,42,0.08)] backdrop-blur-sm">
     <header class="flex items-center justify-between gap-3 border-b border-stone-200/80 px-4 py-2.5">
       <PopupBrand host={currentHost} />
 
@@ -142,7 +142,7 @@ load();
         <button
           type="button"
           onclick={refresh}
-          class="inline-flex size-8.5 items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600 transition-colors hover:border-stone-300 hover:text-stone-950 disabled:cursor-not-allowed disabled:opacity-50"
+          class="inline-flex size-8.5 cursor-pointer items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600 transition-colors hover:border-stone-300 hover:text-stone-950 disabled:cursor-not-allowed disabled:opacity-50"
           aria-label="Refresh discussion scan"
           title="Refresh discussion scan"
           disabled={loading}
@@ -154,7 +154,7 @@ load();
         <button
           type="button"
           onclick={() => browser.runtime.openOptionsPage()}
-          class="inline-flex size-8.5 items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600 transition-colors hover:border-stone-300 hover:text-stone-950"
+          class="inline-flex size-8.5 cursor-pointer items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600 transition-colors hover:border-stone-300 hover:text-stone-950"
           aria-label="Open settings"
           title="Open settings"
         >
@@ -184,14 +184,14 @@ load();
             <button
               type="button"
               onclick={refresh}
-              class="inline-flex min-h-11 items-center justify-center rounded-full bg-stone-900 px-4 text-sm font-medium text-white transition-colors hover:bg-stone-800"
+              class="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-full bg-stone-900 px-4 text-sm font-medium text-white transition-colors hover:bg-stone-800"
             >
               Scan again
             </button>
             <button
               type="button"
               onclick={() => browser.runtime.openOptionsPage()}
-              class="inline-flex min-h-11 items-center justify-center rounded-full border border-stone-300 bg-white px-4 text-sm font-medium text-stone-700 transition-colors hover:border-stone-400 hover:text-stone-950"
+              class="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-full border border-stone-300 bg-white px-4 text-sm font-medium text-stone-700 transition-colors hover:border-stone-400 hover:text-stone-950"
             >
               Review sources
             </button>
@@ -200,7 +200,7 @@ load();
         <ExternalLinks url={currentUrl} />
       </section>
     {:else}
-      <div class="max-h-[27rem] space-y-2.5 overflow-y-auto px-4 py-3">
+      <div class="max-h-[19rem] min-h-0 flex-1 space-y-2.5 overflow-y-auto px-4 py-3">
         {#each groupedDiscussions as group (group.platform)}
           <section id={`platform-${group.platform}`} class="scroll-mt-3">
             <div class="mb-0.5 flex items-center gap-3">
@@ -222,7 +222,7 @@ load();
         {/each}
       </div>
 
-      <div class="border-t border-stone-200 bg-stone-50/80 px-4 py-2.5">
+      <div class="shrink-0 border-t border-stone-200 bg-stone-50/80 px-4 py-2">
 
         {#if summaryError}
           <p class="mb-3 rounded-2xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700" role="status" aria-live="polite">
@@ -234,7 +234,7 @@ load();
           <button
             type="button"
             onclick={() => { view = 'summary'; }}
-            class="inline-flex min-h-10 w-full items-center justify-center rounded-full bg-stone-900 px-4 text-sm font-medium text-white transition-colors hover:bg-stone-800"
+            class="inline-flex min-h-9 w-full cursor-pointer items-center justify-center rounded-full bg-stone-900 px-4 text-sm font-medium text-white transition-colors hover:bg-stone-800"
           >
             View Summary
           </button>
@@ -243,14 +243,14 @@ load();
             type="button"
             onclick={hasApiKey ? () => doSummarize() : () => browser.runtime.openOptionsPage()}
             disabled={summarizing}
-            class="inline-flex min-h-10 w-full items-center justify-center rounded-full px-4 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60
+            class="inline-flex min-h-9 w-full cursor-pointer items-center justify-center rounded-full px-4 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60
               {hasApiKey ? 'bg-stone-900 text-white hover:bg-stone-800' : 'bg-stone-200 text-stone-500'}"
           >
             {summarizing ? 'Summarizing...' : hasApiKey ? 'Summarize All' : 'Open AI Settings'}
           </button>
         {/if}
 
-        <p class="mt-1.5 text-xs text-stone-500">{ctaDescription}</p>
+        <p class="mt-1 text-[0.72rem] leading-4 text-stone-500">{ctaDescription}</p>
 
         <ExternalLinks url={currentUrl} />
       </div>

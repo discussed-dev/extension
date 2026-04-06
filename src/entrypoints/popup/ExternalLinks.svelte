@@ -19,14 +19,14 @@ const links = $derived([
 ]);
 </script>
 
-<div class="mt-4 flex flex-wrap items-center gap-2">
-  <span class="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-stone-500">{t('searchElsewhere')}</span>
+<div class="mt-2 flex flex-wrap items-center gap-1.5">
+  <span class="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-stone-500">{t('searchElsewhere')}</span>
   {#each links as link}
     <a
       href={link.href}
       target="_blank"
       rel="noopener noreferrer"
-      class="inline-flex min-h-9 items-center rounded-full border border-stone-200 bg-white px-3 text-xs font-medium text-stone-700 transition-colors hover:border-stone-300 hover:text-stone-950"
+      class="inline-flex min-h-8 items-center rounded-full border border-stone-200 bg-white px-2.5 text-[0.72rem] font-medium text-stone-700 transition-colors hover:border-stone-300 hover:text-stone-950"
     >
       {link.label}
     </a>

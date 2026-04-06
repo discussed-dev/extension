@@ -57,13 +57,13 @@ function renderMarkdown(text: string): string {
 }
 </script>
 
-<div class="w-[25rem] rounded-[1.75rem] border border-stone-200/80 bg-white/95 text-stone-900 shadow-[0_18px_45px_rgba(15,23,42,0.08)] backdrop-blur-sm">
-  <div class="flex items-start justify-between gap-4 border-b border-stone-200/80 px-4 py-4">
-    <div class="flex min-w-0 items-start gap-2">
+<div class="w-[28rem] overflow-hidden border border-stone-200/80 bg-white/95 text-stone-900 shadow-[0_18px_45px_rgba(15,23,42,0.08)] backdrop-blur-sm">
+  <div class="flex items-center justify-between gap-4 border-b border-stone-200/80 px-4 py-3">
+    <div class="flex min-w-0 items-center gap-2">
       <button
         type="button"
         onclick={onBack}
-        class="mt-0.5 inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-stone-200 bg-white text-stone-500 transition-colors hover:border-stone-300 hover:text-stone-900"
+        class="inline-flex size-8.5 shrink-0 cursor-pointer items-center justify-center rounded-full border border-stone-200 bg-white text-stone-500 transition-colors hover:border-stone-300 hover:text-stone-900"
         title="Back to overview"
         aria-label="Back to overview"
       >
@@ -73,8 +73,6 @@ function renderMarkdown(text: string): string {
       </button>
       <div class="min-w-0">
         <p class="text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-stone-500">{t('summary')}</p>
-        <h1 class="mt-2 text-lg font-semibold tracking-tight text-stone-950">{t('communityRead')}</h1>
-        <p class="mt-1 text-sm leading-5 text-stone-600">{t('communityReadHint')}</p>
       </div>
     </div>
 
@@ -82,7 +80,7 @@ function renderMarkdown(text: string): string {
       <button
         type="button"
         onclick={copyMarkdown}
-        class="inline-flex min-h-11 items-center justify-center rounded-full border border-stone-200 bg-white px-4 text-sm font-medium text-stone-700 transition-colors hover:border-stone-300 hover:text-stone-950"
+        class="inline-flex min-h-9 cursor-pointer items-center justify-center rounded-full border border-stone-200 bg-white px-3.5 text-sm font-medium text-stone-700 transition-colors hover:border-stone-300 hover:text-stone-950"
         title="Copy summary as markdown"
       >
         {copied ? t('copied') : t('copy')}
@@ -91,25 +89,25 @@ function renderMarkdown(text: string): string {
         type="button"
         onclick={onRegenerate}
         disabled={regenerating}
-        class="inline-flex min-h-11 items-center justify-center rounded-full border border-stone-200 bg-white px-4 text-sm font-medium text-stone-700 transition-colors hover:border-stone-300 hover:text-stone-950 disabled:cursor-not-allowed disabled:opacity-50"
+        class="inline-flex min-h-9 cursor-pointer items-center justify-center rounded-full border border-stone-200 bg-white px-3.5 text-sm font-medium text-stone-700 transition-colors hover:border-stone-300 hover:text-stone-950 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {regenerating ? t('generating') : t('regenerate')}
       </button>
     </div>
   </div>
 
-  <div class="max-h-[28rem] space-y-4 overflow-y-auto px-4 py-4">
-    <section class="rounded-[1.5rem] border border-stone-200 bg-stone-50 px-4 py-4">
+  <div class="max-h-[28rem] space-y-3 overflow-y-auto px-4 py-3">
+    <section class="rounded-[1.35rem] border border-stone-200 bg-stone-50 px-4 py-3">
       <p class="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-stone-500">{t('verdict')}</p>
-      <div class="mt-3 text-[0.95rem] font-medium leading-7 text-stone-900">
+      <div class="mt-2 text-[0.95rem] font-medium leading-6 text-stone-900">
         {@html renderMarkdown(verdict)}
       </div>
     </section>
 
     {#if supportingBlocks.length > 0}
-      <section class="space-y-4">
+      <section class="space-y-3">
         {#each supportingBlocks as block}
-          <p class="text-sm leading-7 text-stone-700">
+          <p class="text-sm leading-6 text-stone-700">
             {@html renderMarkdown(block)}
           </p>
         {/each}

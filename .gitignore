@@ -22,6 +22,11 @@ docs/
 .agents/
 skills-lock.json
 
+# Internal logo exploration workspace
+logos/concepts/
+logos/iterations/
+logos/preview.html
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

@@ -73,7 +73,7 @@ async function doSummarize(force = false) {
 }
 
 const sorted = $derived(
-	[...discussions].sort((a, b) => b.points * b.commentCount - a.points * a.commentCount),
+	[...discussions].sort((a, b) => b.commentCount - a.commentCount),
 );
 
 const groupedDiscussions = $derived.by(() =>

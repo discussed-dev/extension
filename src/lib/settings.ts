@@ -65,7 +65,7 @@ const DEFAULTS: Settings = {
 	selectedProvider: 'anthropic',
 	llmProvider: 'anthropic',
 	apiKey: '',
-	model: 'claude-sonnet-4-20250514',
+	model: 'claude-sonnet-4-6',
 	maxCommentsForSummary: 40,
 	summaryLanguage: 'en',
 	openaiBaseUrl: 'https://api.openai.com/v1',
@@ -88,9 +88,9 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 		apiFormat: 'anthropic',
 		keyPlaceholder: 'sk-ant-...',
 		models: [
-			{ id: 'claude-sonnet-4-20250514', label: 'Claude Sonnet 4' },
-			{ id: 'claude-haiku-4-5-20251001', label: 'Claude Haiku 4.5' },
-			{ id: 'claude-opus-4-20250514', label: 'Claude Opus 4' },
+			{ id: 'claude-sonnet-4-6', label: 'Claude Sonnet 4.6' },
+			{ id: 'claude-haiku-4-5', label: 'Claude Haiku 4.5' },
+			{ id: 'claude-opus-4-6', label: 'Claude Opus 4.6' },
 		],
 	},
 	openai: {
@@ -99,9 +99,10 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 		baseUrl: 'https://api.openai.com/v1',
 		keyPlaceholder: 'sk-...',
 		models: [
-			{ id: 'gpt-4.1', label: 'GPT-4.1' },
+			{ id: 'gpt-5.4-mini', label: 'GPT-5.4 Mini' },
+			{ id: 'gpt-5.4-nano', label: 'GPT-5.4 Nano' },
+			{ id: 'gpt-5.4', label: 'GPT-5.4' },
 			{ id: 'gpt-4.1-mini', label: 'GPT-4.1 Mini' },
-			{ id: 'gpt-4.1-nano', label: 'GPT-4.1 Nano' },
 			{ id: 'o4-mini', label: 'o4-mini' },
 		],
 	},
@@ -112,16 +113,18 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 		models: [
 			{ id: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash' },
 			{ id: 'gemini-2.5-pro', label: 'Gemini 2.5 Pro' },
+			{ id: 'gemini-2.5-flash-lite', label: 'Gemini 2.5 Flash Lite' },
+			{ id: 'gemini-3-flash-preview', label: 'Gemini 3 Flash (preview)' },
 		],
 	},
 	deepseek: {
 		label: 'DeepSeek',
 		apiFormat: 'openai',
-		baseUrl: 'https://api.deepseek.com/v1',
+		baseUrl: 'https://api.deepseek.com',
 		keyPlaceholder: 'sk-...',
 		models: [
-			{ id: 'deepseek-chat', label: 'DeepSeek V3' },
-			{ id: 'deepseek-reasoner', label: 'DeepSeek R1' },
+			{ id: 'deepseek-chat', label: 'DeepSeek V3.2' },
+			{ id: 'deepseek-reasoner', label: 'DeepSeek R1 (reasoning)' },
 		],
 	},
 	groq: {
@@ -132,7 +135,7 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 		models: [
 			{ id: 'llama-3.3-70b-versatile', label: 'Llama 3.3 70B' },
 			{ id: 'llama-3.1-8b-instant', label: 'Llama 3.1 8B' },
-			{ id: 'gemma2-9b-it', label: 'Gemma 2 9B' },
+			{ id: 'qwen/qwen3-32b', label: 'Qwen 3 32B' },
 		],
 	},
 	xai: {
@@ -140,7 +143,10 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 		apiFormat: 'openai',
 		baseUrl: 'https://api.x.ai/v1',
 		keyPlaceholder: 'xai-...',
-		models: [{ id: 'grok-3-mini', label: 'Grok 3 Mini' }],
+		models: [
+			{ id: 'grok-4-1-fast-non-reasoning', label: 'Grok 4.1 Fast' },
+			{ id: 'grok-4.20-0309-non-reasoning', label: 'Grok 4.20' },
+		],
 	},
 	openrouter: {
 		label: 'OpenRouter',
@@ -148,10 +154,10 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 		baseUrl: 'https://openrouter.ai/api/v1',
 		keyPlaceholder: 'sk-or-...',
 		models: [
-			{ id: 'anthropic/claude-sonnet-4', label: 'Claude Sonnet 4' },
-			{ id: 'openai/gpt-4.1-mini', label: 'GPT-4.1 Mini' },
+			{ id: 'anthropic/claude-sonnet-4.6', label: 'Claude Sonnet 4.6' },
+			{ id: 'openai/gpt-5.4-mini', label: 'GPT-5.4 Mini' },
 			{ id: 'google/gemini-2.5-flash', label: 'Gemini 2.5 Flash' },
-			{ id: 'deepseek/deepseek-chat-v3', label: 'DeepSeek V3' },
+			{ id: 'deepseek/deepseek-chat', label: 'DeepSeek V3.2' },
 		],
 	},
 	ollama: {

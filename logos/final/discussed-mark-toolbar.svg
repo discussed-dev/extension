@@ -1,7 +1,7 @@
 <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
   <title id="title">Discussed toolbar mark</title>
   <desc id="desc">Standalone icon variant shifted up-left to leave room for the Chrome badge overlay.</desc>
-  <g id="icon" transform="translate(-66.64 -102.37) scale(1.42)">
+  <g id="icon" transform="translate(-109.36 -146.21) scale(1.58)">
     <ellipse cx="154" cy="234" rx="62" ry="42" fill="#DDBE87"/>
     <ellipse cx="258" cy="152" rx="58" ry="36" fill="#F56B14" transform="rotate(-24 258 152)"/>
     <ellipse cx="266" cy="310" rx="60" ry="38" fill="#F05A24" transform="rotate(24 266 310)"/>

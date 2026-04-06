@@ -9,6 +9,13 @@ interface Props {
 
 let { discussions }: Props = $props();
 
+function jumpToPlatform(platform: Platform): void {
+	document.getElementById(`platform-${platform}`)?.scrollIntoView({
+		block: 'start',
+		behavior: 'smooth',
+	});
+}
+
 const totalComments = $derived(discussions.reduce((sum, d) => sum + d.commentCount, 0));
 const totalPoints = $derived(discussions.reduce((sum, d) => sum + d.points, 0));
 
@@ -66,10 +73,14 @@ const timeSpanLabel = $derived.by(() => {
 
   <div class="mt-1.5 flex flex-wrap gap-1.5">
     {#each activePlatforms as [platform, count]}
-      <span class="inline-flex items-center gap-1 rounded-full border border-stone-200 bg-white px-2 py-0.5 text-[0.7rem] font-medium text-stone-700">
+      <button
+        type="button"
+        onclick={() => jumpToPlatform(platform)}
+        class="inline-flex items-center gap-1 rounded-full border border-stone-200 bg-white px-2 py-0.5 text-[0.7rem] font-medium text-stone-700 transition-colors hover:border-stone-300 hover:text-stone-950"
+      >
         <PlatformMark {platform} sizeClass="size-3.5" />
         {PLATFORM_LABELS[platform]} {count}
-      </span>
+      </button>
     {/each}
     <span class="inline-flex items-center rounded-full border border-stone-200 bg-white px-2 py-0.5 text-[0.7rem] text-stone-500">
       {coverageLabel}

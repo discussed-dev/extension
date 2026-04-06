@@ -14,6 +14,8 @@ type ToolbarActionSource = {
 	browserAction?: unknown;
 };
 
+export type { ToolbarActionSource };
+
 function isToolbarActionApi(value: unknown): value is ToolbarActionApi {
 	return (
 		typeof value === 'object' &&

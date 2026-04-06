@@ -31,24 +31,20 @@ const href = $derived(
   {href}
   target={openInNewTab ? '_blank' : '_self'}
   rel="noopener noreferrer"
-  class="group flex min-w-0 items-start gap-1.5 rounded-[0.95rem] border border-stone-200 bg-white px-2.5 py-1.5 transition-colors hover:border-stone-300 hover:bg-stone-50"
+  class="group flex min-w-0 items-start gap-2 rounded-[0.95rem] border border-stone-200 bg-white px-2.5 py-1.5 transition-colors hover:border-stone-300 hover:bg-stone-50"
 >
-  <div class="mt-0.5 shrink-0">
+  <div class="flex w-9 shrink-0 self-center flex-col items-center justify-center gap-1.5 text-center">
     <PlatformMark platform={discussion.platform} sizeClass="size-4" />
+    <span class="text-[0.62rem] font-medium leading-none text-stone-500">
+      {timeAgo(discussion.createdAt)}
+    </span>
   </div>
 
   <div class="min-w-0 flex-1">
-    <div class="flex items-start gap-1.5">
-      <div class="min-w-0 flex-1">
-        <span class="line-clamp-2 min-w-0 text-[0.9rem] font-medium leading-[1.12rem] text-stone-900 group-hover:text-stone-950">
-          {discussion.title}
-        </span>
-      </div>
-      <div class="ml-1 shrink-0 text-right">
-        <span class="inline-flex text-[0.64rem] font-medium leading-none text-stone-500">
-          {timeAgo(discussion.createdAt)}
-        </span>
-      </div>
+    <div class="min-w-0">
+      <span class="line-clamp-2 min-w-0 text-[0.9rem] font-medium leading-[1.12rem] text-stone-900 group-hover:text-stone-950">
+        {discussion.title}
+      </span>
     </div>
 
     <span class="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[0.68rem] text-stone-500">

@@ -1,4 +1,5 @@
 <script lang="ts">
+import { syncToolbarBadgeForDiscussions } from '@/lib/badge';
 import { cacheGet } from '@/lib/cache';
 import { discoverDiscussions } from '@/lib/discovery';
 import { type Settings, settings } from '@/lib/settings';
@@ -6,7 +7,7 @@ import { type SummaryResult, summarizeDiscussions } from '@/lib/summarize';
 import type { Discussion, Platform } from '@/lib/types';
 import DiscussionRow from './DiscussionRow.svelte';
 import ExternalLinks from './ExternalLinks.svelte';
-import SignalBar from './SignalBar.svelte';
+import PopupBrand from './PopupBrand.svelte';
 import Summary from './Summary.svelte';
 
 type View = 'overview' | 'summary';
@@ -21,6 +22,7 @@ const PLATFORM_LABELS: Record<Platform, string> = {
 let discussions = $state<Discussion[]>([]);
 let loading = $state(true);
 let currentUrl = $state('');
+let currentTabId = $state<number | null>(null);
 let view = $state<View>('overview');
 let summaryResult = $state<SummaryResult | null>(null);
 let summarizing = $state(false);
@@ -34,10 +36,19 @@ async function load() {
 		const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
 		if (!tab?.url) return;
 		currentUrl = tab.url;
+		currentTabId = typeof tab.id === 'number' ? tab.id : null;
 		discussions = await discoverDiscussions(tab.url);
 
 		userSettings = await settings.getValue();
 		hasApiKey = !!userSettings.apiKey;
+		if (currentTabId != null) {
+			await syncToolbarBadgeForDiscussions(
+				browser,
+				currentTabId,
+				discussions,
+				userSettings.badgeDisplay,
+			);
+		}
 
 		const cached = await cacheGet<SummaryResult>(`summary:${tab.url}`);
 		if (cached) summaryResult = cached;
@@ -49,10 +60,18 @@ async function load() {
 }
 
 async function refresh() {
-	if (!currentUrl) return;
+	if (!currentUrl || currentTabId == null) return;
 	loading = true;
 	try {
 		discussions = await discoverDiscussions(currentUrl, { force: true });
+		const currentSettings = userSettings ?? (await settings.getValue());
+		userSettings = currentSettings;
+		await syncToolbarBadgeForDiscussions(
+			browser,
+			currentTabId,
+			discussions,
+			currentSettings.badgeDisplay,
+		);
 	} finally {
 		loading = false;
 	}
@@ -72,9 +91,7 @@ async function doSummarize(force = false) {
 	}
 }
 
-const sorted = $derived(
-	[...discussions].sort((a, b) => b.commentCount - a.commentCount),
-);
+const sorted = $derived([...discussions].sort((a, b) => b.commentCount - a.commentCount));
 
 const groupedDiscussions = $derived.by(() =>
 	PLATFORM_ORDER.map((platform) => ({
@@ -117,19 +134,15 @@ load();
     regenerating={summarizing}
   />
 {:else}
-  <main class="w-[25rem] min-h-48 rounded-[1.75rem] border border-stone-200/80 bg-white/95 text-stone-900 shadow-[0_18px_45px_rgba(15,23,42,0.08)] backdrop-blur-sm">
-    <header class="flex items-center justify-between gap-3 border-b border-stone-200/80 px-4 py-2">
-      <div class="min-w-0">
-        <p class="truncate text-[0.72rem] font-semibold uppercase tracking-[0.2em] text-stone-600">
-          Discussed <span class="mx-1 text-stone-400">/</span> {currentHost}
-        </p>
-      </div>
+  <main class="w-[28rem] min-h-48 overflow-hidden border border-stone-200/80 bg-white/95 text-stone-900 shadow-[0_18px_45px_rgba(15,23,42,0.08)] backdrop-blur-sm">
+    <header class="flex items-center justify-between gap-3 border-b border-stone-200/80 px-4 py-2.5">
+      <PopupBrand host={currentHost} />
 
       <div class="flex shrink-0 gap-1.5">
         <button
           type="button"
           onclick={refresh}
-          class="inline-flex size-9 items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600 transition-colors hover:border-stone-300 hover:text-stone-950 disabled:cursor-not-allowed disabled:opacity-50"
+          class="inline-flex size-8.5 items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600 transition-colors hover:border-stone-300 hover:text-stone-950 disabled:cursor-not-allowed disabled:opacity-50"
           aria-label="Refresh discussion scan"
           title="Refresh discussion scan"
           disabled={loading}
@@ -141,7 +154,7 @@ load();
         <button
           type="button"
           onclick={() => browser.runtime.openOptionsPage()}
-          class="inline-flex size-9 items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600 transition-colors hover:border-stone-300 hover:text-stone-950"
+          class="inline-flex size-8.5 items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600 transition-colors hover:border-stone-300 hover:text-stone-950"
           aria-label="Open settings"
           title="Open settings"
         >
@@ -187,11 +200,9 @@ load();
         <ExternalLinks url={currentUrl} />
       </section>
     {:else}
-      <SignalBar {discussions} />
-
-      <div class="max-h-[24rem] space-y-2.5 overflow-y-auto px-4 py-2.5">
+      <div class="max-h-[27rem] space-y-2.5 overflow-y-auto px-4 py-3">
         {#each groupedDiscussions as group (group.platform)}
-          <section>
+          <section id={`platform-${group.platform}`} class="scroll-mt-3">
             <div class="mb-0.5 flex items-center gap-3">
               <h2 class="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-stone-500">
                 {group.label}

@@ -32,24 +32,18 @@ export interface SummarizeResult {
 
 function buildSystemPrompt(language: string): string {
 	const langInstruction = language !== 'en' ? `\nRespond in ${language}.` : '';
-	return `You summarize discussion threads about a webpage.${langInstruction}
+	return `You brief a developer on what people said about a webpage. Write like a sharp colleague talking over coffee, not a report.${langInstruction}
 
 Rules:
-- Use only the supplied comments and thread links.
-- Do not invent consensus, facts, or motivations not supported by the comments.
-- You are seeing a sample, not all comments. Say "sampled comments suggest" not "the community thinks".
-- If evidence is mixed, say so explicitly (e.g. "opinions are split").
-- If evidence is thin or one-sided, say that the sample is limited.
-- Prefer concrete disagreement over vague synthesis.
-- Reference threads using markdown links like [HN thread](url) or [r/subreddit](url).
-- Output plain markdown paragraphs only. No headings. No bullet lists.
+- Only use the supplied comments. Don't invent facts or consensus.
+- This is a sample, not everything. Never say "the community thinks" — say what the comments actually say.
+- Quote or paraphrase specific people when a point is interesting. Use their words, not abstractions.
+- If opinions are split, say so plainly. If the sample is thin, say that.
+- Don't balance pros and cons artificially. If the discussion leaned one way, reflect that.
+- Link to threads with markdown: [HN](url) or [r/sub](url).
+- Plain paragraphs only. No headings, no bullets, no "Overall," or "It's worth noting."
 
-Output:
-1. First paragraph: one-sentence verdict.
-2. Second paragraph: main arguments, points of agreement, and strongest objections.
-3. Optional third paragraph: where platforms differed, with markdown links to the relevant threads.
-
-Keep it under 180 words.`;
+Write 2-3 short paragraphs. Lead with the sharpest takeaway. Under 150 words.`;
 }
 
 function formatDiscussionSources(discussions: DiscussionSource[]): string {

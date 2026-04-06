@@ -54,8 +54,17 @@ function isBlacklisted(url: string, blacklist: string, mode: 'blacklist' | 'whit
 	}
 }
 
+function isInternalUrl(url: string): boolean {
+	return /^(about:|chrome:|chrome-extension:|edge:|moz-extension:|file:|data:|blob:)/i.test(url);
+}
+
 async function onTabUpdated(tabId: number, url: string): Promise<void> {
 	try {
+		if (isInternalUrl(url)) {
+			await setToolbarBadge(browser, { tabId, text: '' });
+			return;
+		}
+
 		const userSettings = await settings.getValue();
 
 		if (isBlacklisted(url, userSettings.blacklist, userSettings.blacklistMode)) {

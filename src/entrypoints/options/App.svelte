@@ -331,11 +331,12 @@ load();
                 >
                   <option value="" disabled selected>Presets</option>
                   {#each modelOptions as preset}
-                    <option value={preset.id}>{preset.label}</option>
+                    <option value={preset.id}>{preset.label}{preset.cost ? ` (${preset.cost})` : ''}</option>
                   {/each}
                 </select>
               {/if}
             </div>
+            <p class="mt-1 text-xs text-stone-500">Each summary uses ~8K input + ~500 output tokens. $ = cheapest, $$$ = premium.</p>
           </label>
 
           <label class="block">

@@ -79,7 +79,7 @@ export interface ProviderConfig {
 	apiFormat: LlmProvider;
 	baseUrl?: string;
 	keyPlaceholder: string;
-	models: Array<{ id: string; label: string }>;
+	models: Array<{ id: string; label: string; cost?: '$' | '$$' | '$$$' }>;
 }
 
 export const PROVIDERS: Record<string, ProviderConfig> = {
@@ -88,9 +88,9 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 		apiFormat: 'anthropic',
 		keyPlaceholder: 'sk-ant-...',
 		models: [
-			{ id: 'claude-sonnet-4-6', label: 'Claude Sonnet 4.6' },
-			{ id: 'claude-haiku-4-5', label: 'Claude Haiku 4.5' },
-			{ id: 'claude-opus-4-6', label: 'Claude Opus 4.6' },
+			{ id: 'claude-sonnet-4-6', label: 'Claude Sonnet 4.6', cost: '$$' },
+			{ id: 'claude-haiku-4-5', label: 'Claude Haiku 4.5', cost: '$' },
+			{ id: 'claude-opus-4-6', label: 'Claude Opus 4.6', cost: '$$$' },
 		],
 	},
 	openai: {
@@ -99,11 +99,11 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 		baseUrl: 'https://api.openai.com/v1',
 		keyPlaceholder: 'sk-...',
 		models: [
-			{ id: 'gpt-5.4-mini', label: 'GPT-5.4 Mini' },
-			{ id: 'gpt-5.4-nano', label: 'GPT-5.4 Nano' },
-			{ id: 'gpt-5.4', label: 'GPT-5.4' },
-			{ id: 'gpt-4.1-mini', label: 'GPT-4.1 Mini' },
-			{ id: 'o4-mini', label: 'o4-mini' },
+			{ id: 'gpt-5.4-mini', label: 'GPT-5.4 Mini', cost: '$' },
+			{ id: 'gpt-5.4-nano', label: 'GPT-5.4 Nano', cost: '$' },
+			{ id: 'gpt-5.4', label: 'GPT-5.4', cost: '$$$' },
+			{ id: 'gpt-4.1-mini', label: 'GPT-4.1 Mini', cost: '$' },
+			{ id: 'o4-mini', label: 'o4-mini', cost: '$$' },
 		],
 	},
 	google: {
@@ -111,10 +111,10 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 		apiFormat: 'google',
 		keyPlaceholder: 'AIza...',
 		models: [
-			{ id: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash' },
-			{ id: 'gemini-2.5-pro', label: 'Gemini 2.5 Pro' },
-			{ id: 'gemini-2.5-flash-lite', label: 'Gemini 2.5 Flash Lite' },
-			{ id: 'gemini-3-flash-preview', label: 'Gemini 3 Flash (preview)' },
+			{ id: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash', cost: '$' },
+			{ id: 'gemini-2.5-pro', label: 'Gemini 2.5 Pro', cost: '$$' },
+			{ id: 'gemini-2.5-flash-lite', label: 'Gemini 2.5 Flash Lite', cost: '$' },
+			{ id: 'gemini-3-flash-preview', label: 'Gemini 3 Flash (preview)', cost: '$' },
 		],
 	},
 	deepseek: {
@@ -123,8 +123,8 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 		baseUrl: 'https://api.deepseek.com',
 		keyPlaceholder: 'sk-...',
 		models: [
-			{ id: 'deepseek-chat', label: 'DeepSeek V3.2' },
-			{ id: 'deepseek-reasoner', label: 'DeepSeek R1 (reasoning)' },
+			{ id: 'deepseek-chat', label: 'DeepSeek V3.2', cost: '$' },
+			{ id: 'deepseek-reasoner', label: 'DeepSeek R1 (reasoning)', cost: '$' },
 		],
 	},
 	groq: {
@@ -133,9 +133,9 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 		baseUrl: 'https://api.groq.com/openai/v1',
 		keyPlaceholder: 'gsk_...',
 		models: [
-			{ id: 'llama-3.3-70b-versatile', label: 'Llama 3.3 70B' },
-			{ id: 'llama-3.1-8b-instant', label: 'Llama 3.1 8B' },
-			{ id: 'qwen/qwen3-32b', label: 'Qwen 3 32B' },
+			{ id: 'llama-3.3-70b-versatile', label: 'Llama 3.3 70B', cost: '$' },
+			{ id: 'llama-3.1-8b-instant', label: 'Llama 3.1 8B', cost: '$' },
+			{ id: 'qwen/qwen3-32b', label: 'Qwen 3 32B', cost: '$' },
 		],
 	},
 	xai: {
@@ -144,8 +144,8 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 		baseUrl: 'https://api.x.ai/v1',
 		keyPlaceholder: 'xai-...',
 		models: [
-			{ id: 'grok-4-1-fast-non-reasoning', label: 'Grok 4.1 Fast' },
-			{ id: 'grok-4.20-0309-non-reasoning', label: 'Grok 4.20' },
+			{ id: 'grok-4-1-fast-non-reasoning', label: 'Grok 4.1 Fast', cost: '$' },
+			{ id: 'grok-4.20-0309-non-reasoning', label: 'Grok 4.20', cost: '$$' },
 		],
 	},
 	openrouter: {
@@ -154,10 +154,10 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 		baseUrl: 'https://openrouter.ai/api/v1',
 		keyPlaceholder: 'sk-or-...',
 		models: [
-			{ id: 'anthropic/claude-sonnet-4.6', label: 'Claude Sonnet 4.6' },
-			{ id: 'openai/gpt-5.4-mini', label: 'GPT-5.4 Mini' },
-			{ id: 'google/gemini-2.5-flash', label: 'Gemini 2.5 Flash' },
-			{ id: 'deepseek/deepseek-chat', label: 'DeepSeek V3.2' },
+			{ id: 'anthropic/claude-sonnet-4.6', label: 'Claude Sonnet 4.6', cost: '$$' },
+			{ id: 'openai/gpt-5.4-mini', label: 'GPT-5.4 Mini', cost: '$' },
+			{ id: 'google/gemini-2.5-flash', label: 'Gemini 2.5 Flash', cost: '$' },
+			{ id: 'deepseek/deepseek-chat', label: 'DeepSeek V3.2', cost: '$' },
 		],
 	},
 	ollama: {

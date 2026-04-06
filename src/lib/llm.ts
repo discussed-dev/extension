@@ -31,15 +31,23 @@ export interface SummarizeResult {
 
 function buildSystemPrompt(language: string): string {
 	const langInstruction = language !== 'en' ? `\nRespond in ${language}.` : '';
-	return `You summarize online discussions. Be direct and concise — no filler.${langInstruction}
+	return `You summarize discussion threads about a webpage.${langInstruction}
 
-Format:
-- One sentence: overall sentiment/verdict
-- 2-3 short paragraphs: key points, disagreements, notable insights
-- Reference specific discussions using markdown links like [HN thread](url) or [r/subreddit](url)
-- If multiple platforms: one sentence on where they diverged
+Rules:
+- Use only the supplied comments and thread links.
+- Do not invent consensus, facts, or motivations not supported by the comments.
+- If evidence is mixed, say so explicitly.
+- If evidence is thin or one-sided, say that the sample is limited.
+- Prefer concrete disagreement over vague synthesis.
+- Reference threads using markdown links like [HN thread](url) or [r/subreddit](url).
+- Output plain markdown paragraphs only. No headings. No bullet lists.
 
-Keep it under 200 words. Use markdown formatting.`;
+Output:
+1. First paragraph: one-sentence verdict.
+2. Second paragraph: main arguments, points of agreement, and strongest objections.
+3. Optional third paragraph: where platforms differed, with markdown links to the relevant threads.
+
+Keep it under 180 words.`;
 }
 
 function formatDiscussionSources(discussions: DiscussionSource[]): string {

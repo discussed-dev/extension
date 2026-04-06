@@ -97,6 +97,39 @@ export async function fetchRedditComments(permalink: string): Promise<Comment[]>
 	}
 }
 
+// --- Lobsters ---
+
+interface LobstersComment {
+	short_id: string;
+	comment_plain: string;
+	score: number;
+	depth: number;
+	commenting_user: string;
+	is_deleted: boolean;
+	is_moderated: boolean;
+}
+
+export async function fetchLobstersComments(storyId: string): Promise<Comment[]> {
+	try {
+		const response = await fetch(`https://lobste.rs/s/${storyId}.json`);
+		if (!response.ok) return [];
+		const data: { comments: LobstersComment[] } = await response.json();
+
+		return (data.comments ?? [])
+			.filter((c) => !c.is_deleted && !c.is_moderated && c.comment_plain)
+			.map((c) => ({
+				id: c.short_id,
+				author: c.commenting_user,
+				text: c.comment_plain,
+				score: c.score,
+				depth: c.depth,
+				platform: 'lobsters' as const,
+			}));
+	} catch {
+		return [];
+	}
+}
+
 // --- Helpers ---
 
 function stripHtml(html: string): string {

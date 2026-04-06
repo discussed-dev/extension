@@ -1,5 +1,10 @@
 import { cacheGet, cacheSet } from './cache';
-import { type Comment, fetchHnComments, fetchRedditComments } from './comments';
+import {
+	type Comment,
+	fetchHnComments,
+	fetchLobstersComments,
+	fetchRedditComments,
+} from './comments';
 import type { TokenUsage } from './llm';
 import { summarize } from './llm';
 import { formatCommentsForPrompt, preprocessComments } from './preprocess';
@@ -28,6 +33,7 @@ async function fetchAllComments(discussions: Discussion[]): Promise<Comment[]> {
 	const fetches = discussions.map((d) => {
 		if (d.platform === 'hn') return fetchHnComments(d.externalId);
 		if (d.platform === 'reddit') return fetchRedditComments(extractPermalink(d.url));
+		if (d.platform === 'lobsters') return fetchLobstersComments(d.externalId);
 		return Promise.resolve([]);
 	});
 

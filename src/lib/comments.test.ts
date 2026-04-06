@@ -1,5 +1,5 @@
 import { type Mock, beforeEach, describe, expect, it, vi } from 'vitest';
-import { fetchHnComments, fetchRedditComments } from './comments';
+import { fetchHnComments, fetchLobstersComments, fetchRedditComments } from './comments';
 
 const mockFetch = vi.fn() as Mock;
 vi.stubGlobal('fetch', mockFetch);
@@ -113,5 +113,75 @@ describe('fetchRedditComments', () => {
 	it('returns empty on failure', async () => {
 		mockFetch.mockResolvedValueOnce({ ok: false, status: 429 });
 		expect(await fetchRedditComments('/r/test/comments/abc/test/')).toEqual([]);
+	});
+});
+
+describe('fetchLobstersComments', () => {
+	beforeEach(() => mockFetch.mockReset());
+
+	it('returns comments from Lobsters story', async () => {
+		mockFetch.mockResolvedValueOnce({
+			ok: true,
+			json: () =>
+				Promise.resolve({
+					comments: [
+						{
+							short_id: 'abc',
+							comment_plain: 'Great article about testing',
+							score: 5,
+							depth: 0,
+							commenting_user: 'alice',
+							is_deleted: false,
+							is_moderated: false,
+						},
+					],
+				}),
+		});
+
+		const comments = await fetchLobstersComments('xyz123');
+		expect(comments).toHaveLength(1);
+		expect(comments[0]).toMatchObject({
+			author: 'alice',
+			platform: 'lobsters',
+			score: 5,
+		});
+	});
+
+	it('filters deleted and moderated comments', async () => {
+		mockFetch.mockResolvedValueOnce({
+			ok: true,
+			json: () =>
+				Promise.resolve({
+					comments: [
+						{
+							short_id: 'a',
+							comment_plain: 'deleted',
+							score: 0,
+							depth: 0,
+							commenting_user: 'x',
+							is_deleted: true,
+							is_moderated: false,
+						},
+						{
+							short_id: 'b',
+							comment_plain: 'Real comment here',
+							score: 3,
+							depth: 0,
+							commenting_user: 'y',
+							is_deleted: false,
+							is_moderated: false,
+						},
+					],
+				}),
+		});
+
+		const comments = await fetchLobstersComments('xyz123');
+		expect(comments).toHaveLength(1);
+		expect(comments[0].author).toBe('y');
+	});
+
+	it('returns empty on failure', async () => {
+		mockFetch.mockResolvedValueOnce({ ok: false, status: 404 });
+		expect(await fetchLobstersComments('xyz123')).toEqual([]);
 	});
 });

@@ -6,6 +6,11 @@ export default defineConfig({
 	modules: ['@wxt-dev/module-svelte'],
 	manifest: {
 		permissions: ['tabs', 'activeTab', 'storage'],
+		browser_specific_settings: {
+			gecko: {
+				id: 'discussed@discussed.dev',
+			},
+		},
 	},
 	vite: () => ({
 		plugins: [tailwindcss()],

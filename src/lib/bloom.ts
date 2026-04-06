@@ -79,7 +79,7 @@ export async function updateBloomFilter(): Promise<void> {
 
 		const release: {
 			tag_name: string;
-			assets: Array<{ name: string; browser_download_url: string }>;
+			assets: Array<{ name: string; url: string }>;
 		} = await releaseResp.json();
 
 		// Check if we already have this version
@@ -91,8 +91,10 @@ export async function updateBloomFilter(): Promise<void> {
 		const asset = release.assets.find((a) => a.name === 'bloom.bin');
 		if (!asset) return;
 
-		// Download
-		const filterResp = await fetch(asset.browser_download_url);
+		// Download via GitHub API (avoids CORS redirect issues with browser_download_url)
+		const filterResp = await fetch(asset.url, {
+			headers: { Accept: 'application/octet-stream' },
+		});
 		if (!filterResp.ok) return;
 
 		const data = await filterResp.arrayBuffer();

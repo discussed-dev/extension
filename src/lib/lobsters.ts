@@ -1,4 +1,5 @@
 import type { Discussion } from './types';
+import { normalizeUrl } from './url';
 
 interface LobstersStory {
 	short_id: string;
@@ -18,16 +19,25 @@ export async function searchLobsters(url: string): Promise<Discussion[]> {
 		if (!response.ok) return [];
 
 		const stories: LobstersStory[] = await response.json();
+		const normalizedTarget = normalizeUrl(url);
 
-		return stories.map((story) => ({
-			platform: 'lobsters' as const,
-			title: story.title,
-			url: story.comments_url,
-			points: story.score,
-			commentCount: story.comment_count,
-			createdAt: new Date(story.created_at).toISOString(),
-			externalId: story.short_id,
-		}));
+		return stories
+			.filter((story) => {
+				try {
+					return normalizeUrl(story.url) === normalizedTarget;
+				} catch {
+					return false;
+				}
+			})
+			.map((story) => ({
+				platform: 'lobsters' as const,
+				title: story.title,
+				url: story.comments_url,
+				points: story.score,
+				commentCount: story.comment_count,
+				createdAt: new Date(story.created_at).toISOString(),
+				externalId: story.short_id,
+			}));
 	} catch {
 		return [];
 	}

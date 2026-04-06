@@ -73,4 +73,18 @@ describe('searchLobsters', () => {
 		const results = await searchLobsters('https://example.com');
 		expect(results).toEqual([]);
 	});
+
+	it('filters out stories with non-matching URLs', async () => {
+		const unrelated = {
+			...STORY,
+			short_id: 'xyz789',
+			title: 'Unrelated Post',
+			url: 'https://example.com/other-page',
+		};
+		mockFetch.mockResolvedValueOnce(lobstersResponse([STORY, unrelated]));
+
+		const results = await searchLobsters('https://example.com/article');
+		expect(results).toHaveLength(1);
+		expect(results[0].title).toBe('Example Post');
+	});
 });

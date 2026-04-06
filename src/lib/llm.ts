@@ -43,7 +43,7 @@ Rules:
 - Link to threads with markdown: [HN](url) or [r/sub](url).
 - Plain paragraphs only. No headings, no bullets, no "Overall," or "It's worth noting."
 
-Write 2-3 short paragraphs. Lead with the sharpest takeaway. Under 150 words.`;
+Structure: one sentence verdict (max 20 words), then 2 short paragraphs with quotes and specifics. Spread the substance across paragraphs, don't front-load. Under 150 words total.`;
 }
 
 function formatDiscussionSources(discussions: DiscussionSource[]): string {

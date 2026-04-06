@@ -1,12 +1,12 @@
 <script lang="ts">
-import type { LlmProvider } from '@/lib/llm';
-import { MODEL_PRESETS, type Settings, settings } from '@/lib/settings';
+import { PROVIDERS, type Settings, settings } from '@/lib/settings';
 
 let current = $state<Settings | null>(null);
 let saved = $state(false);
 let testResult = $state('');
 
-const modelOptions = $derived(current ? MODEL_PRESETS[current.llmProvider] : []);
+const providerConfig = $derived(current ? PROVIDERS[current.selectedProvider] : null);
+const modelOptions = $derived(providerConfig?.models ?? []);
 
 async function load() {
 	current = await settings.getValue();
@@ -23,10 +23,11 @@ async function save() {
 
 function onProviderChange() {
 	if (!current) return;
-	const presets = MODEL_PRESETS[current.llmProvider];
-	if (presets.length > 0) {
-		current.model = presets[0].id;
-	}
+	const config = PROVIDERS[current.selectedProvider];
+	if (!config) return;
+	current.llmProvider = config.apiFormat;
+	if (config.baseUrl) current.openaiBaseUrl = config.baseUrl;
+	if (config.models.length > 0) current.model = config.models[0].id;
 }
 
 async function testApiKey() {
@@ -202,25 +203,25 @@ load();
   <!-- AI -->
   <section class="mb-6">
     <h2 class="text-sm font-medium text-gray-500 uppercase tracking-wide mb-3">AI Summarization</h2>
+
     <label class="block mb-3">
       <span class="block text-sm mb-1">Provider</span>
-      <select bind:value={current.llmProvider} onchange={onProviderChange} class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm">
-        <option value="anthropic">Anthropic (Claude)</option>
-        <option value="openai">OpenAI / Compatible</option>
-        <option value="google">Google (Gemini)</option>
+      <select bind:value={current.selectedProvider} onchange={onProviderChange} class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm">
+        {#each Object.entries(PROVIDERS) as [key, config]}
+          <option value={key}>{config.label}</option>
+        {/each}
       </select>
     </label>
 
-    {#if current.llmProvider === 'openai'}
+    {#if current.selectedProvider === 'custom' || current.selectedProvider === 'ollama'}
       <label class="block mb-3">
         <span class="block text-sm mb-1">API Base URL</span>
         <input
           type="text"
           bind:value={current.openaiBaseUrl}
-          placeholder="https://api.openai.com/v1"
+          placeholder="https://api.example.com/v1"
           class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm"
         />
-        <span class="text-xs text-gray-400">Change for Groq, Together, local models, etc.</span>
       </label>
     {/if}
 
@@ -253,7 +254,7 @@ load();
           <input
             type="password"
             bind:value={current.apiKey}
-            placeholder={current.llmProvider === 'anthropic' ? 'sk-ant-...' : current.llmProvider === 'google' ? 'AIza...' : 'sk-...'}
+            placeholder={providerConfig?.keyPlaceholder ?? 'your-api-key'}
             class="flex-1 px-2 py-1.5 border border-gray-300 rounded text-sm"
           />
           <button

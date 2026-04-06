@@ -40,7 +40,7 @@ export async function searchReddit(url: string): Promise<Discussion[]> {
 			url: `https://www.reddit.com${post.permalink}`,
 			points: post.score,
 			commentCount: post.num_comments,
-			createdAt: new Date(post.created_utc * 1000),
+			createdAt: new Date(post.created_utc * 1000).toISOString(),
 			externalId: post.name,
 			subreddit: post.subreddit,
 		}));

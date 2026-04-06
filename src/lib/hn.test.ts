@@ -42,7 +42,7 @@ describe('searchHn', () => {
 			url: 'https://news.ycombinator.com/item?id=29623646',
 			points: 120,
 			commentCount: 64,
-			createdAt: new Date('2021-12-20T11:29:50Z'),
+			createdAt: '2021-12-20T11:29:50.000Z',
 			externalId: '29623646',
 		});
 	});

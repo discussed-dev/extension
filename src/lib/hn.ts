@@ -35,7 +35,7 @@ export async function searchHn(url: string): Promise<Discussion[]> {
 			url: `https://news.ycombinator.com/item?id=${hit.objectID}`,
 			points: hit.points,
 			commentCount: hit.num_comments,
-			createdAt: new Date(hit.created_at),
+			createdAt: new Date(hit.created_at).toISOString(),
 			externalId: hit.objectID,
 		}));
 	} catch {

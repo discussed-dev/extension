@@ -13,8 +13,8 @@ export interface Discussion {
 	points: number;
 	/** Number of comments */
 	commentCount: number;
-	/** When the discussion was created */
-	createdAt: Date;
+	/** When the discussion was created (ISO 8601 string) */
+	createdAt: string;
 	/** Platform-specific identifier */
 	externalId: string;
 	/** Subreddit name (Reddit only) */

@@ -39,7 +39,7 @@ describe('searchLobsters', () => {
 			url: 'https://lobste.rs/s/abc123/example_post',
 			points: 15,
 			commentCount: 8,
-			createdAt: new Date('2021-12-20T11:29:50.000-06:00'),
+			createdAt: '2021-12-20T17:29:50.000Z',
 			externalId: 'abc123',
 		});
 	});

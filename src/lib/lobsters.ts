@@ -25,7 +25,7 @@ export async function searchLobsters(url: string): Promise<Discussion[]> {
 			url: story.comments_url,
 			points: story.score,
 			commentCount: story.comment_count,
-			createdAt: new Date(story.created_at),
+			createdAt: new Date(story.created_at).toISOString(),
 			externalId: story.short_id,
 		}));
 	} catch {

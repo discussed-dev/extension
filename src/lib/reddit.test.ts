@@ -44,7 +44,7 @@ describe('searchReddit', () => {
 			url: 'https://www.reddit.com/r/programming/comments/abc123/example_post/',
 			points: 500,
 			commentCount: 42,
-			createdAt: new Date(1639999790 * 1000),
+			createdAt: '2021-12-20T11:29:50.000Z',
 			externalId: 't3_abc123',
 			subreddit: 'programming',
 		});

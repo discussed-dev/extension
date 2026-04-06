@@ -6,6 +6,13 @@ export default defineConfig({
 	modules: ['@wxt-dev/module-svelte'],
 	manifest: {
 		permissions: ['tabs', 'activeTab', 'storage'],
+		host_permissions: [
+			'https://hn.algolia.com/*',
+			'https://www.reddit.com/*',
+			'https://lobste.rs/*',
+			'https://api.anthropic.com/*',
+			'https://api.github.com/*',
+		],
 		browser_specific_settings: {
 			gecko: {
 				id: 'discussed@discussed.dev',

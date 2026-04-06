@@ -28,7 +28,7 @@ export async function searchReddit(url: string): Promise<Discussion[]> {
 		});
 
 		const response = await fetch(`${REDDIT_SEARCH}?${params}`, {
-			headers: { 'User-Agent': 'web:discussed:v0.1.0 (by /u/discussed_dev)' },
+			headers: { 'User-Agent': 'web:discussed:v0.1.0 (https://discussed.dev)' },
 		});
 		if (!response.ok) return [];
 

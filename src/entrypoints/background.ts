@@ -1,3 +1,4 @@
+import { updateBloomFilter } from '@/lib/bloom';
 import { discoverDiscussions } from '@/lib/discovery';
 import type { Discussion } from '@/lib/types';
 
@@ -23,6 +24,9 @@ async function onTabUpdated(tabId: number, url: string): Promise<void> {
 }
 
 export default defineBackground(() => {
+	// Update Bloom filter on startup (non-blocking)
+	updateBloomFilter();
+
 	// Run discovery when a tab finishes loading
 	browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 		if (changeInfo.status === 'complete' && tab.url) {

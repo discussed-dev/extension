@@ -1,0 +1,46 @@
+name: Generate Bloom Filter
+
+on:
+  schedule:
+    # Every Sunday at 03:00 UTC
+    - cron: '0 3 * * 0'
+  workflow_dispatch: # Manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install google-cloud-bigquery bitarray
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+      - name: Generate Bloom filter
+        run: python scripts/generate-bloom.py --output bloom.bin
+
+      - name: Get date tag
+        id: tag
+        run: echo "tag=bloom-$(date +%Y%m%d)" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.tag }}
+          name: Bloom Filter ${{ steps.tag.outputs.tag }}
+          body: |
+            Weekly Bloom filter update.
+            Generated from BigQuery `bigquery-public-data.hacker_news.full`.
+          files: bloom.bin

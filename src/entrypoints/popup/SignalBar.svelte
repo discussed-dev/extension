@@ -34,7 +34,7 @@ const PLATFORM_LABELS: Record<Platform, string> = {
 };
 </script>
 
-<div class="flex items-center gap-3 px-4 py-3 bg-gray-50 text-xs text-gray-600 border-b border-gray-100">
+<div class="flex items-center gap-3 pl-4 pr-16 py-3 bg-gray-50 text-xs text-gray-600 border-b border-gray-100">
   <span class="font-semibold text-gray-900">{discussions.length} discussions</span>
   <span>{totalComments.toLocaleString()} comments</span>
   <span>{totalPoints.toLocaleString()} pts</span>

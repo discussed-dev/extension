@@ -1,6 +1,7 @@
 import { updateBloomFilter } from '@/lib/bloom';
 import { discoverDiscussions } from '@/lib/discovery';
 import { settings } from '@/lib/settings';
+import { setToolbarBadge } from '@/lib/toolbar-action';
 import type { Discussion, Platform } from '@/lib/types';
 
 const PLATFORM_COLORS: Record<string, string> = {
@@ -29,10 +30,10 @@ async function updateBadge(tabId: number, discussions: Discussion[]): Promise<vo
 		}
 	}
 
-	await browser.action.setBadgeText({ tabId, text });
+	await setToolbarBadge(browser, { tabId, text });
 	if (discussions.length > 0) {
 		const color = PLATFORM_COLORS[dominantPlatform(discussions)];
-		await browser.action.setBadgeBackgroundColor({ tabId, color });
+		await setToolbarBadge(browser, { tabId, color });
 	}
 }
 
@@ -58,7 +59,7 @@ async function onTabUpdated(tabId: number, url: string): Promise<void> {
 		const userSettings = await settings.getValue();
 
 		if (isBlacklisted(url, userSettings.blacklist, userSettings.blacklistMode)) {
-			await browser.action.setBadgeText({ tabId, text: '' });
+			await setToolbarBadge(browser, { tabId, text: '' });
 			return;
 		}
 
@@ -66,7 +67,7 @@ async function onTabUpdated(tabId: number, url: string): Promise<void> {
 		await updateBadge(tabId, discussions);
 	} catch (error) {
 		console.error('[discussed] discovery failed:', error);
-		await browser.action.setBadgeText({ tabId, text: '' });
+		await setToolbarBadge(browser, { tabId, text: '' });
 	}
 }
 

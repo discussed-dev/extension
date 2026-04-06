@@ -50,6 +50,7 @@ const LOBSTERS_RESULT: Discussion = {
 describe('discoverDiscussions', () => {
 	beforeEach(() => {
 		fakeBrowser.reset();
+		vi.useRealTimers();
 		hnMock.mockReset();
 		redditMock.mockReset();
 		lobstersMock.mockReset();
@@ -116,5 +117,24 @@ describe('discoverDiscussions', () => {
 
 		expect(results).toHaveLength(2);
 		expect(results.map((d) => d.platform)).toEqual(expect.arrayContaining(['hn', 'lobsters']));
+	});
+
+	it('returns available results when one platform hangs', async () => {
+		vi.useFakeTimers();
+		hnMock.mockImplementationOnce(
+			() =>
+				new Promise<Discussion[]>(() => {
+					// Never resolves; discovery should time out this source.
+				}),
+		);
+		redditMock.mockResolvedValueOnce([REDDIT_RESULT]);
+		lobstersMock.mockResolvedValueOnce([LOBSTERS_RESULT]);
+
+		const pending = discoverDiscussions('https://example.com');
+		await vi.advanceTimersByTimeAsync(5000);
+		const results = await pending;
+
+		expect(results).toHaveLength(2);
+		expect(results.map((d) => d.platform)).toEqual(expect.arrayContaining(['reddit', 'lobsters']));
 	});
 });

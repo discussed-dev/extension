@@ -1,5 +1,6 @@
 <script lang="ts">
-import type { Discussion, Platform } from '@/lib/types';
+import type { Discussion } from '@/lib/types';
+import PlatformMark from './PlatformMark.svelte';
 
 interface Props {
 	discussion: Discussion;
@@ -9,30 +10,15 @@ interface Props {
 
 let { discussion, useOldReddit = false, openInNewTab = true }: Props = $props();
 
-const PLATFORM_COLORS: Record<Platform, string> = {
-	hn: 'bg-orange-100 text-orange-700',
-	reddit: 'bg-blue-100 text-blue-700',
-	lobsters: 'bg-red-100 text-red-700',
-};
-
-const PLATFORM_LABELS: Record<Platform, string> = {
-	hn: 'HN',
-	reddit: 'Reddit',
-	lobsters: 'Lobsters',
-};
-
 function timeAgo(iso: string): string {
 	const seconds = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+	if (seconds < 60) return 'now';
 	if (seconds < 3600) return `${Math.floor(seconds / 60)}m`;
 	if (seconds < 86400) return `${Math.floor(seconds / 3600)}h`;
 	if (seconds < 2592000) return `${Math.floor(seconds / 86400)}d`;
 	if (seconds < 31536000) return `${Math.floor(seconds / 2592000)}mo`;
 	return `${Math.floor(seconds / 31536000)}y`;
 }
-
-const label = $derived(
-	discussion.subreddit ? `r/${discussion.subreddit}` : PLATFORM_LABELS[discussion.platform],
-);
 
 const href = $derived(
 	useOldReddit && discussion.platform === 'reddit'
@@ -45,17 +31,32 @@ const href = $derived(
   {href}
   target={openInNewTab ? '_blank' : '_self'}
   rel="noopener noreferrer"
-  class="flex items-center gap-2 px-4 py-2.5 hover:bg-gray-50 transition-colors"
+  class="group flex min-w-0 items-start gap-1.5 rounded-[0.95rem] border border-stone-200 bg-white px-2.5 py-1.5 transition-colors hover:border-stone-300 hover:bg-stone-50"
 >
-  <span class="shrink-0 px-1.5 py-0.5 rounded text-[10px] font-medium {PLATFORM_COLORS[discussion.platform]}">
-    {label}
-  </span>
+  <div class="mt-0.5 shrink-0">
+    <PlatformMark platform={discussion.platform} sizeClass="size-4" />
+  </div>
 
-  <span class="truncate text-sm text-gray-800">{discussion.title}</span>
+  <div class="min-w-0 flex-1">
+    <div class="flex items-start gap-1.5">
+      <div class="min-w-0 flex-1">
+        <span class="line-clamp-2 min-w-0 text-[0.9rem] font-medium leading-[1.12rem] text-stone-900 group-hover:text-stone-950">
+          {discussion.title}
+        </span>
+      </div>
+      <div class="ml-1 shrink-0 text-right">
+        <span class="inline-flex text-[0.64rem] font-medium leading-none text-stone-500">
+          {timeAgo(discussion.createdAt)}
+        </span>
+      </div>
+    </div>
 
-  <span class="ml-auto flex items-center gap-2 shrink-0 text-xs text-gray-400">
-    <span>{discussion.points} pts</span>
-    <span>{discussion.commentCount} 💬</span>
-    <span>{timeAgo(discussion.createdAt)}</span>
-  </span>
+    <span class="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[0.68rem] text-stone-500">
+      <span class="font-semibold tabular-nums text-stone-800">{discussion.commentCount.toLocaleString()} comments</span>
+      <span class="tabular-nums text-stone-600">{discussion.points.toLocaleString()} points</span>
+      {#if discussion.subreddit}
+        <span class="truncate text-stone-600">r/{discussion.subreddit}</span>
+      {/if}
+    </span>
+  </div>
 </a>

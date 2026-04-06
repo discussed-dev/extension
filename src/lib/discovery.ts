@@ -10,6 +10,27 @@ export interface DiscoverOptions {
 	force?: boolean;
 }
 
+const SOURCE_TIMEOUT_MS = 4000;
+
+function withTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T> {
+	return new Promise<T>((resolve, reject) => {
+		const timeout = setTimeout(() => {
+			reject(new Error(`Source timed out after ${timeoutMs}ms`));
+		}, timeoutMs);
+
+		promise.then(
+			(value) => {
+				clearTimeout(timeout);
+				resolve(value);
+			},
+			(error) => {
+				clearTimeout(timeout);
+				reject(error);
+			},
+		);
+	});
+}
+
 export async function discoverDiscussions(
 	rawUrl: string,
 	options: DiscoverOptions = {},
@@ -26,9 +47,10 @@ export async function discoverDiscussions(
 	}
 
 	const searches: Array<Promise<Discussion[]>> = [];
-	if (userSettings.enableHn) searches.push(searchHn(url));
-	if (userSettings.enableReddit) searches.push(searchReddit(url));
-	if (userSettings.enableLobsters) searches.push(searchLobsters(url));
+	if (userSettings.enableHn) searches.push(withTimeout(searchHn(url), SOURCE_TIMEOUT_MS));
+	if (userSettings.enableReddit) searches.push(withTimeout(searchReddit(url), SOURCE_TIMEOUT_MS));
+	if (userSettings.enableLobsters)
+		searches.push(withTimeout(searchLobsters(url), SOURCE_TIMEOUT_MS));
 
 	const results = await Promise.allSettled(searches);
 

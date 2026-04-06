@@ -17,14 +17,14 @@ const links = $derived([
 ]);
 </script>
 
-<div class="flex items-center gap-3 px-4 py-2.5 border-t border-gray-100">
-  <span class="text-[10px] text-gray-400 uppercase tracking-wide">Search elsewhere</span>
+<div class="mt-4 flex flex-wrap items-center gap-2">
+  <span class="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-stone-500">Search elsewhere</span>
   {#each links as link}
     <a
       href={link.href}
       target="_blank"
       rel="noopener noreferrer"
-      class="text-xs text-indigo-500 hover:text-indigo-700 transition-colors"
+      class="inline-flex min-h-9 items-center rounded-full border border-stone-200 bg-white px-3 text-xs font-medium text-stone-700 transition-colors hover:border-stone-300 hover:text-stone-950"
     >
       {link.label}
     </a>

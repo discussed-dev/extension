@@ -1,5 +1,6 @@
 import { checkBloomFilter, getBloomFilter } from './bloom';
 import type { Discussion } from './types';
+import { normalizeUrl } from './url';
 
 interface AlgoliaHit {
 	objectID: string;
@@ -28,16 +29,25 @@ async function queryAlgolia(url: string): Promise<Discussion[]> {
 	if (!response.ok) return [];
 
 	const data: AlgoliaResponse = await response.json();
+	const normalizedTarget = normalizeUrl(url);
 
-	return data.hits.map((hit) => ({
-		platform: 'hn' as const,
-		title: hit.title,
-		url: `https://news.ycombinator.com/item?id=${hit.objectID}`,
-		points: hit.points,
-		commentCount: hit.num_comments,
-		createdAt: new Date(hit.created_at).toISOString(),
-		externalId: hit.objectID,
-	}));
+	return data.hits
+		.filter((hit) => {
+			try {
+				return hit.url && normalizeUrl(hit.url) === normalizedTarget;
+			} catch {
+				return false;
+			}
+		})
+		.map((hit) => ({
+			platform: 'hn' as const,
+			title: hit.title,
+			url: `https://news.ycombinator.com/item?id=${hit.objectID}`,
+			points: hit.points,
+			commentCount: hit.num_comments,
+			createdAt: new Date(hit.created_at).toISOString(),
+			externalId: hit.objectID,
+		}));
 }
 
 export async function searchHn(url: string): Promise<Discussion[]> {

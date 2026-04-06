@@ -188,13 +188,6 @@ load();
             >
               Scan again
             </button>
-            <button
-              type="button"
-              onclick={() => browser.runtime.openOptionsPage()}
-              class="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-full border border-stone-300 bg-white px-4 text-sm font-medium text-stone-700 transition-colors hover:border-stone-400 hover:text-stone-950"
-            >
-              Review sources
-            </button>
           </div>
         </div>
         <ExternalLinks url={currentUrl} />

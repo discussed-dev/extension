@@ -16,6 +16,7 @@ export interface SummarizeOptions {
 	language?: string;
 	discussions?: DiscussionSource[];
 	openaiBaseUrl?: string;
+	coverageHeader?: string;
 }
 
 export interface TokenUsage {
@@ -36,7 +37,8 @@ function buildSystemPrompt(language: string): string {
 Rules:
 - Use only the supplied comments and thread links.
 - Do not invent consensus, facts, or motivations not supported by the comments.
-- If evidence is mixed, say so explicitly.
+- You are seeing a sample, not all comments. Say "sampled comments suggest" not "the community thinks".
+- If evidence is mixed, say so explicitly (e.g. "opinions are split").
 - If evidence is thin or one-sided, say that the sample is limited.
 - Prefer concrete disagreement over vague synthesis.
 - Reference threads using markdown links like [HN thread](url) or [r/subreddit](url).
@@ -61,11 +63,22 @@ function formatDiscussionSources(discussions: DiscussionSource[]): string {
 }
 
 function buildUserMessage(commentsText: string, options: SummarizeOptions): string {
-	const sourcesSection = options.discussions?.length
-		? `\n\nDiscussion threads (use these URLs when referencing discussions):\n${formatDiscussionSources(options.discussions)}`
-		: '';
+	const parts: string[] = [];
 
-	return `${options.pageTitle ? `Page: ${options.pageTitle}\n` : ''}URL: ${options.pageUrl}${sourcesSection}\n\nComments:\n${commentsText}`;
+	if (options.pageTitle) parts.push(`Page: ${options.pageTitle}`);
+	parts.push(`URL: ${options.pageUrl}`);
+
+	if (options.coverageHeader) parts.push(`\n${options.coverageHeader}`);
+
+	if (options.discussions?.length) {
+		parts.push(
+			`\nDiscussion threads (use these URLs when referencing discussions):\n${formatDiscussionSources(options.discussions)}`,
+		);
+	}
+
+	parts.push(`\nComments:\n${commentsText}`);
+
+	return parts.join('\n');
 }
 
 // --- Anthropic ---

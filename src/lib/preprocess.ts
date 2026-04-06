@@ -1,7 +1,7 @@
 import type { Comment } from './comments';
 import type { Platform } from './types';
 
-const MAX_COMMENT_LENGTH = 500;
+const MAX_COMMENT_LENGTH = 300;
 const PLATFORMS: Platform[] = ['hn', 'reddit', 'lobsters'];
 
 export interface PreprocessOptions {

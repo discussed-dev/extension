@@ -34,7 +34,7 @@ describe('preprocessComments', () => {
 		const longText = 'a'.repeat(600);
 		const comments = [makeComment({ text: longText })];
 		const result = preprocessComments(comments);
-		expect(result[0].text.length).toBeLessThan(510);
+		expect(result[0].text.length).toBeLessThan(310);
 		expect(result[0].text).toMatch(/\.\.\.$/);
 	});
 

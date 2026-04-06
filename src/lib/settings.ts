@@ -66,7 +66,7 @@ const DEFAULTS: Settings = {
 	llmProvider: 'anthropic',
 	apiKey: '',
 	model: 'claude-sonnet-4-6',
-	maxCommentsForSummary: 40,
+	maxCommentsForSummary: 25,
 	summaryLanguage: 'en',
 	openaiBaseUrl: 'https://api.openai.com/v1',
 

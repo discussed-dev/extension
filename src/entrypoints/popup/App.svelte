@@ -98,7 +98,7 @@ const ctaDescription = $derived.by(() => {
 		return 'Cached summary ready.';
 	}
 	if (!hasApiKey) {
-		return 'API key required.';
+		return 'Add your own API key in Settings. It stays in your browser — we never see it.';
 	}
 	return `${discussions.length} discussion${discussions.length === 1 ? '' : 's'}, one short read.`;
 });

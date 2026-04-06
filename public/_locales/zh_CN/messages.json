@@ -38,7 +38,9 @@
 		"placeholders": { "HOST": { "content": "$1" } }
 	},
 	"scanDescription": { "message": "在离开页面前，看看技术社区怎么说。" },
-	"configureApiKey": { "message": "在设置中配置 API 密钥以启用" },
+	"configureApiKey": {
+		"message": "在设置中添加你自己的 API 密钥。密钥仅存储在你的浏览器中，我们绝不会读取。"
+	},
 	"save": { "message": "保存设置" },
 	"saved": { "message": "设置已保存。" },
 	"sources": { "message": "讨论来源" },

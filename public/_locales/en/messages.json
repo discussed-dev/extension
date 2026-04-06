@@ -42,7 +42,9 @@
 	"scanDescription": {
 		"message": "Scan what technical communities are saying before you leave the page."
 	},
-	"configureApiKey": { "message": "Configure an API key in settings to enable" },
+	"configureApiKey": {
+		"message": "Add your own API key in Settings. It stays in your browser — we never see it."
+	},
 	"save": { "message": "Save settings" },
 	"saved": { "message": "Settings saved." },
 	"sources": { "message": "Sources" },

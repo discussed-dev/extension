@@ -294,7 +294,7 @@ load();
           <div>
             <div class="block">
               <span class="block text-sm font-medium text-stone-900">API key</span>
-              <span class="mt-0.5 block text-xs leading-5 text-stone-600">Stored locally. Testing also saves these AI settings.</span>
+              <span class="mt-0.5 block text-xs leading-5 text-stone-600">Your key is stored in your browser only and sent directly to your chosen provider. Discussed never sees or collects it.</span>
             </div>
             <div class="mt-2 flex flex-col gap-2.5 sm:flex-row">
               <input

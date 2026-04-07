@@ -119,6 +119,42 @@ describe('discoverDiscussions', () => {
 		expect(results.map((d) => d.platform)).toEqual(expect.arrayContaining(['hn', 'lobsters']));
 	});
 
+	it('skips root URLs whose query string was stripped', async () => {
+		const results = await discoverDiscussions('https://www.douban.com/?p=13');
+		expect(results).toEqual([]);
+		expect(hnMock).not.toHaveBeenCalled();
+	});
+
+	it('does not skip root URLs without query string', async () => {
+		hnMock.mockResolvedValueOnce([HN_RESULT]);
+		redditMock.mockResolvedValueOnce([]);
+		lobstersMock.mockResolvedValueOnce([]);
+
+		const results = await discoverDiscussions('https://example.com/');
+		expect(results).toHaveLength(1);
+		expect(hnMock).toHaveBeenCalled();
+	});
+
+	it('does not skip when URL has meaningful path despite query string', async () => {
+		hnMock.mockResolvedValueOnce([HN_RESULT]);
+		redditMock.mockResolvedValueOnce([]);
+		lobstersMock.mockResolvedValueOnce([]);
+
+		const results = await discoverDiscussions('https://douban.com/subject/12345/?from=tag');
+		expect(results).toHaveLength(1);
+		expect(hnMock).toHaveBeenCalled();
+	});
+
+	it('bypasses root-URL skip when force is true', async () => {
+		hnMock.mockResolvedValueOnce([HN_RESULT]);
+		redditMock.mockResolvedValueOnce([]);
+		lobstersMock.mockResolvedValueOnce([]);
+
+		const results = await discoverDiscussions('https://www.douban.com/?p=13', { force: true });
+		expect(results).toHaveLength(1);
+		expect(hnMock).toHaveBeenCalled();
+	});
+
 	it('returns available results when one platform hangs', async () => {
 		vi.useFakeTimers();
 		hnMock.mockImplementationOnce(

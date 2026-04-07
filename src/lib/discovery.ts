@@ -40,6 +40,18 @@ export async function discoverDiscussions(
 	const userSettings = await settings.getValue();
 	const keepQuery = !userSettings.ignoreQueryString;
 	const url = normalizeUrl(rawUrl, { keepQueryString: keepQuery });
+
+	// Skip if query string stripping reduced URL to bare domain root — too generic
+	if (!options.force && !keepQuery) {
+		try {
+			const original = new URL(rawUrl);
+			const normalized = new URL(url);
+			if (original.search && normalized.pathname === '/') return [];
+		} catch {
+			// ignore parse errors
+		}
+	}
+
 	const cacheTtlMs = userSettings.cacheDurationMinutes * 60 * 1000;
 	const cacheKey = `discussions:${url}`;
 

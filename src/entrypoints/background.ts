@@ -4,6 +4,7 @@ import { discoverDiscussions } from '@/lib/discovery';
 import { settings } from '@/lib/settings';
 import { setToolbarBadge } from '@/lib/toolbar-action';
 import type { Discussion } from '@/lib/types';
+import { shouldSkipUrl } from '@/lib/url';
 
 async function updateBadge(tabId: number, discussions: Discussion[]): Promise<void> {
 	const userSettings = await settings.getValue();
@@ -27,13 +28,9 @@ function isBlacklisted(url: string, blacklist: string, mode: 'blacklist' | 'whit
 	}
 }
 
-function isInternalUrl(url: string): boolean {
-	return /^(about:|chrome:|chrome-extension:|edge:|moz-extension:|file:|data:|blob:)/i.test(url);
-}
-
 async function onTabUpdated(tabId: number, url: string): Promise<void> {
 	try {
-		if (isInternalUrl(url)) {
+		if (shouldSkipUrl(url)) {
 			await setToolbarBadge(browser, { tabId, text: '' });
 			return;
 		}

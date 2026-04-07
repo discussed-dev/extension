@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { normalizeUrl } from './url';
+import { normalizeUrl, shouldSkipUrl } from './url';
 
 describe('normalizeUrl', () => {
 	describe('query string removal', () => {
@@ -126,5 +126,126 @@ describe('normalizeUrl', () => {
 		it('lowercases hostname', () => {
 			expect(normalizeUrl('https://EXAMPLE.COM/Page')).toBe('https://example.com/Page');
 		});
+	});
+});
+
+describe('shouldSkipUrl', () => {
+	describe('internal URLs', () => {
+		const internalUrls = [
+			'about:blank',
+			'chrome://settings',
+			'chrome-extension://abc/popup.html',
+			'edge://newtab',
+			'moz-extension://abc/popup.html',
+			'file:///home/user/doc.html',
+			'data:text/html,<h1>hi</h1>',
+			'blob:https://example.com/abc',
+		];
+
+		for (const url of internalUrls) {
+			it(`skips ${url.split(':')[0]}:`, () => {
+				expect(shouldSkipUrl(url)).toBe(true);
+			});
+		}
+	});
+
+	describe('search engines', () => {
+		const searchEngineUrls = [
+			'https://www.google.com/search?q=test',
+			'https://google.co.uk/search?q=test',
+			'https://www.bing.com/search?q=test',
+			'https://duckduckgo.com/?q=test',
+			'https://search.brave.com/search?q=test',
+			'https://www.baidu.com/s?wd=test',
+			'https://yandex.com/search/?text=test',
+			'https://www.ecosia.org/search?q=test',
+			'https://search.yahoo.com/search?p=test',
+			'https://kagi.com/search?q=test',
+			'https://www.perplexity.ai/search?q=test',
+			'https://www.startpage.com/search?q=test',
+		];
+
+		for (const url of searchEngineUrls) {
+			it(`skips ${new URL(url).hostname}`, () => {
+				expect(shouldSkipUrl(url)).toBe(true);
+			});
+		}
+
+		it('does not skip non-search pages on google.com', () => {
+			expect(shouldSkipUrl('https://developers.google.com/some-doc')).toBe(false);
+		});
+	});
+
+	describe('query-dependent services (Google Maps, Translate, etc.)', () => {
+		const queryDependentUrls = [
+			'https://maps.google.com/maps?q=coffee+shops',
+			'https://www.google.com/maps/search/coffee+shops',
+			'https://translate.google.com/?sl=en&tl=zh&text=hello',
+			'https://scholar.google.com/scholar?q=machine+learning',
+			'https://github.com/search?q=react',
+			'https://www.amazon.com/s?k=keyboard',
+			'https://amazon.co.uk/s?k=keyboard',
+		];
+
+		for (const url of queryDependentUrls) {
+			it(`skips ${new URL(url).hostname}${new URL(url).pathname}`, () => {
+				expect(shouldSkipUrl(url)).toBe(true);
+			});
+		}
+
+		it('does not skip normal GitHub pages', () => {
+			expect(shouldSkipUrl('https://github.com/user/repo')).toBe(false);
+		});
+
+		it('does not skip normal Amazon product pages', () => {
+			expect(shouldSkipUrl('https://www.amazon.com/dp/B08N5WRWNW')).toBe(false);
+		});
+
+		it('does not skip Google Docs (shareable content)', () => {
+			expect(shouldSkipUrl('https://docs.google.com/document/d/1abc/edit')).toBe(false);
+		});
+	});
+
+	describe('localhost and private networks', () => {
+		const localUrls = [
+			'http://localhost:3000',
+			'http://localhost',
+			'http://127.0.0.1:8080/api',
+			'http://192.168.1.1',
+			'http://192.168.0.100:3000/dashboard',
+			'http://10.0.0.1/admin',
+			'http://172.16.0.1',
+			'http://172.31.255.255',
+			'http://[::1]:3000',
+			'http://myapp.local',
+			'http://myapp.localhost:5173',
+			'http://myapp.test',
+			'http://example.invalid',
+		];
+
+		for (const url of localUrls) {
+			it(`skips ${new URL(url).hostname}`, () => {
+				expect(shouldSkipUrl(url)).toBe(true);
+			});
+		}
+
+		it('does not skip public IPs', () => {
+			expect(shouldSkipUrl('https://8.8.8.8')).toBe(false);
+		});
+	});
+
+	describe('normal URLs', () => {
+		const normalUrls = [
+			'https://example.com/article',
+			'https://news.ycombinator.com/item?id=123',
+			'https://github.com/user/repo',
+			'https://developer.mozilla.org/en-US/docs/Web',
+		];
+
+		for (const url of normalUrls) {
+			it(`does not skip ${new URL(url).hostname}`, () => {
+				expect(shouldSkipUrl(url)).toBe(false);
+			});
+		}
 	});
 });

@@ -4,7 +4,7 @@ import { searchLobsters } from './lobsters';
 import { searchReddit } from './reddit';
 import { settings } from './settings';
 import type { Discussion } from './types';
-import { normalizeUrl } from './url';
+import { normalizeUrl, shouldSkipUrl } from './url';
 
 export interface DiscoverOptions {
 	force?: boolean;
@@ -31,13 +31,11 @@ function withTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T> {
 	});
 }
 
-const INTERNAL_URL_RE = /^(about:|chrome:|chrome-extension:|edge:|moz-extension:|file:|data:|blob:)/i;
-
 export async function discoverDiscussions(
 	rawUrl: string,
 	options: DiscoverOptions = {},
 ): Promise<Discussion[]> {
-	if (INTERNAL_URL_RE.test(rawUrl)) return [];
+	if (shouldSkipUrl(rawUrl)) return [];
 
 	const userSettings = await settings.getValue();
 	const keepQuery = !userSettings.ignoreQueryString;

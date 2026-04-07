@@ -86,6 +86,31 @@ function extractYouTubeVideoId(url: URL): string | null {
 	return null;
 }
 
+/**
+ * Returns true if the URL's domain is filtered out by the user's domain filter settings.
+ * In blacklist mode, matched domains are blocked. In whitelist mode, only matched domains are allowed.
+ */
+export function isBlacklisted(
+	url: string,
+	blacklist: string,
+	mode: 'blacklist' | 'whitelist',
+): boolean {
+	if (!blacklist.trim()) return false;
+	const domains = blacklist
+		.split('\n')
+		.map((d) => d.trim().toLowerCase())
+		.filter(Boolean);
+	if (domains.length === 0) return false;
+
+	try {
+		const hostname = new URL(url).hostname.toLowerCase();
+		const matched = domains.some((d) => hostname === d || hostname.endsWith(`.${d}`));
+		return mode === 'blacklist' ? matched : !matched;
+	} catch {
+		return false;
+	}
+}
+
 export function normalizeUrl(raw: string, options: NormalizeUrlOptions = {}): string {
 	const url = new URL(raw);
 

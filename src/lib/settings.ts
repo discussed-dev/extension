@@ -10,13 +10,10 @@ export interface Settings {
 	// Search behavior
 	redditExactMatch: boolean;
 	ignoreQueryString: boolean;
-	youtubeSpecialHandling: boolean;
 
 	// Auto-search
 	searchOnTabUpdate: boolean;
 	searchOnTabActivate: boolean;
-	retryOnZeroResults: boolean;
-	retryOnError: boolean;
 
 	// Popup behavior
 	openLinksInNewTab: boolean;
@@ -47,14 +44,11 @@ const DEFAULTS: Settings = {
 	enableLobsters: true,
 	useOldReddit: false,
 
-	redditExactMatch: false,
+	redditExactMatch: true,
 	ignoreQueryString: true,
-	youtubeSpecialHandling: true,
 
 	searchOnTabUpdate: true,
 	searchOnTabActivate: false,
-	retryOnZeroResults: true,
-	retryOnError: true,
 
 	openLinksInNewTab: true,
 

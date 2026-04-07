@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { normalizeUrl, shouldSkipUrl } from './url';
+import { isBlacklisted, normalizeUrl, shouldSkipUrl } from './url';
 
 describe('normalizeUrl', () => {
 	describe('query string removal', () => {
@@ -126,6 +126,58 @@ describe('normalizeUrl', () => {
 		it('lowercases hostname', () => {
 			expect(normalizeUrl('https://EXAMPLE.COM/Page')).toBe('https://example.com/Page');
 		});
+	});
+});
+
+describe('isBlacklisted', () => {
+	describe('blacklist mode', () => {
+		it('blocks exact domain match', () => {
+			expect(isBlacklisted('https://douban.com/page', 'douban.com', 'blacklist')).toBe(true);
+		});
+
+		it('blocks subdomain match', () => {
+			expect(isBlacklisted('https://book.douban.com/page', 'douban.com', 'blacklist')).toBe(true);
+		});
+
+		it('does not block unrelated domain', () => {
+			expect(isBlacklisted('https://example.com/page', 'douban.com', 'blacklist')).toBe(false);
+		});
+
+		it('is case-insensitive', () => {
+			expect(isBlacklisted('https://Douban.COM/page', 'douban.com', 'blacklist')).toBe(true);
+		});
+
+		it('handles multiple domains', () => {
+			const list = 'douban.com\nfacebook.com\ntwitter.com';
+			expect(isBlacklisted('https://facebook.com', list, 'blacklist')).toBe(true);
+			expect(isBlacklisted('https://github.com', list, 'blacklist')).toBe(false);
+		});
+
+		it('returns false for empty blacklist', () => {
+			expect(isBlacklisted('https://example.com', '', 'blacklist')).toBe(false);
+		});
+
+		it('ignores blank lines', () => {
+			expect(isBlacklisted('https://example.com', '\n\n\n', 'blacklist')).toBe(false);
+		});
+	});
+
+	describe('whitelist mode', () => {
+		it('allows exact domain match', () => {
+			expect(isBlacklisted('https://github.com/repo', 'github.com', 'whitelist')).toBe(false);
+		});
+
+		it('blocks non-listed domain', () => {
+			expect(isBlacklisted('https://example.com', 'github.com', 'whitelist')).toBe(true);
+		});
+
+		it('returns false (allows all) when whitelist is empty', () => {
+			expect(isBlacklisted('https://example.com', '', 'whitelist')).toBe(false);
+		});
+	});
+
+	it('returns false for invalid URL', () => {
+		expect(isBlacklisted('not-a-url', 'example.com', 'blacklist')).toBe(false);
 	});
 });
 

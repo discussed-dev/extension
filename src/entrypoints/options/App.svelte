@@ -406,13 +406,6 @@ load();
                   <span class="mt-0.5 block text-xs leading-5 text-stone-600">Ignore tracking and session parameters.</span>
                 </span>
               </label>
-              <label class="flex items-start gap-3">
-                <input type="checkbox" bind:checked={current.youtubeSpecialHandling} class="mt-1 rounded border-stone-300" />
-                <span>
-                  <span class="block text-sm font-medium text-stone-900">Use YouTube video ID matching</span>
-                  <span class="mt-0.5 block text-xs leading-5 text-stone-600">Treat YouTube URL variants as one video.</span>
-                </span>
-              </label>
             </div>
           </section>
 
@@ -431,20 +424,6 @@ load();
                 <span>
                   <span class="block text-sm font-medium text-stone-900">Scan when switching to an existing tab</span>
                   <span class="mt-0.5 block text-xs leading-5 text-stone-600">Refresh the badge when you return to an open tab.</span>
-                </span>
-              </label>
-              <label class="flex items-start gap-3">
-                <input type="checkbox" bind:checked={current.retryOnZeroResults} class="mt-1 rounded border-stone-300" />
-                <span>
-                  <span class="block text-sm font-medium text-stone-900">Retry when a source returns nothing</span>
-                  <span class="mt-0.5 block text-xs leading-5 text-stone-600">Fall back to a looser search.</span>
-                </span>
-              </label>
-              <label class="flex items-start gap-3">
-                <input type="checkbox" bind:checked={current.retryOnError} class="mt-1 rounded border-stone-300" />
-                <span>
-                  <span class="block text-sm font-medium text-stone-900">Retry on server errors</span>
-                  <span class="mt-0.5 block text-xs leading-5 text-stone-600">Retry temporary source failures automatically.</span>
                 </span>
               </label>
             </div>
@@ -489,11 +468,17 @@ load();
               </label>
 
               <label class="block">
-                <span class="block text-sm font-medium text-stone-900">Domains</span>
-                <span class="mt-0.5 block text-xs leading-5 text-stone-600">One domain per line.</span>
+                <span class="block text-sm font-medium text-stone-900">
+                  {current.blacklistMode === 'whitelist' ? 'Allowed domains' : 'Blocked domains'}
+                </span>
+                <span class="mt-0.5 block text-xs leading-5 text-stone-600">
+                  One domain per line. {current.blacklistMode === 'whitelist' ? 'Only these domains will be scanned.' : 'These domains will be skipped.'}
+                </span>
                 <textarea
                   bind:value={current.blacklist}
-                  placeholder="facebook.com&#10;reddit.com&#10;twitter.com"
+                  placeholder={current.blacklistMode === 'whitelist'
+                    ? 'github.com\nnews.ycombinator.com\nlobste.rs'
+                    : 'facebook.com\nreddit.com\ntwitter.com'}
                   rows="4"
                   class="mt-2 w-full rounded-[1.25rem] border border-stone-300 bg-white px-4 py-3 text-sm leading-6 text-stone-900"
                 ></textarea>

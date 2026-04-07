@@ -4,7 +4,9 @@ import { cacheGet } from '@/lib/cache';
 import { discoverDiscussions } from '@/lib/discovery';
 import { type Settings, settings } from '@/lib/settings';
 import { type SummaryResult, summarizeDiscussions } from '@/lib/summarize';
+import { setToolbarBadge } from '@/lib/toolbar-action';
 import type { Discussion, Platform } from '@/lib/types';
+import { isBlacklisted } from '@/lib/url';
 import DiscussionRow from './DiscussionRow.svelte';
 import ExternalLinks from './ExternalLinks.svelte';
 import PopupBrand from './PopupBrand.svelte';
@@ -21,6 +23,7 @@ const PLATFORM_LABELS: Record<Platform, string> = {
 
 let discussions = $state<Discussion[]>([]);
 let loading = $state(true);
+let blocked = $state(false);
 let currentUrl = $state('');
 let currentTabId = $state<number | null>(null);
 let view = $state<View>('overview');
@@ -37,10 +40,22 @@ async function load() {
 		if (!tab?.url) return;
 		currentUrl = tab.url;
 		currentTabId = typeof tab.id === 'number' ? tab.id : null;
-		discussions = await discoverDiscussions(tab.url);
 
 		userSettings = await settings.getValue();
 		hasApiKey = !!userSettings.apiKey;
+
+		if (isBlacklisted(tab.url, userSettings.blacklist, userSettings.blacklistMode)) {
+			blocked = true;
+			discussions = [];
+			if (currentTabId != null) {
+				await setToolbarBadge(browser, { tabId: currentTabId, text: '' });
+			}
+			return;
+		}
+
+		blocked = false;
+		discussions = await discoverDiscussions(tab.url);
+
 		if (currentTabId != null) {
 			await syncToolbarBadgeForDiscussions(
 				browser,
@@ -63,9 +78,18 @@ async function refresh() {
 	if (!currentUrl || currentTabId == null) return;
 	loading = true;
 	try {
-		discussions = await discoverDiscussions(currentUrl, { force: true });
 		const currentSettings = userSettings ?? (await settings.getValue());
 		userSettings = currentSettings;
+
+		if (isBlacklisted(currentUrl, currentSettings.blacklist, currentSettings.blacklistMode)) {
+			blocked = true;
+			discussions = [];
+			await setToolbarBadge(browser, { tabId: currentTabId, text: '' });
+			return;
+		}
+
+		blocked = false;
+		discussions = await discoverDiscussions(currentUrl, { force: true });
 		await syncToolbarBadgeForDiscussions(
 			browser,
 			currentTabId,
@@ -74,6 +98,63 @@ async function refresh() {
 		);
 	} finally {
 		loading = false;
+	}
+}
+
+async function toggleBlock() {
+	if (!currentUrl || !userSettings) return;
+	const host = new URL(currentUrl).hostname.replace(/^www\./, '');
+	const domains = userSettings.blacklist
+		.split('\n')
+		.map((d) => d.trim())
+		.filter(Boolean);
+
+	const isCurrentlyListed = domains.some((d) => d.toLowerCase() === host.toLowerCase());
+
+	if (userSettings.blacklistMode === 'whitelist') {
+		if (!isCurrentlyListed) {
+			domains.push(host);
+		}
+	} else {
+		if (isCurrentlyListed) {
+			const idx = domains.findIndex((d) => d.toLowerCase() === host.toLowerCase());
+			domains.splice(idx, 1);
+		}
+	}
+
+	userSettings.blacklist = domains.join('\n');
+	await settings.setValue(userSettings);
+	blocked = false;
+	await refresh();
+}
+
+async function blockSite() {
+	if (!currentUrl || !userSettings) return;
+	const host = new URL(currentUrl).hostname.replace(/^www\./, '');
+	const domains = userSettings.blacklist
+		.split('\n')
+		.map((d) => d.trim())
+		.filter(Boolean);
+
+	const isCurrentlyListed = domains.some((d) => d.toLowerCase() === host.toLowerCase());
+
+	if (userSettings.blacklistMode === 'blacklist') {
+		if (!isCurrentlyListed) {
+			domains.push(host);
+		}
+	} else {
+		if (isCurrentlyListed) {
+			const idx = domains.findIndex((d) => d.toLowerCase() === host.toLowerCase());
+			domains.splice(idx, 1);
+		}
+	}
+
+	userSettings.blacklist = domains.join('\n');
+	await settings.setValue(userSettings);
+	blocked = true;
+	discussions = [];
+	if (currentTabId != null) {
+		await setToolbarBadge(browser, { tabId: currentTabId, text: '' });
 	}
 }
 
@@ -173,6 +254,24 @@ load();
           <p class="mt-1 text-sm text-stone-500">Checking Hacker News, Reddit, and Lobsters for this page.</p>
         </div>
       </div>
+    {:else if blocked}
+      <section class="px-4 py-6">
+        <div class="rounded-[1.5rem] border border-dashed border-stone-300 bg-stone-50 px-4 py-5">
+          <p class="text-base font-semibold tracking-tight text-stone-950">Domain filtered</p>
+          <p class="mt-2 text-sm leading-6 text-stone-600">
+            {currentHost} is {userSettings?.blacklistMode === 'whitelist' ? 'not in your whitelist' : 'in your blacklist'}. You can change this in settings.
+          </p>
+          <div class="mt-4 flex flex-wrap gap-2">
+            <button
+              type="button"
+              onclick={toggleBlock}
+              class="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-full bg-stone-900 px-4 text-sm font-medium text-white transition-colors hover:bg-stone-800"
+            >
+              Unblock {currentHost}
+            </button>
+          </div>
+        </div>
+      </section>
     {:else if discussions.length === 0}
       <section class="px-4 py-6">
         <div class="rounded-[1.5rem] border border-dashed border-stone-300 bg-stone-50 px-4 py-5">
@@ -246,6 +345,14 @@ load();
         <p class="mt-1 text-[0.72rem] leading-4 text-stone-500">{ctaDescription}</p>
 
         <ExternalLinks url={currentUrl} />
+
+        <button
+          type="button"
+          onclick={blockSite}
+          class="mt-1 cursor-pointer text-[0.68rem] text-stone-400 transition-colors hover:text-stone-600"
+        >
+          Block {currentHost}
+        </button>
       </div>
     {/if}
   </main>

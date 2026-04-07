@@ -62,7 +62,13 @@ export async function discoverDiscussions(
 
 	const searches: Array<Promise<Discussion[]>> = [];
 	if (userSettings.enableHn) searches.push(withTimeout(searchHn(url), SOURCE_TIMEOUT_MS));
-	if (userSettings.enableReddit) searches.push(withTimeout(searchReddit(url), SOURCE_TIMEOUT_MS));
+	if (userSettings.enableReddit)
+		searches.push(
+			withTimeout(
+				searchReddit(url, { exactMatch: userSettings.redditExactMatch }),
+				SOURCE_TIMEOUT_MS,
+			),
+		);
 	if (userSettings.enableLobsters)
 		searches.push(withTimeout(searchLobsters(url), SOURCE_TIMEOUT_MS));
 

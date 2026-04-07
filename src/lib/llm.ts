@@ -215,5 +215,7 @@ export async function summarize(
 			return summarizeOpenai(commentsText, options);
 		case 'google':
 			return summarizeGoogle(commentsText, options);
+		default:
+			throw new Error(`Unsupported LLM provider: ${options.provider}`);
 	}
 }

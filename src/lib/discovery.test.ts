@@ -78,7 +78,7 @@ describe('discoverDiscussions', () => {
 
 		// Should be normalized: https, no www, no query, no fragment, no trailing slash
 		expect(hnMock).toHaveBeenCalledWith('https://example.com/page');
-		expect(redditMock).toHaveBeenCalledWith('https://example.com/page');
+		expect(redditMock).toHaveBeenCalledWith('https://example.com/page', { exactMatch: true });
 		expect(lobstersMock).toHaveBeenCalledWith('https://example.com/page');
 	});
 

@@ -65,6 +65,19 @@ bun run lint:fix               # biome auto-fix
 - URL normalization strips `index.html/htm/php`, query strings, fragments, `www.`, trailing slashes
 - 8 LLM providers with OpenAI-compatible base URL for custom/local models
 
+## Release Workflow
+
+When asked to release or bump version:
+
+1. `bun run test` — all tests must pass
+2. `bun run lint` — must be clean
+3. Bump `version` in `package.json` (patch/minor/major as specified)
+4. `bun run build` — production build must succeed
+5. Commit: `Bump version to X.Y.Z`
+6. `git tag vX.Y.Z`
+7. `git push && git push --tags`
+8. `gh release create vX.Y.Z --title "Discussed vX.Y.Z" --generate-notes`
+
 ## Bloom Filter Pipeline
 
 - `scripts/generate-bloom.py` — queries BigQuery public HN dataset, normalizes URLs, generates bloom filter binary

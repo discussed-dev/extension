@@ -54,6 +54,16 @@ def _normalize_url_inner(raw: str) -> str | None:
     if parsed.scheme not in ("http", "https"):
         return None
 
+    # Unwrap web.archive.org URLs to the original URL
+    if parsed.hostname and parsed.hostname.lower() == "web.archive.org" and parsed.path.startswith("/web/"):
+        import re as _re
+        match = _re.match(r"^/web/[^/]+/(.+)", parsed.path)
+        if match:
+            try:
+                return _normalize_url_inner(match.group(1))
+            except Exception:
+                pass
+
     scheme = "https"
 
     hostname = parsed.hostname
@@ -62,6 +72,10 @@ def _normalize_url_inner(raw: str) -> str | None:
     hostname = hostname.lower()
     if hostname.startswith("www."):
         hostname = hostname[4:]
+
+    # Normalize mobile Wikipedia: en.m.wikipedia.org → en.wikipedia.org
+    if hostname.endswith(".m.wikipedia.org"):
+        hostname = hostname.replace(".m.wikipedia.org", ".wikipedia.org")
 
     # YouTube special handling
     if hostname in ("youtube.com", "m.youtube.com"):

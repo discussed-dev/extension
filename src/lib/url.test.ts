@@ -106,6 +106,100 @@ describe('normalizeUrl', () => {
 		});
 	});
 
+	describe('tracking parameter stripping', () => {
+		it('strips utm_* params while keeping others when keepQueryString is true', () => {
+			expect(
+				normalizeUrl('https://example.com/page?id=42&utm_source=twitter&utm_medium=social', {
+					keepQueryString: true,
+				}),
+			).toBe('https://example.com/page?id=42');
+		});
+
+		it('strips fbclid', () => {
+			expect(
+				normalizeUrl('https://example.com/page?id=42&fbclid=abc123', {
+					keepQueryString: true,
+				}),
+			).toBe('https://example.com/page?id=42');
+		});
+
+		it('strips gclid and msclkid', () => {
+			expect(
+				normalizeUrl('https://example.com/page?gclid=abc&msclkid=def&q=test', {
+					keepQueryString: true,
+				}),
+			).toBe('https://example.com/page?q=test');
+		});
+
+		it('strips all tracking params leaving clean URL', () => {
+			expect(
+				normalizeUrl('https://example.com/page?utm_source=x&fbclid=y', {
+					keepQueryString: true,
+				}),
+			).toBe('https://example.com/page');
+		});
+
+		it('strips tracking params even without keepQueryString (no-op since all stripped)', () => {
+			expect(normalizeUrl('https://example.com/page?utm_source=x&id=5')).toBe(
+				'https://example.com/page',
+			);
+		});
+
+		it('strips _ga and _gl params', () => {
+			expect(
+				normalizeUrl('https://example.com/page?_ga=1.2.3&_gl=abc&tab=overview', {
+					keepQueryString: true,
+				}),
+			).toBe('https://example.com/page?tab=overview');
+		});
+	});
+
+	describe('mobile subdomain normalization', () => {
+		it('normalizes en.m.wikipedia.org to en.wikipedia.org', () => {
+			expect(normalizeUrl('https://en.m.wikipedia.org/wiki/TypeScript')).toBe(
+				'https://en.wikipedia.org/wiki/TypeScript',
+			);
+		});
+
+		it('normalizes ja.m.wikipedia.org to ja.wikipedia.org', () => {
+			expect(normalizeUrl('https://ja.m.wikipedia.org/wiki/JavaScript')).toBe(
+				'https://ja.wikipedia.org/wiki/JavaScript',
+			);
+		});
+
+		it('does not modify non-mobile Wikipedia', () => {
+			expect(normalizeUrl('https://en.wikipedia.org/wiki/TypeScript')).toBe(
+				'https://en.wikipedia.org/wiki/TypeScript',
+			);
+		});
+	});
+
+	describe('web.archive.org unwrapping', () => {
+		it('unwraps archived URL with timestamp', () => {
+			expect(
+				normalizeUrl('https://web.archive.org/web/20240101120000/https://example.com/page'),
+			).toBe('https://example.com/page');
+		});
+
+		it('unwraps archived URL with wildcard timestamp', () => {
+			expect(normalizeUrl('https://web.archive.org/web/2024*/https://example.com/page')).toBe(
+				'https://example.com/page',
+			);
+		});
+
+		it('normalizes the unwrapped URL too', () => {
+			expect(
+				normalizeUrl('https://web.archive.org/web/20240101/http://www.example.com/page/'),
+			).toBe('https://example.com/page');
+		});
+
+		it('does not unwrap non-web archive.org paths', () => {
+			expect(normalizeUrl('https://archive.org/details/some-item')).toBe(
+				'https://archive.org/details/some-item',
+			);
+		});
+	});
+
 	describe('combined transformations', () => {
 		it('applies all normalizations together', () => {
 			expect(normalizeUrl('http://www.example.com/page/?utm_source=x#top')).toBe(

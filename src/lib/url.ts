@@ -63,6 +63,35 @@ export interface NormalizeUrlOptions {
 	keepQueryString?: boolean;
 }
 
+/** Known tracking parameters that never identify content. Stripped regardless of keepQueryString. */
+const TRACKING_PARAMS = new Set([
+	'fbclid',
+	'gclid',
+	'gclsrc',
+	'msclkid',
+	'dclid',
+	'twclid',
+	'igshid',
+	'mc_cid',
+	'mc_eid',
+	'_ga',
+	'_gl',
+]);
+
+const TRACKING_PREFIX = 'utm_';
+
+function stripTrackingParams(url: URL): void {
+	const toDelete: string[] = [];
+	for (const key of url.searchParams.keys()) {
+		if (TRACKING_PARAMS.has(key) || key.startsWith(TRACKING_PREFIX)) {
+			toDelete.push(key);
+		}
+	}
+	for (const key of toDelete) {
+		url.searchParams.delete(key);
+	}
+}
+
 const YOUTUBE_HOSTS = new Set(['youtube.com', 'www.youtube.com', 'm.youtube.com']);
 
 function extractYouTubeVideoId(url: URL): string | null {
@@ -114,6 +143,18 @@ export function isBlacklisted(
 export function normalizeUrl(raw: string, options: NormalizeUrlOptions = {}): string {
 	const url = new URL(raw);
 
+	// Unwrap web.archive.org URLs to the original URL
+	if (url.hostname === 'web.archive.org' && url.pathname.startsWith('/web/')) {
+		const match = url.pathname.match(/^\/web\/[^/]+\/(.+)/);
+		if (match) {
+			try {
+				return normalizeUrl(match[1], options);
+			} catch {
+				// If the inner URL is malformed, fall through to normal normalization
+			}
+		}
+	}
+
 	// Upgrade http to https
 	url.protocol = 'https:';
 
@@ -126,8 +167,14 @@ export function normalizeUrl(raw: string, options: NormalizeUrlOptions = {}): st
 		return `https://youtube.com/watch?v=${videoId}`;
 	}
 
+	// Normalize mobile Wikipedia: en.m.wikipedia.org → en.wikipedia.org
+	url.hostname = url.hostname.replace(/\.m\.wikipedia\.org$/, '.wikipedia.org');
+
 	// Strip fragment
 	url.hash = '';
+
+	// Always strip tracking parameters (utm_*, fbclid, gclid, etc.)
+	stripTrackingParams(url);
 
 	// Strip query string unless opted in
 	if (!options.keepQueryString) {

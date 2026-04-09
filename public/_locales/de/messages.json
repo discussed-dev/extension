@@ -62,5 +62,6 @@
 	"model": { "message": "Modell" },
 	"apiKey": { "message": "API-Schlüssel" },
 	"test": { "message": "Testen" },
-	"reportIssue": { "message": "Problem melden" }
+	"reportIssue": { "message": "Problem melden" },
+	"submitTo": { "message": "Einreichen bei" }
 }

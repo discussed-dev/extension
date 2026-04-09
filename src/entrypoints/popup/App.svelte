@@ -25,6 +25,7 @@ let discussions = $state<Discussion[]>([]);
 let loading = $state(true);
 let blocked = $state(false);
 let currentUrl = $state('');
+let currentTitle = $state('');
 let currentTabId = $state<number | null>(null);
 let view = $state<View>('overview');
 let summaryResult = $state<SummaryResult | null>(null);
@@ -39,6 +40,7 @@ async function load() {
 		const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
 		if (!tab?.url) return;
 		currentUrl = tab.url;
+		currentTitle = tab.title ?? '';
 		currentTabId = typeof tab.id === 'number' ? tab.id : null;
 
 		userSettings = await settings.getValue();
@@ -289,7 +291,7 @@ load();
             </button>
           </div>
         </div>
-        <ExternalLinks url={currentUrl} />
+        <ExternalLinks url={currentUrl} title={currentTitle} showSubmit />
       </section>
     {:else}
       <div class="max-h-[19rem] min-h-0 flex-1 space-y-2.5 overflow-y-auto px-4 py-3">

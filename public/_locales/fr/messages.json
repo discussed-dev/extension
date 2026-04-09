@@ -60,5 +60,6 @@
 	"model": { "message": "Modèle" },
 	"apiKey": { "message": "Clé API" },
 	"test": { "message": "Tester" },
-	"reportIssue": { "message": "Signaler un problème" }
+	"reportIssue": { "message": "Signaler un problème" },
+	"submitTo": { "message": "Soumettre à" }
 }

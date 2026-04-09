@@ -58,5 +58,6 @@
 	"model": { "message": "Model" },
 	"apiKey": { "message": "API Key" },
 	"test": { "message": "Test" },
-	"reportIssue": { "message": "Report an issue" }
+	"reportIssue": { "message": "Report an issue" },
+	"submitTo": { "message": "Submit to" }
 }

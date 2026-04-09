@@ -54,5 +54,6 @@
 	"model": { "message": "モデル" },
 	"apiKey": { "message": "APIキー" },
 	"test": { "message": "テスト" },
-	"reportIssue": { "message": "問題を報告" }
+	"reportIssue": { "message": "問題を報告" },
+	"submitTo": { "message": "投稿先" }
 }

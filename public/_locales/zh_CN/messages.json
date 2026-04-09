@@ -54,5 +54,6 @@
 	"model": { "message": "模型" },
 	"apiKey": { "message": "API 密钥" },
 	"test": { "message": "测试" },
-	"reportIssue": { "message": "报告问题" }
+	"reportIssue": { "message": "报告问题" },
+	"submitTo": { "message": "提交到" }
 }

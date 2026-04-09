@@ -58,5 +58,6 @@
 	"model": { "message": "모델" },
 	"apiKey": { "message": "API 키" },
 	"test": { "message": "테스트" },
-	"reportIssue": { "message": "문제 신고" }
+	"reportIssue": { "message": "문제 신고" },
+	"submitTo": { "message": "제출하기" }
 }

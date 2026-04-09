@@ -38,7 +38,7 @@ export async function injectAndExtract(tabId: number): Promise<PageContent | und
     const results = await Promise.race([
       browser.scripting.executeScript({
         target: { tabId },
-        files: ['/content-scripts/extract.js'],
+        files: ['/extract.js'],
       }),
       new Promise<never>((_, reject) =>
         setTimeout(() => reject(new Error('Content script timeout')), 5000),

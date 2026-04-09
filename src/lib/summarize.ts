@@ -8,7 +8,11 @@ import {
 import type { SummarizeOptions, TokenUsage } from './llm';
 import { summarize } from './llm';
 import { type PageContent, buildArticleContext } from './page-content';
-import { formatCommentsForPrompt, formatPageCommentsForPrompt, preprocessComments } from './preprocess';
+import {
+	formatCommentsForPrompt,
+	formatPageCommentsForPrompt,
+	preprocessComments,
+} from './preprocess';
 import { settings } from './settings';
 import type { Discussion, Platform } from './types';
 

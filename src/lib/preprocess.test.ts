@@ -1,7 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import type { Comment } from './comments';
 import type { ExtractedComment } from './page-content';
-import { formatCommentsForPrompt, formatPageCommentsForPrompt, preprocessComments } from './preprocess';
+import {
+	formatCommentsForPrompt,
+	formatPageCommentsForPrompt,
+	preprocessComments,
+} from './preprocess';
 
 function makeComment(overrides: Partial<Comment> = {}): Comment {
 	return {

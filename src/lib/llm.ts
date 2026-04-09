@@ -33,7 +33,11 @@ export interface SummarizeResult {
 	usage: TokenUsage;
 }
 
-function buildSystemPrompt(language: string, hasArticle: boolean, hasPageComments: boolean): string {
+function buildSystemPrompt(
+	language: string,
+	hasArticle: boolean,
+	hasPageComments: boolean,
+): string {
 	const langInstruction = language !== 'en' ? `\nRespond in ${language}.` : '';
 	const basePrompt = `You brief someone on what people said about a webpage. Write like a sharp colleague talking over coffee, not a report.${langInstruction}
 
@@ -111,7 +115,11 @@ async function summarizeAnthropic(
 		body: JSON.stringify({
 			model: options.model,
 			max_tokens: 1024,
-			system: buildSystemPrompt(options.language ?? 'en', !!options.articleContext, !!options.pageComments),
+			system: buildSystemPrompt(
+				options.language ?? 'en',
+				!!options.articleContext,
+				!!options.pageComments,
+			),
 			messages: [{ role: 'user', content: buildUserMessage(commentsText, options) }],
 		}),
 	});
@@ -154,7 +162,14 @@ async function summarizeOpenai(
 			model: options.model,
 			max_tokens: 1024,
 			messages: [
-				{ role: 'system', content: buildSystemPrompt(options.language ?? 'en', !!options.articleContext, !!options.pageComments) },
+				{
+					role: 'system',
+					content: buildSystemPrompt(
+						options.language ?? 'en',
+						!!options.articleContext,
+						!!options.pageComments,
+					),
+				},
 				{ role: 'user', content: buildUserMessage(commentsText, options) },
 			],
 		}),
@@ -192,7 +207,17 @@ async function summarizeGoogle(
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({
-			system_instruction: { parts: [{ text: buildSystemPrompt(options.language ?? 'en', !!options.articleContext, !!options.pageComments) }] },
+			system_instruction: {
+				parts: [
+					{
+						text: buildSystemPrompt(
+							options.language ?? 'en',
+							!!options.articleContext,
+							!!options.pageComments,
+						),
+					},
+				],
+			},
 			contents: [{ parts: [{ text: buildUserMessage(commentsText, options) }] }],
 			generationConfig: { maxOutputTokens: 1024 },
 		}),

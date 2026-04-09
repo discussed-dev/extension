@@ -2,7 +2,7 @@
 import { syncToolbarBadgeForDiscussions } from '@/lib/badge';
 import { cacheGet } from '@/lib/cache';
 import { discoverDiscussions } from '@/lib/discovery';
-import { injectAndExtract, type PageContent } from '@/lib/page-content';
+import { type PageContent, injectAndExtract } from '@/lib/page-content';
 import { type Settings, settings } from '@/lib/settings';
 import { type SummaryResult, summarizeDiscussions } from '@/lib/summarize';
 import { setToolbarBadge } from '@/lib/toolbar-action';

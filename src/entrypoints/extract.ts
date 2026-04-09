@@ -1,7 +1,7 @@
 import { Readability } from '@mozilla/readability';
 import type { PageContent } from '@/lib/page-content';
+import { extractPageComments } from '@/extractors/registry';
 
-/** Maximum characters of article text to return (~2000 tokens). */
 const MAX_ARTICLE_CHARS = 8000;
 
 function extractArticle(): string | undefined {
@@ -19,12 +19,13 @@ function extractArticle(): string | undefined {
 
 export default defineUnlistedScript(() => {
   const articleText = extractArticle();
+  const pageCommentResult = extractPageComments(window.location.hostname);
 
   const content: PageContent = {
     articleText,
-    // Comments will be added in Task 8 (extractors)
+    comments: pageCommentResult?.comments,
+    commentSource: pageCommentResult?.source,
   };
 
-  // Return value is picked up by browser.scripting.executeScript
   return content;
 });

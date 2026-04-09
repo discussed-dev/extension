@@ -62,7 +62,8 @@ bun run lint:fix               # biome auto-fix
 - Lobsters results filtered by normalized URL match (domain API returns all domain results)
 - Internal URLs (`about:`, `chrome://`, etc.) skip discovery entirely
 - Reddit uses exact match by default; fuzzy search delegated to Google Forums external link
-- URL normalization strips `index.html/htm/php`, query strings, fragments, `www.`, trailing slashes
+- URL normalization strips `index.html/htm/php`, query strings, fragments, `www.`, trailing slashes, tracking params (`utm_*`, `fbclid`, `gclid`, etc.); normalizes mobile Wikipedia (`en.m.` → `en.`); unwraps `web.archive.org` URLs
+- Empty-state popup offers "Submit to" links for HN, Reddit, Lobsters (pre-fills URL + title)
 - 8 LLM providers with OpenAI-compatible base URL for custom/local models
 
 ## Release Workflow

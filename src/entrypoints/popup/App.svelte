@@ -217,6 +217,16 @@ load();
     model={summaryResult.model}
     createdAt={summaryResult.createdAt}
     usage={summaryResult.usage}
+    pageTitle={currentTitle}
+    pageUrl={currentUrl}
+    discussions={discussions.map((d) => ({
+      platform: d.platform,
+      title: d.title,
+      url: d.url,
+      commentCount: d.commentCount,
+      subreddit: d.subreddit,
+    }))}
+    obsidianVault={userSettings?.obsidianVault ?? ''}
     onBack={() => { view = 'overview'; }}
     onRegenerate={() => doSummarize(true)}
     regenerating={summarizing}

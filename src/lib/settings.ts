@@ -36,6 +36,9 @@ export interface Settings {
 	// Blacklist
 	blacklist: string;
 	blacklistMode: 'blacklist' | 'whitelist';
+
+	// Export
+	obsidianVault: string;
 }
 
 const DEFAULTS: Settings = {
@@ -66,6 +69,8 @@ const DEFAULTS: Settings = {
 
 	blacklist: '',
 	blacklistMode: 'blacklist',
+
+	obsidianVault: '',
 };
 
 export interface ProviderConfig {

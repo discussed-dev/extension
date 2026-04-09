@@ -55,5 +55,11 @@
 	"apiKey": { "message": "APIキー" },
 	"test": { "message": "テスト" },
 	"reportIssue": { "message": "問題を報告" },
-	"submitTo": { "message": "投稿先" }
+	"submitTo": { "message": "投稿先" },
+	"copyMarkdown": { "message": "Markdownとしてコピー" },
+	"copyPlainText": { "message": "プレーンテキストとしてコピー" },
+	"openInObsidian": { "message": "Obsidianで開く" },
+	"obsidianVault": { "message": "Obsidianボールト名" },
+	"obsidianVaultHint": { "message": "任意。「Obsidianで開く」機能に必要です。" },
+	"exportSection": { "message": "エクスポート" }
 }

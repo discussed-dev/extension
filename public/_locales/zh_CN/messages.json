@@ -55,5 +55,11 @@
 	"apiKey": { "message": "API 密钥" },
 	"test": { "message": "测试" },
 	"reportIssue": { "message": "报告问题" },
-	"submitTo": { "message": "提交到" }
+	"submitTo": { "message": "提交到" },
+	"copyMarkdown": { "message": "复制为 Markdown" },
+	"copyPlainText": { "message": "复制为纯文本" },
+	"openInObsidian": { "message": "在 Obsidian 中打开" },
+	"obsidianVault": { "message": "Obsidian 仓库名称" },
+	"obsidianVaultHint": { "message": "可选。使用「在 Obsidian 中打开」功能时必填。" },
+	"exportSection": { "message": "导出" }
 }

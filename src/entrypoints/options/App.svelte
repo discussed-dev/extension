@@ -1,4 +1,5 @@
 <script lang="ts">
+import { t } from '@/lib/i18n';
 import type { LlmProvider } from '@/lib/llm';
 import { PROVIDERS, type Settings, settings } from '@/lib/settings';
 
@@ -359,6 +360,25 @@ load();
             </select>
           </label>
         </section>
+      </div>
+    </section>
+
+    <section class="rounded-[1.15rem] border border-stone-200 bg-white/95 p-3 shadow-sm">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">{t('exportSection')}</p>
+        <h2 class="mt-1 text-base font-semibold tracking-tight text-stone-950">Export</h2>
+      </div>
+      <div class="mt-3">
+        <label class="block">
+          <span class="block text-sm font-medium text-stone-900">{t('obsidianVault')}</span>
+          <span class="mt-0.5 block text-xs leading-5 text-stone-600">{t('obsidianVaultHint')}</span>
+          <input
+            type="text"
+            bind:value={current.obsidianVault}
+            placeholder="My Vault"
+            class="mt-2 min-h-10 w-full rounded-2xl border border-stone-300 bg-white px-4 text-sm text-stone-900"
+          />
+        </label>
       </div>
     </section>
 

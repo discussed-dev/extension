@@ -59,5 +59,11 @@
 	"apiKey": { "message": "API 키" },
 	"test": { "message": "테스트" },
 	"reportIssue": { "message": "문제 신고" },
-	"submitTo": { "message": "제출하기" }
+	"submitTo": { "message": "제출하기" },
+	"copyMarkdown": { "message": "Markdown으로 복사" },
+	"copyPlainText": { "message": "일반 텍스트로 복사" },
+	"openInObsidian": { "message": "Obsidian에서 열기" },
+	"obsidianVault": { "message": "Obsidian 보관함 이름" },
+	"obsidianVaultHint": { "message": "선택사항. 'Obsidian에서 열기' 기능에 필요합니다." },
+	"exportSection": { "message": "내보내기" }
 }

@@ -63,5 +63,11 @@
 	"apiKey": { "message": "API-Schlüssel" },
 	"test": { "message": "Testen" },
 	"reportIssue": { "message": "Problem melden" },
-	"submitTo": { "message": "Einreichen bei" }
+	"submitTo": { "message": "Einreichen bei" },
+	"copyMarkdown": { "message": "Als Markdown kopieren" },
+	"copyPlainText": { "message": "Als Klartext kopieren" },
+	"openInObsidian": { "message": "In Obsidian öffnen" },
+	"obsidianVault": { "message": "Obsidian-Vault-Name" },
+	"obsidianVaultHint": { "message": "Optional. Erforderlich für „In Obsidian öffnen\"." },
+	"exportSection": { "message": "Exportieren" }
 }

@@ -1,4 +1,6 @@
 import type { Comment } from './comments';
+import type { ExtractedComment } from './page-content';
+import { truncateToTokenBudget } from './token-budget';
 import type { Platform } from './types';
 
 const MAX_COMMENT_LENGTH = 300;
@@ -109,4 +111,21 @@ export function formatCommentsForPrompt(comments: Comment[]): string {
 	}
 
 	return sections.join('\n\n');
+}
+
+const PAGE_COMMENT_TOKEN_BUDGET = 2000;
+
+export function formatPageCommentsForPrompt(
+	comments: ExtractedComment[],
+	tokenBudget: number = PAGE_COMMENT_TOKEN_BUDGET,
+): string {
+	const lines = comments
+		.map((c) => {
+			const prefix = c.author ? `${c.author}: ` : '';
+			const score = c.score != null ? `[${c.score} pts] ` : '';
+			return `${score}${prefix}${c.text}`;
+		})
+		.join('\n\n');
+
+	return truncateToTokenBudget(lines, tokenBudget);
 }

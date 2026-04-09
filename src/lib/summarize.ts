@@ -8,7 +8,7 @@ import {
 import type { SummarizeOptions, TokenUsage } from './llm';
 import { summarize } from './llm';
 import { type PageContent, buildArticleContext } from './page-content';
-import { formatCommentsForPrompt, preprocessComments } from './preprocess';
+import { formatCommentsForPrompt, formatPageCommentsForPrompt, preprocessComments } from './preprocess';
 import { settings } from './settings';
 import type { Discussion, Platform } from './types';
 
@@ -142,6 +142,10 @@ export async function summarizeDiscussions(
 		? buildArticleContext(options.pageContent, ARTICLE_TOKEN_BUDGET)
 		: undefined;
 
+	const pageComments = options.pageContent?.comments
+		? formatPageCommentsForPrompt(options.pageContent.comments)
+		: undefined;
+
 	const summarizeOptions: SummarizeOptions = {
 		provider: userSettings.llmProvider,
 		apiKey: userSettings.apiKey,
@@ -157,6 +161,8 @@ export async function summarizeDiscussions(
 		})),
 		coverageHeader,
 		articleContext,
+		pageComments,
+		pageCommentSource: options.pageContent?.commentSource,
 	};
 
 	const result = await summarize(commentsText, summarizeOptions);

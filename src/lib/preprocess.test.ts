@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { Comment } from './comments';
-import { formatCommentsForPrompt, preprocessComments } from './preprocess';
+import type { ExtractedComment } from './page-content';
+import { formatCommentsForPrompt, formatPageCommentsForPrompt, preprocessComments } from './preprocess';
 
 function makeComment(overrides: Partial<Comment> = {}): Comment {
 	return {
@@ -86,5 +87,26 @@ describe('formatCommentsForPrompt', () => {
 		const comments = [makeComment({ platform: 'lobsters', author: 'charlie', score: 5 })];
 		const text = formatCommentsForPrompt(comments);
 		expect(text).toContain('--- Lobsters');
+	});
+});
+
+describe('formatPageCommentsForPrompt', () => {
+	it('formats comments with author and score', () => {
+		const comments: ExtractedComment[] = [
+			{ author: 'alice', text: 'Great article', score: 5 },
+			{ text: 'Anonymous comment' },
+		];
+		const result = formatPageCommentsForPrompt(comments);
+		expect(result).toContain('[5 pts] alice: Great article');
+		expect(result).toContain('Anonymous comment');
+	});
+
+	it('truncates to token budget', () => {
+		const comments: ExtractedComment[] = Array.from({ length: 100 }, (_, i) => ({
+			text: `This is comment number ${i} with some substantial text to fill the budget`,
+			author: `user${i}`,
+		}));
+		const result = formatPageCommentsForPrompt(comments, 100); // 100 tokens = 400 chars
+		expect(result.length).toBeLessThanOrEqual(400);
 	});
 });

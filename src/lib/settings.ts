@@ -93,11 +93,14 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 		baseUrl: 'https://api.openai.com/v1',
 		keyPlaceholder: 'sk-...',
 		models: [
-			{ id: 'gpt-5.4-mini', label: 'GPT-5.4 Mini', cost: '$' },
+			{ id: 'gpt-5-nano', label: 'GPT-5 Nano', cost: '$' },
+			{ id: 'gpt-4.1-nano', label: 'GPT-4.1 Nano', cost: '$' },
+			{ id: 'gpt-5-mini', label: 'GPT-5 Mini', cost: '$' },
 			{ id: 'gpt-5.4-nano', label: 'GPT-5.4 Nano', cost: '$' },
-			{ id: 'gpt-5.4', label: 'GPT-5.4', cost: '$$$' },
 			{ id: 'gpt-4.1-mini', label: 'GPT-4.1 Mini', cost: '$' },
+			{ id: 'gpt-5.4-mini', label: 'GPT-5.4 Mini', cost: '$$' },
 			{ id: 'o4-mini', label: 'o4-mini', cost: '$$' },
+			{ id: 'gpt-5.4', label: 'GPT-5.4', cost: '$$$' },
 		],
 	},
 	google: {
@@ -105,10 +108,10 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 		apiFormat: 'google',
 		keyPlaceholder: 'AIza...',
 		models: [
-			{ id: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash', cost: '$' },
-			{ id: 'gemini-2.5-pro', label: 'Gemini 2.5 Pro', cost: '$$' },
 			{ id: 'gemini-2.5-flash-lite', label: 'Gemini 2.5 Flash Lite', cost: '$' },
 			{ id: 'gemini-3-flash-preview', label: 'Gemini 3 Flash (preview)', cost: '$' },
+			{ id: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash', cost: '$$' },
+			{ id: 'gemini-2.5-pro', label: 'Gemini 2.5 Pro', cost: '$$' },
 		],
 	},
 	deepseek: {

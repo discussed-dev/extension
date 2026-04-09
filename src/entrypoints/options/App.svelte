@@ -336,7 +336,7 @@ load();
                 </select>
               {/if}
             </div>
-            <p class="mt-1 text-xs text-stone-500">Each summary uses ~8K input + ~500 output tokens. $ = cheapest, $$$ = premium.</p>
+            <p class="mt-1 text-xs text-stone-500">Summarization works well with lightweight models — no need for flagship ones. $ models cost under $0.001 per summary.</p>
           </label>
 
           <label class="block">

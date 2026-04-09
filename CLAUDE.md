@@ -66,6 +66,10 @@ bun run lint:fix               # biome auto-fix
 - Empty-state popup offers "Submit to" links for HN, Reddit, Lobsters (pre-fills URL + title)
 - 8 LLM providers with OpenAI-compatible base URL for custom/local models
 
+## Coding Rules
+
+- **i18n required for all UI text.** Every user-visible string in popup, options, or content script must use `t('key')` from `src/lib/i18n.ts` with entries in all 7 locale files under `public/_locales/`. No hardcoded English in UI components.
+
 ## Release Workflow
 
 When asked to release or bump version:

@@ -7,11 +7,13 @@ import {
 } from './comments';
 import type { SummarizeOptions, TokenUsage } from './llm';
 import { summarize } from './llm';
+import { type PageContent, buildArticleContext } from './page-content';
 import { formatCommentsForPrompt, preprocessComments } from './preprocess';
 import { settings } from './settings';
 import type { Discussion, Platform } from './types';
 
 const SUMMARY_CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+const ARTICLE_TOKEN_BUDGET = 2000;
 const MAX_THREADS_FOR_COMMENTS = 5;
 const MAX_HN_COMMENTS_PER_THREAD = 200;
 
@@ -107,7 +109,7 @@ ${platformLines}`;
 export async function summarizeDiscussions(
 	pageUrl: string,
 	discussions: Discussion[],
-	options: { force?: boolean } = {},
+	options: { force?: boolean; pageContent?: PageContent } = {},
 ): Promise<SummaryResult> {
 	const cacheKey = `summary:${pageUrl}`;
 
@@ -136,6 +138,10 @@ export async function summarizeDiscussions(
 	const coverageHeader = formatCoverageHeader(coverage);
 	const commentsText = formatCommentsForPrompt(processed);
 
+	const articleContext = options.pageContent
+		? buildArticleContext(options.pageContent, ARTICLE_TOKEN_BUDGET)
+		: undefined;
+
 	const summarizeOptions: SummarizeOptions = {
 		provider: userSettings.llmProvider,
 		apiKey: userSettings.apiKey,
@@ -150,6 +156,7 @@ export async function summarizeDiscussions(
 			subreddit: d.subreddit,
 		})),
 		coverageHeader,
+		articleContext,
 	};
 
 	const result = await summarize(commentsText, summarizeOptions);

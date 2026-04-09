@@ -2,6 +2,7 @@
 import { syncToolbarBadgeForDiscussions } from '@/lib/badge';
 import { cacheGet } from '@/lib/cache';
 import { discoverDiscussions } from '@/lib/discovery';
+import { injectAndExtract } from '@/lib/page-content';
 import { type Settings, settings } from '@/lib/settings';
 import { type SummaryResult, summarizeDiscussions } from '@/lib/summarize';
 import { setToolbarBadge } from '@/lib/toolbar-action';
@@ -165,7 +166,11 @@ async function doSummarize(force = false) {
 	summarizing = true;
 	summaryError = '';
 	try {
-		summaryResult = await summarizeDiscussions(currentUrl, discussions, { force });
+		let pageContent = undefined;
+		if (currentTabId != null) {
+			pageContent = await injectAndExtract(currentTabId);
+		}
+		summaryResult = await summarizeDiscussions(currentUrl, discussions, { force, pageContent });
 		view = 'summary';
 	} catch (e) {
 		summaryError = e instanceof Error ? e.message : 'Summarization failed';

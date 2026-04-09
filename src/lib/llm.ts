@@ -17,6 +17,9 @@ export interface SummarizeOptions {
 	discussions?: DiscussionSource[];
 	openaiBaseUrl?: string;
 	coverageHeader?: string;
+	articleContext?: string;
+	pageComments?: string;
+	pageCommentSource?: string;
 }
 
 export interface TokenUsage {
@@ -30,9 +33,9 @@ export interface SummarizeResult {
 	usage: TokenUsage;
 }
 
-function buildSystemPrompt(language: string): string {
+function buildSystemPrompt(language: string, hasArticle: boolean, hasPageComments: boolean): string {
 	const langInstruction = language !== 'en' ? `\nRespond in ${language}.` : '';
-	return `You brief a developer on what people said about a webpage. Write like a sharp colleague talking over coffee, not a report.${langInstruction}
+	const basePrompt = `You brief someone on what people said about a webpage. Write like a sharp colleague talking over coffee, not a report.${langInstruction}
 
 Rules:
 - Only use the supplied comments. Don't invent facts or consensus.
@@ -44,6 +47,13 @@ Rules:
 - Plain paragraphs only. No headings, no bullets, no "Overall," or "It's worth noting."
 
 Structure: one sentence verdict (max 20 words), then 2 short paragraphs with quotes and specifics. Spread the substance across paragraphs, don't front-load. Under 150 words total.`;
+
+	let extra = '';
+	if (hasArticle || hasPageComments) {
+		extra =
+			'\n\nWhen article context or page comments are provided, also:\n- Note where page commenters differ from forum commenters\n- Surface unique insights not obvious from the article alone';
+	}
+	return basePrompt + extra;
 }
 
 function formatDiscussionSources(discussions: DiscussionSource[]): string {
@@ -64,13 +74,22 @@ function buildUserMessage(commentsText: string, options: SummarizeOptions): stri
 
 	if (options.coverageHeader) parts.push(`\n${options.coverageHeader}`);
 
+	if (options.articleContext) {
+		parts.push(`\nARTICLE SUMMARY:\n${options.articleContext}`);
+	}
+
 	if (options.discussions?.length) {
 		parts.push(
 			`\nDiscussion threads (use these URLs when referencing discussions):\n${formatDiscussionSources(options.discussions)}`,
 		);
 	}
 
-	parts.push(`\nComments:\n${commentsText}`);
+	parts.push(`\nDISCUSSION COMMENTS:\n${commentsText}`);
+
+	if (options.pageComments) {
+		const source = options.pageCommentSource ?? 'page';
+		parts.push(`\nPAGE COMMENTS (from ${source}):\n${options.pageComments}`);
+	}
 
 	return parts.join('\n');
 }
@@ -92,7 +111,7 @@ async function summarizeAnthropic(
 		body: JSON.stringify({
 			model: options.model,
 			max_tokens: 1024,
-			system: buildSystemPrompt(options.language ?? 'en'),
+			system: buildSystemPrompt(options.language ?? 'en', !!options.articleContext, !!options.pageComments),
 			messages: [{ role: 'user', content: buildUserMessage(commentsText, options) }],
 		}),
 	});
@@ -135,7 +154,7 @@ async function summarizeOpenai(
 			model: options.model,
 			max_tokens: 1024,
 			messages: [
-				{ role: 'system', content: buildSystemPrompt(options.language ?? 'en') },
+				{ role: 'system', content: buildSystemPrompt(options.language ?? 'en', !!options.articleContext, !!options.pageComments) },
 				{ role: 'user', content: buildUserMessage(commentsText, options) },
 			],
 		}),
@@ -173,7 +192,7 @@ async function summarizeGoogle(
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({
-			system_instruction: { parts: [{ text: buildSystemPrompt(options.language ?? 'en') }] },
+			system_instruction: { parts: [{ text: buildSystemPrompt(options.language ?? 'en', !!options.articleContext, !!options.pageComments) }] },
 			contents: [{ parts: [{ text: buildUserMessage(commentsText, options) }] }],
 			generationConfig: { maxOutputTokens: 1024 },
 		}),

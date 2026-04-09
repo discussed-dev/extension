@@ -6,7 +6,7 @@ export default defineConfig({
 	modules: ['@wxt-dev/module-svelte'],
 	manifest: {
 		default_locale: 'en',
-		permissions: ['tabs', 'activeTab', 'storage'],
+		permissions: ['tabs', 'activeTab', 'storage', 'scripting'],
 		commands: {
 			_execute_action: {
 				suggested_key: {

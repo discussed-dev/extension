@@ -1,6 +1,6 @@
 # Privacy Policy — Discussed Browser Extension
 
-**Last updated:** April 6, 2026
+**Last updated:** April 9, 2026
 
 ## What Discussed Does
 
@@ -23,8 +23,16 @@ When you browse the web with Discussed installed, the following data is processe
 - Discussion metadata (titles, scores, comment counts) retrieved from HN, Reddit, and Lobsters is cached in your browser's local storage.
 - Cached data expires automatically based on your configured cache duration.
 
+### Page Content Reading (v0.3+)
+- When you click "Summarize", Discussed reads text from the current page to provide context for the discussion summary:
+  - **Article text** is extracted using Mozilla Readability to identify the page's main content.
+  - **Native comments** on supported sites (NYT, WSJ, Guardian, Substack) are read from the page DOM.
+- This happens **only when you click Summarize** — never on page load, never passively.
+- No page content is stored beyond the current session.
+- Discussed does not inject any visible elements into web pages.
+
 ### AI Summarization
-- When you click "Summarize", discussion comments are sent **directly from your browser** to the AI provider you configured (e.g., Anthropic, OpenAI, Google, etc.).
+- When you click "Summarize", discussion comments (and optionally article text and page comments) are sent **directly from your browser** to the AI provider you configured (e.g., Anthropic, OpenAI, Google, etc.).
 - **Your API key** is stored in your browser's synced storage and is sent directly to the AI provider. It is never sent to us.
 - Summaries are cached locally in your browser for 7 days.
 
@@ -48,7 +56,8 @@ Discussed communicates directly with these third-party services from your browse
 | Permission | Why |
 |-----------|-----|
 | `tabs` | Read the current tab's URL to search for discussions |
-| `activeTab` | Access the active tab for Firefox compatibility |
+| `activeTab` | Access the active tab when you click Summarize (reads page content) |
+| `scripting` | Inject content script to extract article text and page comments on demand |
 | `storage` | Cache discussion results, summaries, settings, and Bloom filter locally |
 | Host permissions | Make API calls directly to discussion platforms and AI providers |
 

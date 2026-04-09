@@ -65,5 +65,7 @@
 	"openInObsidian": { "message": "Obsidian에서 열기" },
 	"obsidianVault": { "message": "Obsidian 보관함 이름" },
 	"obsidianVaultHint": { "message": "선택사항. 'Obsidian에서 열기' 기능에 필요합니다." },
-	"exportSection": { "message": "내보내기" }
+	"exportSection": { "message": "내보내기" },
+	"sourceArticle": { "message": "기사" },
+	"sourcePageComments": { "message": "페이지" }
 }

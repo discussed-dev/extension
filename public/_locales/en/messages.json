@@ -65,5 +65,7 @@
 	"openInObsidian": { "message": "Open in Obsidian" },
 	"obsidianVault": { "message": "Obsidian vault name" },
 	"obsidianVaultHint": { "message": "Optional. Required for \"Open in Obsidian\" export." },
-	"exportSection": { "message": "Export" }
+	"exportSection": { "message": "Export" },
+	"sourceArticle": { "message": "Article" },
+	"sourcePageComments": { "message": "Page" }
 }

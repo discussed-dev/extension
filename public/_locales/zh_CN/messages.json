@@ -61,5 +61,7 @@
 	"openInObsidian": { "message": "在 Obsidian 中打开" },
 	"obsidianVault": { "message": "Obsidian 仓库名称" },
 	"obsidianVaultHint": { "message": "可选。使用「在 Obsidian 中打开」功能时必填。" },
-	"exportSection": { "message": "导出" }
+	"exportSection": { "message": "导出" },
+	"sourceArticle": { "message": "文章" },
+	"sourcePageComments": { "message": "页面评论" }
 }

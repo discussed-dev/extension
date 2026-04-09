@@ -67,5 +67,7 @@
 	"openInObsidian": { "message": "Ouvrir dans Obsidian" },
 	"obsidianVault": { "message": "Nom du coffre Obsidian" },
 	"obsidianVaultHint": { "message": "Facultatif. Requis pour « Ouvrir dans Obsidian »." },
-	"exportSection": { "message": "Exporter" }
+	"exportSection": { "message": "Exporter" },
+	"sourceArticle": { "message": "Article" },
+	"sourcePageComments": { "message": "Page" }
 }

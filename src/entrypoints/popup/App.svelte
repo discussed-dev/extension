@@ -2,7 +2,7 @@
 import { syncToolbarBadgeForDiscussions } from '@/lib/badge';
 import { cacheGet } from '@/lib/cache';
 import { discoverDiscussions } from '@/lib/discovery';
-import { injectAndExtract } from '@/lib/page-content';
+import { injectAndExtract, type PageContent } from '@/lib/page-content';
 import { type Settings, settings } from '@/lib/settings';
 import { type SummaryResult, summarizeDiscussions } from '@/lib/summarize';
 import { setToolbarBadge } from '@/lib/toolbar-action';
@@ -34,6 +34,7 @@ let summarizing = $state(false);
 let summaryError = $state('');
 let hasApiKey = $state(false);
 let userSettings = $state<Settings | null>(null);
+let lastPageContent = $state<PageContent | undefined>(undefined);
 
 async function load() {
 	loading = true;
@@ -170,6 +171,7 @@ async function doSummarize(force = false) {
 		if (currentTabId != null) {
 			pageContent = await injectAndExtract(currentTabId);
 		}
+		lastPageContent = pageContent;
 		summaryResult = await summarizeDiscussions(currentUrl, discussions, { force, pageContent });
 		view = 'summary';
 	} catch (e) {
@@ -230,6 +232,9 @@ load();
     onBack={() => { view = 'overview'; }}
     onRegenerate={() => doSummarize(true)}
     regenerating={summarizing}
+    hasArticleContext={!!lastPageContent?.articleText}
+    hasPageComments={!!lastPageContent?.comments?.length}
+    platforms={[...new Set(discussions.map(d => d.platform))]}
   />
 {:else}
   <main class="flex max-h-[42rem] w-[28rem] min-h-48 flex-col overflow-hidden border border-stone-200/80 bg-white/95 text-stone-900 shadow-[0_18px_45px_rgba(15,23,42,0.08)] backdrop-blur-sm">

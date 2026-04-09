@@ -61,5 +61,7 @@
 	"openInObsidian": { "message": "Obsidianで開く" },
 	"obsidianVault": { "message": "Obsidianボールト名" },
 	"obsidianVaultHint": { "message": "任意。「Obsidianで開く」機能に必要です。" },
-	"exportSection": { "message": "エクスポート" }
+	"exportSection": { "message": "エクスポート" },
+	"sourceArticle": { "message": "記事" },
+	"sourcePageComments": { "message": "ページ" }
 }

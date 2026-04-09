@@ -24,6 +24,9 @@ interface Props {
 	onBack: () => void;
 	onRegenerate: () => void;
 	regenerating: boolean;
+	hasArticleContext?: boolean;
+	hasPageComments?: boolean;
+	platforms?: Array<'hn' | 'reddit' | 'lobsters'>;
 }
 
 let {
@@ -38,6 +41,9 @@ let {
 	onBack,
 	onRegenerate,
 	regenerating,
+	hasArticleContext,
+	hasPageComments,
+	platforms,
 }: Props = $props();
 
 let copied = $state(false);
@@ -222,6 +228,21 @@ function renderMarkdown(text: string): string {
   </div>
 
   <div class="flex flex-wrap items-center gap-2 border-t border-stone-200/80 px-4 py-3 text-xs text-stone-500">
+    {#if platforms?.includes('hn')}
+      <span class="rounded-full border border-orange-200 bg-orange-50 px-2.5 py-1 text-orange-700">HN</span>
+    {/if}
+    {#if platforms?.includes('reddit')}
+      <span class="rounded-full border border-orange-200 bg-orange-50 px-2.5 py-1 text-orange-700">Reddit</span>
+    {/if}
+    {#if platforms?.includes('lobsters')}
+      <span class="rounded-full border border-red-200 bg-red-50 px-2.5 py-1 text-red-700">Lobsters</span>
+    {/if}
+    {#if hasArticleContext}
+      <span class="rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-blue-700">{t('sourceArticle')}</span>
+    {/if}
+    {#if hasPageComments}
+      <span class="rounded-full border border-green-200 bg-green-50 px-2.5 py-1 text-green-700">{t('sourcePageComments')}</span>
+    {/if}
     <span class="rounded-full border border-stone-200 bg-stone-50 px-2.5 py-1">{model}</span>
     <span class="rounded-full border border-stone-200 bg-stone-50 px-2.5 py-1">
       {new Date(createdAt).toLocaleDateString()}

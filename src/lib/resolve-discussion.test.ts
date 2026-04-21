@@ -1,6 +1,6 @@
 import { type Mock, beforeEach, describe, expect, it, vi } from 'vitest';
 import { fakeBrowser } from 'wxt/testing/fake-browser';
-import { detectDiscussionPage, resolveLinkedUrl } from './resolve-discussion';
+import { detectDiscussionPage, isPlatformUrl, resolveLinkedUrl } from './resolve-discussion';
 
 const mockFetch = vi.fn() as Mock;
 vi.stubGlobal('fetch', mockFetch);
@@ -75,6 +75,31 @@ describe('detectDiscussionPage', () => {
 
 	it('returns null for invalid URLs', () => {
 		expect(detectDiscussionPage('not-a-url')).toBeNull();
+	});
+});
+
+describe('isPlatformUrl', () => {
+	it('matches HN', () => {
+		expect(isPlatformUrl('https://news.ycombinator.com/')).toBe(true);
+		expect(isPlatformUrl('https://news.ycombinator.com/newest')).toBe(true);
+		expect(isPlatformUrl('https://news.ycombinator.com/item?id=12345')).toBe(true);
+	});
+
+	it('matches Reddit variants', () => {
+		expect(isPlatformUrl('https://www.reddit.com/')).toBe(true);
+		expect(isPlatformUrl('https://old.reddit.com/r/programming/')).toBe(true);
+		expect(isPlatformUrl('https://reddit.com/')).toBe(true);
+		expect(isPlatformUrl('https://np.reddit.com/r/linux/')).toBe(true);
+	});
+
+	it('matches Lobsters', () => {
+		expect(isPlatformUrl('https://lobste.rs/')).toBe(true);
+		expect(isPlatformUrl('https://lobste.rs/newest')).toBe(true);
+	});
+
+	it('rejects non-platform URLs', () => {
+		expect(isPlatformUrl('https://example.com/')).toBe(false);
+		expect(isPlatformUrl('https://github.com/')).toBe(false);
 	});
 });
 

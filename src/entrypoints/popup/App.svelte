@@ -4,7 +4,7 @@ import { cacheGet } from '@/lib/cache';
 import { discoverDiscussions } from '@/lib/discovery';
 import { t } from '@/lib/i18n';
 import { type PageContent, injectAndExtract } from '@/lib/page-content';
-import { type ResolvedDiscussion, resolveLinkedUrl } from '@/lib/resolve-discussion';
+import { type ResolvedDiscussion, isPlatformUrl, resolveLinkedUrl } from '@/lib/resolve-discussion';
 import { type Settings, settings } from '@/lib/settings';
 import { type SummaryResult, summarizeDiscussions } from '@/lib/summarize';
 import { setToolbarBadge } from '@/lib/toolbar-action';
@@ -63,6 +63,10 @@ async function load() {
 		blocked = false;
 		const resolveResult = await resolveLinkedUrl(tab.url);
 		resolved = resolveResult;
+		if (!resolveResult && isPlatformUrl(tab.url)) {
+			discussions = [];
+			return;
+		}
 		const targetUrl = resolveResult?.linkedUrl ?? tab.url;
 		const allDiscussions = await discoverDiscussions(targetUrl);
 
@@ -108,6 +112,10 @@ async function refresh() {
 		blocked = false;
 		const resolveResult = await resolveLinkedUrl(currentUrl);
 		resolved = resolveResult;
+		if (!resolveResult && isPlatformUrl(currentUrl)) {
+			discussions = [];
+			return;
+		}
 		const targetUrl = resolveResult?.linkedUrl ?? currentUrl;
 		const allDiscussions = await discoverDiscussions(targetUrl, { force: true });
 

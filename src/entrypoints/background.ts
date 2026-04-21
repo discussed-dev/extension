@@ -1,7 +1,7 @@
 import { syncToolbarBadgeForDiscussions } from '@/lib/badge';
 import { updateBloomFilter } from '@/lib/bloom';
 import { discoverDiscussions } from '@/lib/discovery';
-import { resolveLinkedUrl } from '@/lib/resolve-discussion';
+import { isPlatformUrl, resolveLinkedUrl } from '@/lib/resolve-discussion';
 import { settings } from '@/lib/settings';
 import { setToolbarBadge } from '@/lib/toolbar-action';
 import type { Discussion } from '@/lib/types';
@@ -27,6 +27,10 @@ async function onTabUpdated(tabId: number, url: string): Promise<void> {
 		}
 
 		const resolved = await resolveLinkedUrl(url);
+		if (!resolved && isPlatformUrl(url)) {
+			await setToolbarBadge(browser, { tabId, text: '' });
+			return;
+		}
 		const targetUrl = resolved?.linkedUrl ?? url;
 		const discussions = await discoverDiscussions(targetUrl);
 

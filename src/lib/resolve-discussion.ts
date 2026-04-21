@@ -12,10 +12,21 @@ export interface ResolvedDiscussion {
 	discussionId: string;
 }
 
-const HN_ITEM_RE = /^https?:\/\/news\.ycombinator\.com\/item\?/;
 const REDDIT_COMMENTS_RE =
 	/^https?:\/\/([a-z]+\.)?reddit\.com\/(r\/[^/]+\/)?comments\/([a-z0-9]+)/i;
 const LOBSTERS_STORY_RE = /^https?:\/\/lobste\.rs\/s\/([a-z0-9]+)/i;
+
+const PLATFORM_HOSTS = new Set(['news.ycombinator.com', 'lobste.rs']);
+const REDDIT_HOST_RE = /^([a-z]+\.)?reddit\.com$/i;
+
+export function isPlatformUrl(url: string): boolean {
+	try {
+		const { hostname } = new URL(url);
+		return PLATFORM_HOSTS.has(hostname) || REDDIT_HOST_RE.test(hostname);
+	} catch {
+		return false;
+	}
+}
 
 export function detectDiscussionPage(url: string): DiscussionPageInfo | null {
 	try {

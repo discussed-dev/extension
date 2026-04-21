@@ -53,3 +53,14 @@ jobs:
             ${{ steps.assets.outputs.chrome_zip }}
             ${{ steps.assets.outputs.firefox_xpi }}
             ${{ steps.assets.outputs.sources_zip }}
+
+      - name: Submit to Firefox AMO
+        if: secrets.AMO_JWT_ISSUER != ''
+        run: |
+          bunx wxt submit \
+            --firefox-zip "${{ steps.assets.outputs.firefox_xpi }}" \
+            --firefox-sources-zip "${{ steps.assets.outputs.sources_zip }}" \
+            --firefox-extension-id "discussed@discussed.dev" \
+            --firefox-jwt-issuer "${{ secrets.AMO_JWT_ISSUER }}" \
+            --firefox-jwt-secret "${{ secrets.AMO_JWT_SECRET }}" \
+            --firefox-channel listed

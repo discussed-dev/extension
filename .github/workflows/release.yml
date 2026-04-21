@@ -55,7 +55,7 @@ jobs:
             ${{ steps.assets.outputs.sources_zip }}
 
       - name: Submit to Firefox AMO
-        if: secrets.AMO_JWT_ISSUER != ''
+        if: ${{ secrets.AMO_JWT_ISSUER != '' }}
         run: |
           bunx wxt submit \
             --firefox-zip "${{ steps.assets.outputs.firefox_xpi }}" \

@@ -17,6 +17,9 @@ web-ext.config.ts
 # Internal docs (PRD, specs)
 docs/
 
+# Task artifacts
+tasks/
+
 # Claude Code agent files
 .claude/
 .agents/

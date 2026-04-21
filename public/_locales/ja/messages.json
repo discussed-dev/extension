@@ -63,5 +63,9 @@
 	"obsidianVaultHint": { "message": "任意。「Obsidianで開く」機能に必要です。" },
 	"exportSection": { "message": "エクスポート" },
 	"sourceArticle": { "message": "記事" },
-	"sourcePageComments": { "message": "ページ" }
+	"sourcePageComments": { "message": "ページ" },
+	"linkedFrom": {
+		"message": "$PLATFORM$ からのリンク →",
+		"placeholders": { "PLATFORM": { "content": "$1" } }
+	}
 }

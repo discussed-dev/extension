@@ -1,6 +1,7 @@
 import { syncToolbarBadgeForDiscussions } from '@/lib/badge';
 import { updateBloomFilter } from '@/lib/bloom';
 import { discoverDiscussions } from '@/lib/discovery';
+import { resolveLinkedUrl } from '@/lib/resolve-discussion';
 import { settings } from '@/lib/settings';
 import { setToolbarBadge } from '@/lib/toolbar-action';
 import type { Discussion } from '@/lib/types';
@@ -25,8 +26,17 @@ async function onTabUpdated(tabId: number, url: string): Promise<void> {
 			return;
 		}
 
-		const discussions = await discoverDiscussions(url);
-		await updateBadge(tabId, discussions);
+		const resolved = await resolveLinkedUrl(url);
+		const targetUrl = resolved?.linkedUrl ?? url;
+		const discussions = await discoverDiscussions(targetUrl);
+
+		const filtered = resolved
+			? discussions.filter(
+					(d) => !(d.externalId === resolved.discussionId && d.platform === resolved.platform),
+				)
+			: discussions;
+
+		await updateBadge(tabId, filtered);
 	} catch (error) {
 		console.error('[discussed] discovery failed:', error);
 		await setToolbarBadge(browser, { tabId, text: '' });

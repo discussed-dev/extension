@@ -67,5 +67,9 @@
 	"obsidianVaultHint": { "message": "선택사항. 'Obsidian에서 열기' 기능에 필요합니다." },
 	"exportSection": { "message": "내보내기" },
 	"sourceArticle": { "message": "기사" },
-	"sourcePageComments": { "message": "페이지" }
+	"sourcePageComments": { "message": "페이지" },
+	"linkedFrom": {
+		"message": "$PLATFORM$에서 링크됨 →",
+		"placeholders": { "PLATFORM": { "content": "$1" } }
+	}
 }

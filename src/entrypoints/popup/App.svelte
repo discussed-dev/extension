@@ -2,7 +2,9 @@
 import { syncToolbarBadgeForDiscussions } from '@/lib/badge';
 import { cacheGet } from '@/lib/cache';
 import { discoverDiscussions } from '@/lib/discovery';
+import { t } from '@/lib/i18n';
 import { type PageContent, injectAndExtract } from '@/lib/page-content';
+import { type ResolvedDiscussion, resolveLinkedUrl } from '@/lib/resolve-discussion';
 import { type Settings, settings } from '@/lib/settings';
 import { type SummaryResult, summarizeDiscussions } from '@/lib/summarize';
 import { setToolbarBadge } from '@/lib/toolbar-action';
@@ -35,6 +37,7 @@ let summaryError = $state('');
 let hasApiKey = $state(false);
 let userSettings = $state<Settings | null>(null);
 let lastPageContent = $state<PageContent | undefined>(undefined);
+let resolved = $state<ResolvedDiscussion | null>(null);
 
 async function load() {
 	loading = true;
@@ -58,7 +61,17 @@ async function load() {
 		}
 
 		blocked = false;
-		discussions = await discoverDiscussions(tab.url);
+		const resolveResult = await resolveLinkedUrl(tab.url);
+		resolved = resolveResult;
+		const targetUrl = resolveResult?.linkedUrl ?? tab.url;
+		const allDiscussions = await discoverDiscussions(targetUrl);
+
+		discussions = resolveResult
+			? allDiscussions.filter(
+					(d) =>
+						!(d.externalId === resolveResult.discussionId && d.platform === resolveResult.platform),
+				)
+			: allDiscussions;
 
 		if (currentTabId != null) {
 			await syncToolbarBadgeForDiscussions(
@@ -69,7 +82,7 @@ async function load() {
 			);
 		}
 
-		const cached = await cacheGet<SummaryResult>(`summary:${tab.url}`);
+		const cached = await cacheGet<SummaryResult>(`summary:${targetUrl}`);
 		if (cached) summaryResult = cached;
 	} catch (e) {
 		console.error('[discussed] popup load error:', e);
@@ -93,7 +106,18 @@ async function refresh() {
 		}
 
 		blocked = false;
-		discussions = await discoverDiscussions(currentUrl, { force: true });
+		const resolveResult = await resolveLinkedUrl(currentUrl);
+		resolved = resolveResult;
+		const targetUrl = resolveResult?.linkedUrl ?? currentUrl;
+		const allDiscussions = await discoverDiscussions(targetUrl, { force: true });
+
+		discussions = resolveResult
+			? allDiscussions.filter(
+					(d) =>
+						!(d.externalId === resolveResult.discussionId && d.platform === resolveResult.platform),
+				)
+			: allDiscussions;
+
 		await syncToolbarBadgeForDiscussions(
 			browser,
 			currentTabId,
@@ -163,7 +187,8 @@ async function blockSite() {
 }
 
 async function doSummarize(force = false) {
-	if (!currentUrl || discussions.length === 0) return;
+	const summarizeUrl = resolved?.linkedUrl ?? currentUrl;
+	if (!summarizeUrl || discussions.length === 0) return;
 	summarizing = true;
 	summaryError = '';
 	try {
@@ -172,7 +197,7 @@ async function doSummarize(force = false) {
 			pageContent = await injectAndExtract(currentTabId);
 		}
 		lastPageContent = pageContent;
-		summaryResult = await summarizeDiscussions(currentUrl, discussions, { force, pageContent });
+		summaryResult = await summarizeDiscussions(summarizeUrl, discussions, { force, pageContent });
 		view = 'summary';
 	} catch (e) {
 		summaryError = e instanceof Error ? e.message : 'Summarization failed';
@@ -197,6 +222,19 @@ const currentHost = $derived.by(() => {
 		return new URL(currentUrl).hostname.replace(/^www\./, '');
 	} catch {
 		return currentUrl;
+	}
+});
+
+const resolvedHost = $derived.by(() => {
+	if (!resolved) return '';
+	try {
+		const url = new URL(resolved.linkedUrl);
+		const host = url.hostname.replace(/^www\./, '');
+		const path = url.pathname === '/' ? '' : url.pathname;
+		const truncated = path.length > 30 ? `${path.slice(0, 30)}...` : path;
+		return `${host}${truncated}`;
+	} catch {
+		return resolved.linkedUrl;
 	}
 });
 
@@ -314,6 +352,21 @@ load();
         <ExternalLinks url={currentUrl} title={currentTitle} showSubmit />
       </section>
     {:else}
+      {#if resolved}
+        <div class="border-b border-stone-200/80 bg-stone-50/60 px-4 py-2">
+          <p class="text-[0.7rem] font-medium text-stone-500">
+            {t('linkedFrom', PLATFORM_LABELS[resolved.platform])}
+          </p>
+          <a
+            href={resolved.linkedUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-xs text-stone-700 underline decoration-stone-300 hover:text-stone-900 hover:decoration-stone-500"
+          >
+            {resolvedHost}
+          </a>
+        </div>
+      {/if}
       <div class="max-h-[19rem] min-h-0 flex-1 space-y-2.5 overflow-y-auto px-4 py-3">
         {#each groupedDiscussions as group (group.platform)}
           <section id={`platform-${group.platform}`} class="scroll-mt-3">

@@ -67,5 +67,9 @@
 	"obsidianVaultHint": { "message": "Opcional. Necesario para \"Abrir en Obsidian\"." },
 	"exportSection": { "message": "Exportar" },
 	"sourceArticle": { "message": "Artículo" },
-	"sourcePageComments": { "message": "Página" }
+	"sourcePageComments": { "message": "Página" },
+	"linkedFrom": {
+		"message": "Enlazado desde $PLATFORM$ →",
+		"placeholders": { "PLATFORM": { "content": "$1" } }
+	}
 }

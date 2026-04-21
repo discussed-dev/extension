@@ -69,5 +69,9 @@
 	"obsidianVaultHint": { "message": "Facultatif. Requis pour « Ouvrir dans Obsidian »." },
 	"exportSection": { "message": "Exporter" },
 	"sourceArticle": { "message": "Article" },
-	"sourcePageComments": { "message": "Page" }
+	"sourcePageComments": { "message": "Page" },
+	"linkedFrom": {
+		"message": "Lié depuis $PLATFORM$ →",
+		"placeholders": { "PLATFORM": { "content": "$1" } }
+	}
 }

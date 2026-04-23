@@ -5,8 +5,8 @@ import type { Discussion } from './types';
 const PLATFORM_COLORS: Record<string, string> = {
 	mixed: '#6366f1',
 	hn: '#f97316',
-	reddit: '#3b82f6',
-	lobsters: '#ef4444',
+	reddit: '#D93900',
+	lobsters: '#BE123C',
 };
 
 export function dominantPlatform(discussions: Discussion[]): string {

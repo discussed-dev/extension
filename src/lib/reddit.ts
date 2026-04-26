@@ -25,6 +25,16 @@ export interface RedditSearchOptions {
 	exactMatch?: boolean;
 }
 
+function stripWww(hostname: string): string {
+	return hostname.replace(/^www\./, '');
+}
+
+function hostnamesMatch(a: string, b: string): boolean {
+	const ha = stripWww(a);
+	const hb = stripWww(b);
+	return ha === hb || ha.endsWith(`.${hb}`) || hb.endsWith(`.${ha}`);
+}
+
 export async function searchReddit(
 	url: string,
 	options: RedditSearchOptions = {},
@@ -42,12 +52,20 @@ export async function searchReddit(
 		if (!response.ok) return [];
 
 		const data: RedditListing = await response.json();
+		const searchHost = new URL(url).hostname;
 
 		return data.data.children
 			.filter(({ data: post }) => {
-				if (!options.exactMatch) return true;
+				if (post.url == null) return false;
+				if (options.exactMatch) {
+					try {
+						return normalizeUrl(post.url) === normalizeUrl(url);
+					} catch {
+						return false;
+					}
+				}
 				try {
-					return post.url != null && normalizeUrl(post.url) === normalizeUrl(url);
+					return hostnamesMatch(new URL(post.url).hostname, searchHost);
 				} catch {
 					return false;
 				}

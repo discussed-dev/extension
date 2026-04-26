@@ -20,6 +20,7 @@ function redditResponse(posts: Record<string, unknown>[]) {
 const POST = {
 	name: 't3_abc123',
 	title: 'Example post',
+	url: 'https://example.com',
 	subreddit: 'programming',
 	score: 500,
 	num_comments: 42,
@@ -78,6 +79,52 @@ describe('searchReddit', () => {
 
 	it('returns empty array on network error', async () => {
 		mockFetch.mockRejectedValueOnce(new Error('Network error'));
+
+		const results = await searchReddit('https://example.com');
+		expect(results).toEqual([]);
+	});
+
+	it('filters out unrelated domains when exactMatch is off', async () => {
+		mockFetch.mockResolvedValueOnce(
+			redditResponse([
+				{
+					...POST,
+					url: 'https://news.com.au/story/some-article',
+				},
+			]),
+		);
+
+		const results = await searchReddit('https://fast.com/');
+		expect(results).toEqual([]);
+	});
+
+	it('keeps results with matching domain when exactMatch is off', async () => {
+		mockFetch.mockResolvedValueOnce(
+			redditResponse([{ ...POST, url: 'https://fast.com/some/page' }]),
+		);
+
+		const results = await searchReddit('https://fast.com/');
+		expect(results).toHaveLength(1);
+	});
+
+	it('keeps results with subdomain match when exactMatch is off', async () => {
+		mockFetch.mockResolvedValueOnce(
+			redditResponse([{ ...POST, url: 'https://en.wikipedia.org/wiki/Example' }]),
+		);
+
+		const results = await searchReddit('https://wikipedia.org/wiki/Example');
+		expect(results).toHaveLength(1);
+	});
+
+	it('keeps results with reverse subdomain match when exactMatch is off', async () => {
+		mockFetch.mockResolvedValueOnce(redditResponse([{ ...POST, url: 'https://example.com/page' }]));
+
+		const results = await searchReddit('https://blog.example.com/page');
+		expect(results).toHaveLength(1);
+	});
+
+	it('filters posts with null url when exactMatch is off', async () => {
+		mockFetch.mockResolvedValueOnce(redditResponse([{ ...POST, url: null }]));
 
 		const results = await searchReddit('https://example.com');
 		expect(results).toEqual([]);

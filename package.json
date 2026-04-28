@@ -1,6 +1,6 @@
 {
 	"name": "discussed",
-	"description": "Auto-discover community discussions about the current page",
+	"description": "Auto-discover community discussions about the current page and summarize with AI",
 	"private": true,
 	"version": "0.3.4",
 	"type": "module",

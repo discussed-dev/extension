@@ -54,10 +54,15 @@ jobs:
             ${{ steps.assets.outputs.firefox_xpi }}
             ${{ steps.assets.outputs.sources_zip }}
 
-      - name: Submit to Firefox AMO
+      - name: Submit to Chrome Web Store and Firefox AMO
         continue-on-error: true
         run: |
           bunx wxt submit \
+            --chrome-zip "${{ steps.assets.outputs.chrome_zip }}" \
+            --chrome-extension-id "${{ secrets.CWS_EXTENSION_ID }}" \
+            --chrome-client-id "${{ secrets.CWS_CLIENT_ID }}" \
+            --chrome-client-secret "${{ secrets.CWS_CLIENT_SECRET }}" \
+            --chrome-refresh-token "${{ secrets.CWS_REFRESH_TOKEN }}" \
             --firefox-zip "${{ steps.assets.outputs.firefox_xpi }}" \
             --firefox-sources-zip "${{ steps.assets.outputs.sources_zip }}" \
             --firefox-extension-id "discussed@discussed.dev" \

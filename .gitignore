@@ -14,6 +14,10 @@ stats-*.json
 .wxt
 web-ext.config.ts
 
+# Secrets from publish-extension init (Chrome / Firefox store credentials)
+.env.submit
+.env.submit.*
+
 # Internal docs (PRD, specs)
 docs/
 

@@ -1,6 +1,6 @@
 <script lang="ts">
 import { t } from '@/lib/i18n';
-import type { LlmProvider } from '@/lib/llm';
+import { type LlmProvider, needsMaxCompletionTokens } from '@/lib/llm';
 import { PROVIDERS, type Settings, settings } from '@/lib/settings';
 
 type StatusTone = 'neutral' | 'success' | 'error';
@@ -125,6 +125,9 @@ async function testApiKey() {
 			if (response.ok) await saveAfterTest();
 		} else if (current.llmProvider === 'openai') {
 			const baseUrl = current.openaiBaseUrl || 'https://api.openai.com/v1';
+			const tokenLimit = needsMaxCompletionTokens(current.model)
+				? { max_completion_tokens: 10 }
+				: { max_tokens: 10 };
 			const response = await fetch(`${baseUrl}/chat/completions`, {
 				method: 'POST',
 				headers: {
@@ -133,7 +136,7 @@ async function testApiKey() {
 				},
 				body: JSON.stringify({
 					model: current.model,
-					max_tokens: 10,
+					...tokenLimit,
 					messages: [{ role: 'user', content: 'Hi' }],
 				}),
 			});

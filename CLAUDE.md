@@ -100,7 +100,31 @@ When asked to release or bump version:
 6. Commit: `Bump version to X.Y.Z`
 7. `git tag vX.Y.Z`
 8. `git push && git push --tags`
-9. `gh release create vX.Y.Z --title "Discussed vX.Y.Z" --generate-notes`
+
+The tag push triggers `.github/workflows/release.yml`, which auto-creates the GitHub Release and submits to stores (see below). No manual `gh release create` needed.
+
+## Store Submission Pipeline
+
+Tag push (`v*`) → `.github/workflows/release.yml` builds Chrome + Firefox zips, creates the GitHub Release, then runs `bunx wxt submit` to publish to both stores in one step:
+
+- **Chrome Web Store** — secrets `CWS_EXTENSION_ID`, `CWS_CLIENT_ID`, `CWS_CLIENT_SECRET`, `CWS_REFRESH_TOKEN`
+- **Firefox AMO** — secrets `AMO_JWT_ISSUER`, `AMO_JWT_SECRET`; listed channel; fixed extension ID `discussed@discussed.dev`
+
+Both submissions auto-submit for review. `continue-on-error: true` ensures one store's failure won't block the other or the GitHub Release.
+
+### Chrome refresh token expiry
+
+The CWS OAuth client (Google Cloud project `discussed-extension`) lives in Testing mode. Sensitive scopes rotate refresh tokens every ~7 days. When the workflow's Chrome step fails with `invalid_grant`:
+
+1. Locally: `bunx publish-extension init` — re-authorizes via browser, writes new values to gitignored `.env.submit`
+2. Update only the one secret: `gh secret set CWS_REFRESH_TOKEN` (paste from `.env.submit`)
+3. Re-run the failed workflow, or wait for next tag push
+
+Submitting the OAuth app for verification removes this expiry but adds Google review overhead.
+
+### Workflow change timing
+
+Tag-triggered workflows run the workflow file at the tag's commit, not main HEAD. `release.yml` edits only take effect on tags pushed AFTER the change merges to main — fixing a broken workflow always means cutting a new tag.
 
 ## Bloom Filter Pipeline
 

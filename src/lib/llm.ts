@@ -146,11 +146,24 @@ async function summarizeAnthropic(
 
 // --- OpenAI-compatible (OpenAI, Groq, Together, local, etc.) ---
 
+// GPT-5 family and o-series (o1/o3/o4) reject `max_tokens` and require
+// `max_completion_tokens` instead. Older models (gpt-4.1, gpt-4o, etc.) and
+// most non-OpenAI providers (Groq, DeepSeek, Ollama) still expect `max_tokens`.
+// OpenRouter prefixes vendor (e.g. `openai/gpt-5.4-mini`), so strip that first.
+export function needsMaxCompletionTokens(model: string): boolean {
+	const name = model.split('/').pop() ?? model;
+	return /^(gpt-5|o\d)([.\-]|$)/.test(name);
+}
+
 async function summarizeOpenai(
 	commentsText: string,
 	options: SummarizeOptions,
 ): Promise<SummarizeResult> {
 	const baseUrl = options.openaiBaseUrl || 'https://api.openai.com/v1';
+
+	const tokenLimit = needsMaxCompletionTokens(options.model)
+		? { max_completion_tokens: 1024 }
+		: { max_tokens: 1024 };
 
 	const response = await fetch(`${baseUrl}/chat/completions`, {
 		method: 'POST',
@@ -160,7 +173,7 @@ async function summarizeOpenai(
 		},
 		body: JSON.stringify({
 			model: options.model,
-			max_tokens: 1024,
+			...tokenLimit,
 			messages: [
 				{
 					role: 'system',

@@ -89,7 +89,7 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 		models: [
 			{ id: 'claude-sonnet-4-6', label: 'Claude Sonnet 4.6', cost: '$$' },
 			{ id: 'claude-haiku-4-5', label: 'Claude Haiku 4.5', cost: '$' },
-			{ id: 'claude-opus-4-6', label: 'Claude Opus 4.6', cost: '$$$' },
+			{ id: 'claude-opus-4-7', label: 'Claude Opus 4.7', cost: '$$$' },
 		],
 	},
 	openai: {
@@ -116,7 +116,7 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 			{ id: 'gemini-2.5-flash-lite', label: 'Gemini 2.5 Flash Lite', cost: '$' },
 			{ id: 'gemini-3-flash-preview', label: 'Gemini 3 Flash (preview)', cost: '$' },
 			{ id: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash', cost: '$$' },
-			{ id: 'gemini-2.5-pro', label: 'Gemini 2.5 Pro', cost: '$$' },
+			{ id: 'gemini-3.1-pro-preview', label: 'Gemini 3.1 Pro (preview)', cost: '$$' },
 		],
 	},
 	deepseek: {
@@ -125,8 +125,8 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 		baseUrl: 'https://api.deepseek.com',
 		keyPlaceholder: 'sk-...',
 		models: [
-			{ id: 'deepseek-chat', label: 'DeepSeek V3.2', cost: '$' },
-			{ id: 'deepseek-reasoner', label: 'DeepSeek R1 (reasoning)', cost: '$' },
+			{ id: 'deepseek-v4-flash', label: 'DeepSeek V4 Flash', cost: '$' },
+			{ id: 'deepseek-v4-pro', label: 'DeepSeek V4 Pro', cost: '$$' },
 		],
 	},
 	groq: {
@@ -137,6 +137,11 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 		models: [
 			{ id: 'llama-3.3-70b-versatile', label: 'Llama 3.3 70B', cost: '$' },
 			{ id: 'llama-3.1-8b-instant', label: 'Llama 3.1 8B', cost: '$' },
+			{
+				id: 'meta-llama/llama-4-maverick-17b-128e-instruct',
+				label: 'Llama 4 Maverick',
+				cost: '$$',
+			},
 			{ id: 'qwen/qwen3-32b', label: 'Qwen 3 32B', cost: '$' },
 		],
 	},
@@ -146,8 +151,8 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 		baseUrl: 'https://api.x.ai/v1',
 		keyPlaceholder: 'xai-...',
 		models: [
-			{ id: 'grok-4-1-fast-non-reasoning', label: 'Grok 4.1 Fast', cost: '$' },
-			{ id: 'grok-4.20-0309-non-reasoning', label: 'Grok 4.20', cost: '$$' },
+			{ id: 'grok-4-fast', label: 'Grok 4 Fast', cost: '$' },
+			{ id: 'grok-4.20', label: 'Grok 4.20', cost: '$$' },
 		],
 	},
 	openrouter: {
@@ -159,7 +164,7 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 			{ id: 'anthropic/claude-sonnet-4.6', label: 'Claude Sonnet 4.6', cost: '$$' },
 			{ id: 'openai/gpt-5.4-mini', label: 'GPT-5.4 Mini', cost: '$' },
 			{ id: 'google/gemini-2.5-flash', label: 'Gemini 2.5 Flash', cost: '$' },
-			{ id: 'deepseek/deepseek-chat', label: 'DeepSeek V3.2', cost: '$' },
+			{ id: 'deepseek/deepseek-v4-flash', label: 'DeepSeek V4 Flash', cost: '$' },
 		],
 	},
 	ollama: {

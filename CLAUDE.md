@@ -70,18 +70,37 @@ bun run lint:fix               # biome auto-fix
 
 - **i18n required for all UI text.** Every user-visible string in popup, options, or content script must use `t('key')` from `src/lib/i18n.ts` with entries in all 7 locale files under `public/_locales/`. No hardcoded English in UI components.
 
+## LLM Model Lineup Freshness
+
+The `PROVIDERS` map in `src/lib/settings.ts` ships hard-coded model IDs per provider. These rot fast (deprecations, new releases) and 400 errors when stale. Verification protocol:
+
+1. **Before any minor/major release**, query Context7 for each provider's current model list:
+   - Anthropic: `/websites/platform_claude_en_api`
+   - OpenAI: `/websites/developers_openai_api_reference`
+   - Google: `/websites/ai_google_dev_gemini-api`
+   - DeepSeek: `/websites/api-docs_deepseek`
+   - Groq: `/websites/console_groq`
+   - xAI: `/websites/x_ai_developers`
+2. Cross-check each preset against the docs for: (a) model still listed; (b) any explicit deprecation/shutdown date; (c) recommended replacement.
+3. When a provider rolls out a new flagship that supersedes a preset (e.g., Claude Opus 4.7 replacing 4.6), update the preset.
+4. Per-model deprecation comments: when a model has a known retirement date, add an inline `// retires: YYYY-MM-DD` comment so the next pass sees the deadline without re-querying.
+5. Patch releases skip this check unless the bug being fixed is model-related.
+
+**API parameter quirks** to watch when adding OpenAI presets: GPT-5 family and o-series (o1/o3/o4) require `max_completion_tokens` instead of `max_tokens`. The detection regex in `src/lib/llm.ts` (`needsMaxCompletionTokens`) covers `^(gpt-5|o\d)([.\-]|$)` — extend it if OpenAI introduces new reasoning-model prefixes.
+
 ## Release Workflow
 
 When asked to release or bump version:
 
 1. `bun run test` — all tests must pass
 2. `bun run lint` — must be clean
-3. Bump `version` in `package.json` (patch/minor/major as specified)
-4. `bun run build` — production build must succeed
-5. Commit: `Bump version to X.Y.Z`
-6. `git tag vX.Y.Z`
-7. `git push && git push --tags`
-8. `gh release create vX.Y.Z --title "Discussed vX.Y.Z" --generate-notes`
+3. For minor/major bumps: run the LLM Model Lineup Freshness check above
+4. Bump `version` in `package.json` (patch/minor/major as specified)
+5. `bun run build` — production build must succeed
+6. Commit: `Bump version to X.Y.Z`
+7. `git tag vX.Y.Z`
+8. `git push && git push --tags`
+9. `gh release create vX.Y.Z --title "Discussed vX.Y.Z" --generate-notes`
 
 ## Bloom Filter Pipeline
 

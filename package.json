@@ -2,7 +2,7 @@
 	"name": "discussed",
 	"description": "Auto-discover community discussions about the current page and summarize with AI",
 	"private": true,
-	"version": "0.3.6",
+	"version": "0.3.7",
 	"type": "module",
 	"scripts": {
 		"dev": "wxt",

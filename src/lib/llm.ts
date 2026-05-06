@@ -161,8 +161,13 @@ async function summarizeOpenai(
 ): Promise<SummarizeResult> {
 	const baseUrl = options.openaiBaseUrl || 'https://api.openai.com/v1';
 
-	const tokenLimit = needsMaxCompletionTokens(options.model)
-		? { max_completion_tokens: 1024 }
+	// Reasoning models: max_completion_tokens INCLUDES internal reasoning
+	// tokens. With effort=medium (default), 1024 was burned before any output
+	// could be emitted, returning empty content. Use 'minimal' effort
+	// (summarization doesn't need deep reasoning) plus a roomier ceiling.
+	const reasoning = needsMaxCompletionTokens(options.model);
+	const extraParams = reasoning
+		? { max_completion_tokens: 4096, reasoning_effort: 'minimal' as const }
 		: { max_tokens: 1024 };
 
 	const response = await fetch(`${baseUrl}/chat/completions`, {
@@ -173,7 +178,7 @@ async function summarizeOpenai(
 		},
 		body: JSON.stringify({
 			model: options.model,
-			...tokenLimit,
+			...extraParams,
 			messages: [
 				{
 					role: 'system',
@@ -194,12 +199,27 @@ async function summarizeOpenai(
 	}
 
 	const data: {
-		choices: Array<{ message: { content: string } }>;
-		usage: { prompt_tokens: number; completion_tokens: number };
+		choices: Array<{ message: { content: string; refusal?: string }; finish_reason?: string }>;
+		usage: {
+			prompt_tokens: number;
+			completion_tokens: number;
+			completion_tokens_details?: { reasoning_tokens?: number };
+		};
 	} = await response.json();
 
-	const text = data.choices[0]?.message?.content;
-	if (!text) throw new Error('No text in OpenAI response');
+	const choice = data.choices[0];
+	const text = choice?.message?.content;
+	if (!text) {
+		const finish = choice?.finish_reason ?? 'unknown';
+		const refusal = choice?.message?.refusal;
+		const reasoningTokens = data.usage?.completion_tokens_details?.reasoning_tokens;
+		const detail = refusal
+			? `refused: ${refusal}`
+			: finish === 'length' && reasoningTokens
+				? `reasoning consumed all ${reasoningTokens} completion tokens before any output — try a non-reasoning model or raise the limit`
+				: `finish_reason=${finish}`;
+		throw new Error(`No text in OpenAI response (${detail})`);
+	}
 
 	return {
 		summary: text,

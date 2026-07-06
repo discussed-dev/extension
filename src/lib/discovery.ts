@@ -78,7 +78,12 @@ export async function discoverDiscussions(
 		result.status === 'fulfilled' ? result.value : [],
 	);
 
-	await cacheSet(cacheKey, discussions, cacheTtlMs);
+	// Don't cache when every source failed (offline, rate-limited, timed out) —
+	// a cached [] would mask real discussions until TTL expiry.
+	const allFailed = searches.length > 0 && results.every((r) => r.status === 'rejected');
+	if (!allFailed) {
+		await cacheSet(cacheKey, discussions, cacheTtlMs);
+	}
 
 	return discussions;
 }

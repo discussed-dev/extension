@@ -119,6 +119,37 @@ describe('discoverDiscussions', () => {
 		expect(results.map((d) => d.platform)).toEqual(expect.arrayContaining(['hn', 'lobsters']));
 	});
 
+	it('does not cache results when every source failed', async () => {
+		hnMock.mockRejectedValueOnce(new Error('offline'));
+		redditMock.mockRejectedValueOnce(new Error('offline'));
+		lobstersMock.mockRejectedValueOnce(new Error('offline'));
+
+		const first = await discoverDiscussions('https://example.com/article');
+		expect(first).toEqual([]);
+
+		// Sources recover; a second call must re-query instead of serving cached []
+		hnMock.mockResolvedValueOnce([HN_RESULT]);
+		redditMock.mockResolvedValueOnce([]);
+		lobstersMock.mockResolvedValueOnce([]);
+
+		const second = await discoverDiscussions('https://example.com/article');
+
+		expect(second).toHaveLength(1);
+		expect(hnMock).toHaveBeenCalledTimes(2);
+	});
+
+	it('still caches genuinely empty results when sources succeed', async () => {
+		hnMock.mockResolvedValueOnce([]);
+		redditMock.mockResolvedValueOnce([]);
+		lobstersMock.mockResolvedValueOnce([]);
+
+		await discoverDiscussions('https://example.com/article');
+		await discoverDiscussions('https://example.com/article');
+
+		// Empty-but-successful result should be served from cache
+		expect(hnMock).toHaveBeenCalledTimes(1);
+	});
+
 	it('skips root URLs whose query string was stripped', async () => {
 		const results = await discoverDiscussions('https://www.douban.com/?p=13');
 		expect(results).toEqual([]);

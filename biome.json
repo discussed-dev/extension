@@ -21,7 +21,7 @@
 		}
 	},
 	"files": {
-		"ignore": ["node_modules", ".output", ".wxt", "bun.lock"]
+		"ignore": ["node_modules", ".output", ".wxt", ".claude", "bun.lock"]
 	},
 	"overrides": [
 		{

@@ -51,13 +51,13 @@ function setTestStatus(message: string, tone: StatusTone = 'neutral') {
 async function save() {
 	if (!current) return;
 	await settings.setValue(current);
-	setSaveStatus('Settings saved. New scans use these preferences right away.');
+	setSaveStatus(t('settingsSavedDetail'));
 }
 
 async function saveAfterTest() {
 	if (!current) return;
 	await settings.setValue(current);
-	setSaveStatus('API settings saved.');
+	setSaveStatus(t('apiSettingsSaved'));
 }
 
 function onProviderChange() {
@@ -75,29 +75,27 @@ function onProviderChange() {
 
 function describeApiFailure(provider: LlmProvider, status: number): string {
 	if (status === 401 || status === 403) {
-		return `The ${provider} key was rejected. Double-check the selected provider and API key.`;
+		return t('apiKeyRejected', provider);
 	}
 	if (status === 404) {
-		return provider === 'openai'
-			? 'The API endpoint was not found. Check the base URL and model name.'
-			: `The ${provider} endpoint was not found. Check the selected model.`;
+		return provider === 'openai' ? t('endpointNotFoundOpenai') : t('endpointNotFound', provider);
 	}
 	if (status === 429) {
-		return `The ${provider} API is rate-limiting this request. Wait a moment and try again.`;
+		return t('rateLimited', provider);
 	}
 	if (status >= 500) {
-		return `The ${provider} API is having trouble right now. Try again in a moment.`;
+		return t('providerTrouble', provider);
 	}
-	return `The ${provider} API returned ${status}. Check the key, model, and provider settings.`;
+	return t('apiReturnedStatus', provider, String(status));
 }
 
 async function testApiKey() {
 	if (!current?.apiKey) {
-		setTestStatus('Add an API key first.', 'error');
+		setTestStatus(t('addKeyFirst'), 'error');
 		return;
 	}
 
-	setTestStatus('Checking the API key...');
+	setTestStatus(t('checkingApiKey'));
 
 	try {
 		if (current.llmProvider === 'anthropic') {
@@ -117,9 +115,7 @@ async function testApiKey() {
 			});
 
 			setTestStatus(
-				response.ok
-					? 'API key works. Summaries can use this provider.'
-					: describeApiFailure(current.llmProvider, response.status),
+				response.ok ? t('apiKeyWorks') : describeApiFailure(current.llmProvider, response.status),
 				response.ok ? 'success' : 'error',
 			);
 			if (response.ok) await saveAfterTest();
@@ -142,9 +138,7 @@ async function testApiKey() {
 			});
 
 			setTestStatus(
-				response.ok
-					? 'API key works. Summaries can use this provider.'
-					: describeApiFailure(current.llmProvider, response.status),
+				response.ok ? t('apiKeyWorks') : describeApiFailure(current.llmProvider, response.status),
 				response.ok ? 'success' : 'error',
 			);
 			if (response.ok) await saveAfterTest();
@@ -162,16 +156,14 @@ async function testApiKey() {
 			);
 
 			setTestStatus(
-				response.ok
-					? 'API key works. Summaries can use this provider.'
-					: describeApiFailure(current.llmProvider, response.status),
+				response.ok ? t('apiKeyWorks') : describeApiFailure(current.llmProvider, response.status),
 				response.ok ? 'success' : 'error',
 			);
 			if (response.ok) await saveAfterTest();
 		}
 	} catch (e) {
 		setTestStatus(
-			`Could not reach the provider: ${e instanceof Error ? e.message : 'unknown error'}`,
+			t('couldNotReachProvider', e instanceof Error ? e.message : 'unknown error'),
 			'error',
 		);
 	}
@@ -185,7 +177,7 @@ load();
   <div class="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
     <header class="min-w-0">
       <p class="text-xs font-semibold uppercase tracking-[0.24em] text-stone-500">Discussed</p>
-      <h1 class="mt-1 text-xl font-semibold tracking-tight text-stone-950">Settings</h1>
+      <h1 class="mt-1 text-xl font-semibold tracking-tight text-stone-950">{t('settings')}</h1>
     </header>
 
     <div class="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:items-center">
@@ -197,7 +189,7 @@ load();
         onclick={save}
         class="inline-flex min-h-10 items-center justify-center rounded-full bg-stone-900 px-5 text-sm font-medium text-white transition-colors hover:bg-stone-800"
       >
-        Save settings
+        {t('save')}
       </button>
     </div>
   </div>
@@ -205,19 +197,19 @@ load();
   <div class="space-y-3">
     <section class="rounded-[1.15rem] border border-stone-200 bg-white/95 p-3 shadow-sm">
       <div>
-        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">Basics</p>
-        <h2 class="mt-1 text-base font-semibold tracking-tight text-stone-950">Core controls</h2>
+        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">{t('basics')}</p>
+        <h2 class="mt-1 text-base font-semibold tracking-tight text-stone-950">{t('coreControls')}</h2>
       </div>
 
       <div class="mt-3 grid gap-3 md:grid-cols-2">
         <section>
-          <h3 class="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-stone-500">Sources</h3>
+          <h3 class="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-stone-500">{t('sources')}</h3>
           <div class="mt-2 overflow-hidden rounded-[0.95rem] border border-stone-200 bg-stone-50">
             <label class="flex items-start gap-3 px-3 py-2">
               <input type="checkbox" bind:checked={current.enableHn} class="mt-1 rounded border-stone-300" />
               <span>
                 <span class="block text-sm font-medium text-stone-900">Hacker News</span>
-                <span class="mt-0.5 block text-xs leading-5 text-stone-600">Check HN threads for this page.</span>
+                <span class="mt-0.5 block text-xs leading-5 text-stone-600">{t('sourceHintHn')}</span>
               </span>
             </label>
             <div class="border-t border-stone-200/80"></div>
@@ -225,7 +217,7 @@ load();
               <input type="checkbox" bind:checked={current.enableReddit} class="mt-1 rounded border-stone-300" />
               <span>
                 <span class="block text-sm font-medium text-stone-900">Reddit</span>
-                <span class="mt-0.5 block text-xs leading-5 text-stone-600">Include matching threads.</span>
+                <span class="mt-0.5 block text-xs leading-5 text-stone-600">{t('sourceHintMatching')}</span>
               </span>
             </label>
             <div class="border-t border-stone-200/80"></div>
@@ -233,28 +225,28 @@ load();
               <input type="checkbox" bind:checked={current.enableLobsters} class="mt-1 rounded border-stone-300" />
               <span>
                 <span class="block text-sm font-medium text-stone-900">Lobsters</span>
-                <span class="mt-0.5 block text-xs leading-5 text-stone-600">Include matching threads.</span>
+                <span class="mt-0.5 block text-xs leading-5 text-stone-600">{t('sourceHintMatching')}</span>
               </span>
             </label>
           </div>
         </section>
 
         <section>
-          <h3 class="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-stone-500">Link behavior</h3>
+          <h3 class="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-stone-500">{t('linkBehavior')}</h3>
           <div class="mt-2 overflow-hidden rounded-[0.95rem] border border-stone-200 bg-stone-50">
             <label class="flex items-start gap-3 px-3 py-2">
               <input type="checkbox" bind:checked={current.openLinksInNewTab} class="mt-1 rounded border-stone-300" />
               <span>
-                <span class="block text-sm font-medium text-stone-900">Open links in a new tab</span>
-                <span class="mt-0.5 block text-xs leading-5 text-stone-600">Keep the popup open while links open separately.</span>
+                <span class="block text-sm font-medium text-stone-900">{t('openLinksNewTab')}</span>
+                <span class="mt-0.5 block text-xs leading-5 text-stone-600">{t('openLinksNewTabHint')}</span>
               </span>
             </label>
             <div class="border-t border-stone-200/80"></div>
             <label class="flex items-start gap-3 px-3 py-2">
               <input type="checkbox" bind:checked={current.useOldReddit} class="mt-1 rounded border-stone-300" />
               <span>
-                <span class="block text-sm font-medium text-stone-900">Prefer old.reddit.com</span>
-                <span class="mt-0.5 block text-xs leading-5 text-stone-600">Use the classic Reddit view when possible.</span>
+                <span class="block text-sm font-medium text-stone-900">{t('preferOldReddit')}</span>
+                <span class="mt-0.5 block text-xs leading-5 text-stone-600">{t('preferOldRedditHint')}</span>
               </span>
             </label>
           </div>
@@ -264,14 +256,14 @@ load();
 
     <section class="rounded-[1.15rem] border border-stone-200 bg-white/95 p-3 shadow-sm">
       <div>
-        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">AI summaries</p>
-        <h2 class="mt-1 text-base font-semibold tracking-tight text-stone-950">AI setup</h2>
+        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">{t('aiSummarization')}</p>
+        <h2 class="mt-1 text-base font-semibold tracking-tight text-stone-950">{t('aiSetup')}</h2>
       </div>
 
       <div class="mt-3 grid gap-3 md:grid-cols-2">
         <section class="space-y-3">
           <label class="block">
-            <span class="block text-sm font-medium text-stone-900">Provider</span>
+            <span class="block text-sm font-medium text-stone-900">{t('provider')}</span>
             <select
               bind:value={current.selectedProvider}
               onchange={onProviderChange}
@@ -285,7 +277,7 @@ load();
 
           {#if current.selectedProvider === 'custom' || current.selectedProvider === 'ollama'}
             <label class="block">
-              <span class="block text-sm font-medium text-stone-900">API base URL</span>
+              <span class="block text-sm font-medium text-stone-900">{t('apiBaseUrl')}</span>
               <input
                 type="text"
                 bind:value={current.openaiBaseUrl}
@@ -297,8 +289,8 @@ load();
 
           <div>
             <div class="block">
-              <span class="block text-sm font-medium text-stone-900">API key</span>
-              <span class="mt-0.5 block text-xs leading-5 text-stone-600">Your key is stored in your browser only and sent directly to your chosen provider. Discussed never sees or collects it.</span>
+              <span class="block text-sm font-medium text-stone-900">{t('apiKey')}</span>
+              <span class="mt-0.5 block text-xs leading-5 text-stone-600">{t('apiKeyHint')}</span>
             </div>
             <div class="mt-2 flex flex-col gap-2.5 sm:flex-row">
               <input
@@ -312,7 +304,7 @@ load();
                 onclick={testApiKey}
                 class="inline-flex min-h-10 items-center justify-center rounded-full border border-stone-300 bg-white px-5 text-sm font-medium text-stone-700 transition-colors hover:border-stone-400 hover:text-stone-950"
               >
-                Test key
+                {t('testKey')}
               </button>
             </div>
             <p class="mt-2 min-h-5 text-sm {testResultClass}" role="status" aria-live="polite">{testResult}</p>
@@ -321,7 +313,7 @@ load();
 
         <section class="space-y-3">
           <label class="block">
-            <span class="block text-sm font-medium text-stone-900">Model</span>
+            <span class="block text-sm font-medium text-stone-900">{t('model')}</span>
             <div class="mt-2 flex flex-col gap-2.5 sm:flex-row">
               <input
                 type="text"
@@ -333,18 +325,18 @@ load();
                   onchange={(e) => { if (current) current.model = (e.target as HTMLSelectElement).value; }}
                   class="min-h-10 rounded-2xl border border-stone-300 bg-white px-4 text-sm text-stone-700"
                 >
-                  <option value="" disabled selected>Presets</option>
+                  <option value="" disabled selected>{t('presets')}</option>
                   {#each modelOptions as preset}
                     <option value={preset.id}>{preset.label}{preset.cost ? ` (${preset.cost})` : ''}</option>
                   {/each}
                 </select>
               {/if}
             </div>
-            <p class="mt-1 text-xs text-stone-500">Summarization works well with lightweight models — no need for flagship ones. $ models cost under $0.001 per summary.</p>
+            <p class="mt-1 text-xs text-stone-500">{t('modelHint')}</p>
           </label>
 
           <label class="block">
-            <span class="block text-sm font-medium text-stone-900">Max comments per summary</span>
+            <span class="block text-sm font-medium text-stone-900">{t('maxCommentsPerSummary')}</span>
             <input
               type="number"
               bind:value={current.maxCommentsForSummary}
@@ -355,7 +347,7 @@ load();
           </label>
 
           <label class="block">
-            <span class="block text-sm font-medium text-stone-900">Summary language</span>
+            <span class="block text-sm font-medium text-stone-900">{t('summaryLanguage')}</span>
             <select bind:value={current.summaryLanguage} class="mt-2 min-h-10 w-full rounded-2xl border border-stone-300 bg-white px-4 text-sm text-stone-900">
               {#each LANGUAGE_OPTIONS as option}
                 <option value={option.value}>{option.label}</option>
@@ -369,7 +361,7 @@ load();
     <section class="rounded-[1.15rem] border border-stone-200 bg-white/95 p-3 shadow-sm">
       <div>
         <p class="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">{t('exportSection')}</p>
-        <h2 class="mt-1 text-base font-semibold tracking-tight text-stone-950">Export</h2>
+        <h2 class="mt-1 text-base font-semibold tracking-tight text-stone-950">{t('exportSection')}</h2>
       </div>
       <div class="mt-3">
         <label class="block">
@@ -388,8 +380,8 @@ load();
     <section class="rounded-[1.15rem] border border-stone-200 bg-white/95 p-3 shadow-sm">
       <div class="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
         <div>
-          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">Advanced</p>
-          <h2 class="mt-1 text-base font-semibold tracking-tight text-stone-950">Advanced controls</h2>
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">{t('advanced')}</p>
+          <h2 class="mt-1 text-base font-semibold tracking-tight text-stone-950">{t('advancedControls')}</h2>
         </div>
 
         <button
@@ -398,7 +390,7 @@ load();
           class="inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-stone-300 bg-white px-4 text-sm font-medium text-stone-700 transition-colors hover:border-stone-400 hover:text-stone-950"
           aria-expanded={showAdvanced}
         >
-          <span>{showAdvanced ? 'Hide advanced settings' : 'Show advanced settings'}</span>
+          <span>{showAdvanced ? t('hideAdvancedSettings') : t('showAdvancedSettings')}</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 16 16"
@@ -413,60 +405,60 @@ load();
       {#if showAdvanced}
         <div class="mt-3 grid gap-3 md:grid-cols-2">
           <section class="rounded-[0.95rem] border border-stone-200 bg-stone-50 p-3">
-            <h3 class="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-stone-500">Matching</h3>
+            <h3 class="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-stone-500">{t('matching')}</h3>
             <div class="mt-2.5 space-y-2">
               <label class="flex items-start gap-3">
                 <input type="checkbox" bind:checked={current.redditExactMatch} class="mt-1 rounded border-stone-300" />
                 <span>
-                  <span class="block text-sm font-medium text-stone-900">Use Reddit exact match</span>
-                  <span class="mt-0.5 block text-xs leading-5 text-stone-600">Require an exact URL match.</span>
+                  <span class="block text-sm font-medium text-stone-900">{t('redditExactMatchLabel')}</span>
+                  <span class="mt-0.5 block text-xs leading-5 text-stone-600">{t('redditExactMatchHint')}</span>
                 </span>
               </label>
               <label class="flex items-start gap-3">
                 <input type="checkbox" bind:checked={current.ignoreQueryString} class="mt-1 rounded border-stone-300" />
                 <span>
-                  <span class="block text-sm font-medium text-stone-900">Ignore query strings</span>
-                  <span class="mt-0.5 block text-xs leading-5 text-stone-600">Ignore tracking and session parameters.</span>
+                  <span class="block text-sm font-medium text-stone-900">{t('ignoreQueryStrings')}</span>
+                  <span class="mt-0.5 block text-xs leading-5 text-stone-600">{t('ignoreQueryStringsHint')}</span>
                 </span>
               </label>
             </div>
           </section>
 
           <section class="rounded-[0.95rem] border border-stone-200 bg-stone-50 p-3">
-            <h3 class="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-stone-500">Background scanning</h3>
+            <h3 class="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-stone-500">{t('backgroundScanning')}</h3>
             <div class="mt-2.5 space-y-2">
               <label class="flex items-start gap-3">
                 <input type="checkbox" bind:checked={current.searchOnTabUpdate} class="mt-1 rounded border-stone-300" />
                 <span>
-                  <span class="block text-sm font-medium text-stone-900">Scan when a tab URL changes</span>
-                  <span class="mt-0.5 block text-xs leading-5 text-stone-600">Recommended. Keeps the badge in sync with new pages.</span>
+                  <span class="block text-sm font-medium text-stone-900">{t('scanOnTabUpdate')}</span>
+                  <span class="mt-0.5 block text-xs leading-5 text-stone-600">{t('scanOnTabUpdateHint')}</span>
                 </span>
               </label>
               <label class="flex items-start gap-3">
                 <input type="checkbox" bind:checked={current.searchOnTabActivate} class="mt-1 rounded border-stone-300" />
                 <span>
-                  <span class="block text-sm font-medium text-stone-900">Scan when switching to an existing tab</span>
-                  <span class="mt-0.5 block text-xs leading-5 text-stone-600">Refresh the badge when you return to an open tab.</span>
+                  <span class="block text-sm font-medium text-stone-900">{t('scanOnTabActivate')}</span>
+                  <span class="mt-0.5 block text-xs leading-5 text-stone-600">{t('scanOnTabActivateHint')}</span>
                 </span>
               </label>
             </div>
           </section>
 
           <section class="rounded-[0.95rem] border border-stone-200 bg-stone-50 p-3">
-            <h3 class="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-stone-500">Badge and cache</h3>
+            <h3 class="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-stone-500">{t('badgeAndCache')}</h3>
             <div class="mt-2.5 space-y-3">
               <label class="block">
-                <span class="block text-sm font-medium text-stone-900">Badge display</span>
-                <span class="mt-0.5 block text-xs leading-5 text-stone-600">Choose what the toolbar badge shows.</span>
+                <span class="block text-sm font-medium text-stone-900">{t('badgeDisplay')}</span>
+                <span class="mt-0.5 block text-xs leading-5 text-stone-600">{t('badgeDisplayHint')}</span>
                 <select bind:value={current.badgeDisplay} class="mt-2 min-h-10 w-full rounded-2xl border border-stone-300 bg-white px-4 text-sm text-stone-900">
-                  <option value="discussions">Total discussions</option>
-                  <option value="comments">Total comments</option>
+                  <option value="discussions">{t('badgeTotalDiscussions')}</option>
+                  <option value="comments">{t('badgeTotalComments')}</option>
                 </select>
               </label>
 
               <label class="block">
-                <span class="block text-sm font-medium text-stone-900">Cache duration (minutes)</span>
-                <span class="mt-0.5 block text-xs leading-5 text-stone-600">Longer caches reduce requests. Shorter caches refresh faster.</span>
+                <span class="block text-sm font-medium text-stone-900">{t('cacheDurationLabel')}</span>
+                <span class="mt-0.5 block text-xs leading-5 text-stone-600">{t('cacheDurationHint')}</span>
                 <input
                   type="number"
                   bind:value={current.cacheDurationMinutes}
@@ -479,23 +471,23 @@ load();
           </section>
 
           <section class="rounded-[0.95rem] border border-stone-200 bg-stone-50 p-3">
-            <h3 class="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-stone-500">Domain filter</h3>
+            <h3 class="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-stone-500">{t('domainFilter')}</h3>
             <div class="mt-2.5 space-y-3">
               <label class="block">
-                <span class="block text-sm font-medium text-stone-900">Filter mode</span>
-                <span class="mt-0.5 block text-xs leading-5 text-stone-600">Blacklist skips domains. Whitelist only scans listed ones.</span>
+                <span class="block text-sm font-medium text-stone-900">{t('filterMode')}</span>
+                <span class="mt-0.5 block text-xs leading-5 text-stone-600">{t('filterModeHint')}</span>
                 <select bind:value={current.blacklistMode} class="mt-2 min-h-10 w-full rounded-2xl border border-stone-300 bg-white px-4 text-sm text-stone-900">
-                  <option value="blacklist">Blacklist</option>
-                  <option value="whitelist">Whitelist</option>
+                  <option value="blacklist">{t('filterModeBlacklist')}</option>
+                  <option value="whitelist">{t('filterModeWhitelist')}</option>
                 </select>
               </label>
 
               <label class="block">
                 <span class="block text-sm font-medium text-stone-900">
-                  {current.blacklistMode === 'whitelist' ? 'Allowed domains' : 'Blocked domains'}
+                  {current.blacklistMode === 'whitelist' ? t('allowedDomains') : t('blockedDomains')}
                 </span>
                 <span class="mt-0.5 block text-xs leading-5 text-stone-600">
-                  One domain per line. {current.blacklistMode === 'whitelist' ? 'Only these domains will be scanned.' : 'These domains will be skipped.'}
+                  {current.blacklistMode === 'whitelist' ? t('domainsWhitelistHint') : t('domainsBlacklistHint')}
                 </span>
                 <textarea
                   bind:value={current.blacklist}
@@ -516,7 +508,7 @@ load();
   <footer class="mt-5 flex flex-wrap items-center gap-3 border-t border-stone-200 pt-4 text-sm text-stone-500">
     <a href="https://discussed.dev" target="_blank" rel="noopener noreferrer" class="transition-colors hover:text-stone-900">discussed.dev</a>
     <span>&middot;</span>
-    <a href="https://github.com/discussed-dev/extension/issues" target="_blank" rel="noopener noreferrer" class="transition-colors hover:text-stone-900">Report an issue</a>
+    <a href="https://github.com/discussed-dev/extension/issues" target="_blank" rel="noopener noreferrer" class="transition-colors hover:text-stone-900">{t('reportIssue')}</a>
     <span>&middot;</span>
     <a href="https://github.com/discussed-dev/extension" target="_blank" rel="noopener noreferrer" class="transition-colors hover:text-stone-900">GitHub</a>
   </footer>

@@ -1,4 +1,5 @@
 <script lang="ts">
+import { t } from '@/lib/i18n';
 import type { Discussion } from '@/lib/types';
 import PlatformMark from './PlatformMark.svelte';
 
@@ -12,12 +13,12 @@ let { discussion, useOldReddit = false, openInNewTab = true }: Props = $props();
 
 function timeAgo(iso: string): string {
 	const seconds = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
-	if (seconds < 60) return 'now';
-	if (seconds < 3600) return `${Math.floor(seconds / 60)}m`;
-	if (seconds < 86400) return `${Math.floor(seconds / 3600)}h`;
-	if (seconds < 2592000) return `${Math.floor(seconds / 86400)}d`;
-	if (seconds < 31536000) return `${Math.floor(seconds / 2592000)}mo`;
-	return `${Math.floor(seconds / 31536000)}y`;
+	if (seconds < 60) return t('timeNow');
+	if (seconds < 3600) return t('timeMinutes', String(Math.floor(seconds / 60)));
+	if (seconds < 86400) return t('timeHours', String(Math.floor(seconds / 3600)));
+	if (seconds < 2592000) return t('timeDays', String(Math.floor(seconds / 86400)));
+	if (seconds < 31536000) return t('timeMonths', String(Math.floor(seconds / 2592000)));
+	return t('timeYears', String(Math.floor(seconds / 31536000)));
 }
 
 const href = $derived(
@@ -48,8 +49,8 @@ const href = $derived(
     </div>
 
     <span class="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[0.68rem] text-stone-500">
-      <span class="font-semibold tabular-nums text-stone-800">{discussion.commentCount.toLocaleString()} comments</span>
-      <span class="tabular-nums text-stone-600">{discussion.points.toLocaleString()} points</span>
+      <span class="font-semibold tabular-nums text-stone-800">{discussion.commentCount.toLocaleString()} {t('comments')}</span>
+      <span class="tabular-nums text-stone-600">{discussion.points.toLocaleString()} {t('points')}</span>
       {#if discussion.subreddit}
         <span class="truncate text-stone-600">r/{discussion.subreddit}</span>
       {/if}

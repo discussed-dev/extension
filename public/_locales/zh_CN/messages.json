@@ -1,71 +1,457 @@
 {
-	"extensionName": { "message": "Discussed" },
-	"extensionDescription": { "message": "自动发现当前页面的社区讨论，并用 AI 生成摘要" },
-	"popupTitle": { "message": "Discussed" },
-	"overview": { "message": "概览" },
-	"summary": { "message": "摘要" },
-	"settings": { "message": "设置" },
-	"searching": { "message": "正在扫描讨论源..." },
-	"searchingHint": { "message": "正在检查 Hacker News、Reddit 和 Lobsters。" },
-	"noDiscussions": { "message": "暂未发现相关讨论" },
+	"extensionName": {
+		"message": "Discussed"
+	},
+	"extensionDescription": {
+		"message": "自动发现当前页面的社区讨论，并用 AI 生成摘要"
+	},
+	"summary": {
+		"message": "摘要"
+	},
+	"settings": {
+		"message": "设置"
+	},
+	"searching": {
+		"message": "正在扫描讨论源..."
+	},
+	"searchingHint": {
+		"message": "正在检查 Hacker News、Reddit 和 Lobsters。"
+	},
+	"noDiscussions": {
+		"message": "暂未发现相关讨论"
+	},
 	"noDiscussionsHint": {
-		"message": "Discussed 未找到此页面的匹配讨论。试试刷新，或搜索其他来源。"
+		"message": "Discussed 未找到 $HOST$ 的匹配讨论。试试重新扫描，或搜索内置来源以外的地方。",
+		"placeholders": {
+			"HOST": {
+				"content": "$1"
+			}
+		}
 	},
-	"discussions": { "message": "条讨论" },
-	"comments": { "message": "条评论" },
-	"points": { "message": "分" },
-	"threads": { "message": "讨论帖" },
-	"refresh": { "message": "刷新" },
-	"scanAgain": { "message": "重新扫描" },
-	"reviewSources": { "message": "检查来源" },
-	"summarizeAll": { "message": "生成摘要" },
-	"summarizing": { "message": "正在生成..." },
-	"viewSummary": { "message": "查看摘要" },
-	"regenerate": { "message": "重新生成" },
-	"generating": { "message": "生成中..." },
-	"copy": { "message": "复制" },
-	"copied": { "message": "已复制！" },
-	"searchElsewhere": { "message": "其他搜索" },
-	"verdict": { "message": "总结" },
-	"communityRead": { "message": "社区讨论精华" },
-	"communityReadHint": { "message": "先看总结，再浏览主要观点。" },
-	"window": { "message": "时间跨度" },
-	"heavySignal": { "message": "大量讨论" },
-	"healthySignal": { "message": "活跃讨论" },
-	"earlySignal": { "message": "少量讨论" },
-	"discussionSignalFor": {
-		"message": "$HOST$ 的讨论信号",
-		"placeholders": { "HOST": { "content": "$1" } }
+	"comments": {
+		"message": "条评论"
 	},
-	"scanDescription": { "message": "在离开页面前，看看技术社区怎么说。" },
+	"points": {
+		"message": "分"
+	},
+	"scanAgain": {
+		"message": "重新扫描"
+	},
+	"summarizeAll": {
+		"message": "生成摘要"
+	},
+	"summarizing": {
+		"message": "正在生成..."
+	},
+	"viewSummary": {
+		"message": "查看摘要"
+	},
+	"regenerate": {
+		"message": "重新生成"
+	},
+	"generating": {
+		"message": "生成中..."
+	},
+	"copy": {
+		"message": "复制"
+	},
+	"copied": {
+		"message": "已复制！"
+	},
+	"searchElsewhere": {
+		"message": "其他搜索"
+	},
+	"verdict": {
+		"message": "总结"
+	},
 	"configureApiKey": {
 		"message": "在设置中添加你自己的 API 密钥。密钥仅存储在你的浏览器中，我们绝不会读取。"
 	},
-	"save": { "message": "保存设置" },
-	"saved": { "message": "设置已保存。" },
-	"sources": { "message": "讨论来源" },
-	"searchBehavior": { "message": "搜索行为" },
-	"autoSearch": { "message": "自动搜索" },
-	"badgeDisplay": { "message": "徽标显示" },
-	"domainFilter": { "message": "域名过滤" },
-	"cache": { "message": "缓存" },
-	"aiSummarization": { "message": "AI 摘要" },
-	"provider": { "message": "提供商" },
-	"model": { "message": "模型" },
-	"apiKey": { "message": "API 密钥" },
-	"test": { "message": "测试" },
-	"reportIssue": { "message": "报告问题" },
-	"submitTo": { "message": "提交到" },
-	"copyMarkdown": { "message": "复制为 Markdown" },
-	"copyPlainText": { "message": "复制为纯文本" },
-	"openInObsidian": { "message": "在 Obsidian 中打开" },
-	"obsidianVault": { "message": "Obsidian 仓库名称" },
-	"obsidianVaultHint": { "message": "可选。使用「在 Obsidian 中打开」功能时必填。" },
-	"exportSection": { "message": "导出" },
-	"sourceArticle": { "message": "文章" },
-	"sourcePageComments": { "message": "页面评论" },
+	"save": {
+		"message": "保存设置"
+	},
+	"sources": {
+		"message": "讨论来源"
+	},
+	"badgeDisplay": {
+		"message": "徽标显示"
+	},
+	"domainFilter": {
+		"message": "域名过滤"
+	},
+	"aiSummarization": {
+		"message": "AI 摘要"
+	},
+	"provider": {
+		"message": "提供商"
+	},
+	"model": {
+		"message": "模型"
+	},
+	"apiKey": {
+		"message": "API 密钥"
+	},
+	"reportIssue": {
+		"message": "报告问题"
+	},
+	"submitTo": {
+		"message": "提交到"
+	},
+	"copyMarkdown": {
+		"message": "复制为 Markdown"
+	},
+	"copyPlainText": {
+		"message": "复制为纯文本"
+	},
+	"openInObsidian": {
+		"message": "在 Obsidian 中打开"
+	},
+	"obsidianVault": {
+		"message": "Obsidian 仓库名称"
+	},
+	"obsidianVaultHint": {
+		"message": "可选。使用「在 Obsidian 中打开」功能时必填。"
+	},
+	"exportSection": {
+		"message": "导出"
+	},
+	"sourceArticle": {
+		"message": "文章"
+	},
+	"sourcePageComments": {
+		"message": "页面评论"
+	},
 	"linkedFrom": {
 		"message": "来自 $PLATFORM$ 的链接 →",
-		"placeholders": { "PLATFORM": { "content": "$1" } }
+		"placeholders": {
+			"PLATFORM": {
+				"content": "$1"
+			}
+		}
+	},
+	"openAiSettings": {
+		"message": "打开 AI 设置"
+	},
+	"cachedSummaryReady": {
+		"message": "缓存摘要已就绪。"
+	},
+	"discussionReadyOne": {
+		"message": "1 条讨论可生成摘要。"
+	},
+	"discussionsReadyMany": {
+		"message": "$COUNT$ 条讨论可生成摘要。",
+		"placeholders": {
+			"COUNT": {
+				"content": "$1"
+			}
+		}
+	},
+	"domainFiltered": {
+		"message": "域名已过滤"
+	},
+	"domainFilteredBlacklistHint": {
+		"message": "$HOST$ 在你的黑名单中。可在设置中修改。",
+		"placeholders": {
+			"HOST": {
+				"content": "$1"
+			}
+		}
+	},
+	"domainFilteredWhitelistHint": {
+		"message": "$HOST$ 不在你的白名单中。可在设置中修改。",
+		"placeholders": {
+			"HOST": {
+				"content": "$1"
+			}
+		}
+	},
+	"unblockDomain": {
+		"message": "取消屏蔽 $HOST$",
+		"placeholders": {
+			"HOST": {
+				"content": "$1"
+			}
+		}
+	},
+	"blockDomain": {
+		"message": "屏蔽 $HOST$",
+		"placeholders": {
+			"HOST": {
+				"content": "$1"
+			}
+		}
+	},
+	"refreshScan": {
+		"message": "重新扫描讨论"
+	},
+	"backToOverview": {
+		"message": "返回概览"
+	},
+	"moreExportOptions": {
+		"message": "更多导出选项"
+	},
+	"closeMenu": {
+		"message": "关闭菜单"
+	},
+	"tokensUsed": {
+		"message": "$COUNT$ tokens",
+		"placeholders": {
+			"COUNT": {
+				"content": "$1"
+			}
+		}
+	},
+	"summarizationFailed": {
+		"message": "摘要生成失败"
+	},
+	"timeNow": {
+		"message": "刚刚"
+	},
+	"timeMinutes": {
+		"message": "$N$分",
+		"placeholders": {
+			"N": {
+				"content": "$1"
+			}
+		}
+	},
+	"timeHours": {
+		"message": "$N$时",
+		"placeholders": {
+			"N": {
+				"content": "$1"
+			}
+		}
+	},
+	"timeDays": {
+		"message": "$N$天",
+		"placeholders": {
+			"N": {
+				"content": "$1"
+			}
+		}
+	},
+	"timeMonths": {
+		"message": "$N$月",
+		"placeholders": {
+			"N": {
+				"content": "$1"
+			}
+		}
+	},
+	"timeYears": {
+		"message": "$N$年",
+		"placeholders": {
+			"N": {
+				"content": "$1"
+			}
+		}
+	},
+	"basics": {
+		"message": "基础"
+	},
+	"coreControls": {
+		"message": "核心设置"
+	},
+	"sourceHintHn": {
+		"message": "检查此页面的 HN 讨论帖。"
+	},
+	"sourceHintMatching": {
+		"message": "包含匹配的讨论帖。"
+	},
+	"linkBehavior": {
+		"message": "链接行为"
+	},
+	"openLinksNewTab": {
+		"message": "在新标签页打开链接"
+	},
+	"openLinksNewTabHint": {
+		"message": "链接单独打开时保持弹窗不关闭。"
+	},
+	"preferOldReddit": {
+		"message": "优先使用 old.reddit.com"
+	},
+	"preferOldRedditHint": {
+		"message": "尽可能使用经典版 Reddit 界面。"
+	},
+	"aiSetup": {
+		"message": "AI 配置"
+	},
+	"apiBaseUrl": {
+		"message": "API 基础 URL"
+	},
+	"apiKeyHint": {
+		"message": "密钥仅存储在你的浏览器中，并直接发送给你选择的提供商。Discussed 绝不会查看或收集它。"
+	},
+	"testKey": {
+		"message": "测试密钥"
+	},
+	"modelHint": {
+		"message": "摘要用轻量模型就足够了，无需旗舰模型。$$ 档模型每次摘要成本低于 $$0.001。"
+	},
+	"maxCommentsPerSummary": {
+		"message": "每次摘要的最大评论数"
+	},
+	"summaryLanguage": {
+		"message": "摘要语言"
+	},
+	"presets": {
+		"message": "预设"
+	},
+	"advanced": {
+		"message": "高级"
+	},
+	"advancedControls": {
+		"message": "高级选项"
+	},
+	"showAdvancedSettings": {
+		"message": "显示高级设置"
+	},
+	"hideAdvancedSettings": {
+		"message": "隐藏高级设置"
+	},
+	"matching": {
+		"message": "匹配"
+	},
+	"redditExactMatchLabel": {
+		"message": "Reddit 使用精确匹配"
+	},
+	"redditExactMatchHint": {
+		"message": "要求 URL 完全匹配。"
+	},
+	"ignoreQueryStrings": {
+		"message": "忽略查询参数"
+	},
+	"ignoreQueryStringsHint": {
+		"message": "忽略跟踪和会话参数。"
+	},
+	"backgroundScanning": {
+		"message": "后台扫描"
+	},
+	"scanOnTabUpdate": {
+		"message": "标签页 URL 变化时扫描"
+	},
+	"scanOnTabUpdateHint": {
+		"message": "推荐。让徽标与新页面保持同步。"
+	},
+	"scanOnTabActivate": {
+		"message": "切换到已打开的标签页时扫描"
+	},
+	"scanOnTabActivateHint": {
+		"message": "回到已打开的标签页时刷新徽标。"
+	},
+	"badgeAndCache": {
+		"message": "徽标与缓存"
+	},
+	"badgeDisplayHint": {
+		"message": "选择工具栏徽标显示的内容。"
+	},
+	"badgeTotalDiscussions": {
+		"message": "讨论总数"
+	},
+	"badgeTotalComments": {
+		"message": "评论总数"
+	},
+	"cacheDurationLabel": {
+		"message": "缓存时长（分钟）"
+	},
+	"cacheDurationHint": {
+		"message": "缓存越久请求越少，越短刷新越快。"
+	},
+	"filterMode": {
+		"message": "过滤模式"
+	},
+	"filterModeHint": {
+		"message": "黑名单跳过所列域名，白名单只扫描所列域名。"
+	},
+	"filterModeBlacklist": {
+		"message": "黑名单"
+	},
+	"filterModeWhitelist": {
+		"message": "白名单"
+	},
+	"allowedDomains": {
+		"message": "允许的域名"
+	},
+	"blockedDomains": {
+		"message": "屏蔽的域名"
+	},
+	"domainsWhitelistHint": {
+		"message": "每行一个域名。仅扫描这些域名。"
+	},
+	"domainsBlacklistHint": {
+		"message": "每行一个域名。这些域名将被跳过。"
+	},
+	"settingsSavedDetail": {
+		"message": "设置已保存。新的扫描会立即使用这些偏好。"
+	},
+	"apiSettingsSaved": {
+		"message": "API 设置已保存。"
+	},
+	"addKeyFirst": {
+		"message": "请先添加 API 密钥。"
+	},
+	"checkingApiKey": {
+		"message": "正在检查 API 密钥..."
+	},
+	"apiKeyWorks": {
+		"message": "API 密钥有效。摘要可以使用此提供商。"
+	},
+	"couldNotReachProvider": {
+		"message": "无法连接提供商：$ERROR$",
+		"placeholders": {
+			"ERROR": {
+				"content": "$1"
+			}
+		}
+	},
+	"apiKeyRejected": {
+		"message": "$PROVIDER$ 密钥被拒绝。请核对所选提供商和 API 密钥。",
+		"placeholders": {
+			"PROVIDER": {
+				"content": "$1"
+			}
+		}
+	},
+	"endpointNotFoundOpenai": {
+		"message": "未找到 API 端点。请检查基础 URL 和模型名称。"
+	},
+	"endpointNotFound": {
+		"message": "未找到 $PROVIDER$ 端点。请检查所选模型。",
+		"placeholders": {
+			"PROVIDER": {
+				"content": "$1"
+			}
+		}
+	},
+	"rateLimited": {
+		"message": "$PROVIDER$ API 正在限流。请稍候再试。",
+		"placeholders": {
+			"PROVIDER": {
+				"content": "$1"
+			}
+		}
+	},
+	"providerTrouble": {
+		"message": "$PROVIDER$ API 暂时出现问题。请稍后再试。",
+		"placeholders": {
+			"PROVIDER": {
+				"content": "$1"
+			}
+		}
+	},
+	"apiReturnedStatus": {
+		"message": "$PROVIDER$ API 返回了 $STATUS$。请检查密钥、模型和提供商设置。",
+		"placeholders": {
+			"PROVIDER": {
+				"content": "$1"
+			},
+			"STATUS": {
+				"content": "$2"
+			}
+		}
+	},
+	"thisPage": {
+		"message": "此页面"
 	}
 }

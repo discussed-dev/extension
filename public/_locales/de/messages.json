@@ -1,79 +1,457 @@
 {
-	"extensionName": { "message": "Discussed" },
+	"extensionName": {
+		"message": "Discussed"
+	},
 	"extensionDescription": {
 		"message": "Entdecke automatisch Community-Diskussionen zur aktuellen Seite und fasse sie mit KI zusammen"
 	},
-	"popupTitle": { "message": "Discussed" },
-	"overview": { "message": "Übersicht" },
-	"summary": { "message": "Zusammenfassung" },
-	"settings": { "message": "Einstellungen" },
-	"searching": { "message": "Diskussionsquellen werden durchsucht..." },
+	"summary": {
+		"message": "Zusammenfassung"
+	},
+	"settings": {
+		"message": "Einstellungen"
+	},
+	"searching": {
+		"message": "Diskussionsquellen werden durchsucht..."
+	},
 	"searchingHint": {
 		"message": "Hacker News, Reddit und Lobsters werden für diese Seite überprüft."
 	},
-	"noDiscussions": { "message": "Noch kein Diskussionssignal" },
+	"noDiscussions": {
+		"message": "Noch kein Diskussionssignal"
+	},
 	"noDiscussionsHint": {
-		"message": "Discussed hat keine passenden Threads für diese Seite gefunden. Versuche einen neuen Scan oder suche über die integrierten Quellen hinaus."
+		"message": "Discussed hat keine passenden Threads für $HOST$ gefunden. Versuche einen neuen Scan oder suche über die integrierten Quellen hinaus.",
+		"placeholders": {
+			"HOST": {
+				"content": "$1"
+			}
+		}
 	},
-	"discussions": { "message": "Diskussionen" },
-	"comments": { "message": "Kommentare" },
-	"points": { "message": "Punkte" },
-	"threads": { "message": "Threads" },
-	"refresh": { "message": "Aktualisieren" },
-	"scanAgain": { "message": "Erneut scannen" },
-	"reviewSources": { "message": "Quellen prüfen" },
-	"summarizeAll": { "message": "Alle zusammenfassen" },
-	"summarizing": { "message": "Wird zusammengefasst..." },
-	"viewSummary": { "message": "Zusammenfassung anzeigen" },
-	"regenerate": { "message": "Neu generieren" },
-	"generating": { "message": "Wird generiert..." },
-	"copy": { "message": "Kopieren" },
-	"copied": { "message": "Kopiert!" },
-	"searchElsewhere": { "message": "Anderswo suchen" },
-	"verdict": { "message": "Fazit" },
-	"communityRead": { "message": "Community-Meinungen, komprimiert." },
-	"communityReadHint": {
-		"message": "Beginne mit dem Fazit und überblicke dann die zentralen Themen."
+	"comments": {
+		"message": "Kommentare"
 	},
-	"window": { "message": "Zeitraum" },
-	"heavySignal": { "message": "Starkes Diskussionssignal" },
-	"healthySignal": { "message": "Gesundes Diskussionssignal" },
-	"earlySignal": { "message": "Frühes Diskussionssignal" },
-	"discussionSignalFor": {
-		"message": "Diskussionssignal für $HOST$",
-		"placeholders": { "HOST": { "content": "$1" } }
+	"points": {
+		"message": "Punkte"
 	},
-	"scanDescription": {
-		"message": "Erfahre, was technische Communitys sagen, bevor du die Seite verlässt."
+	"scanAgain": {
+		"message": "Erneut scannen"
+	},
+	"summarizeAll": {
+		"message": "Alle zusammenfassen"
+	},
+	"summarizing": {
+		"message": "Wird zusammengefasst..."
+	},
+	"viewSummary": {
+		"message": "Zusammenfassung anzeigen"
+	},
+	"regenerate": {
+		"message": "Neu generieren"
+	},
+	"generating": {
+		"message": "Wird generiert..."
+	},
+	"copy": {
+		"message": "Kopieren"
+	},
+	"copied": {
+		"message": "Kopiert!"
+	},
+	"searchElsewhere": {
+		"message": "Anderswo suchen"
+	},
+	"verdict": {
+		"message": "Fazit"
 	},
 	"configureApiKey": {
 		"message": "Konfiguriere einen API-Schlüssel in den Einstellungen zum Aktivieren"
 	},
-	"save": { "message": "Einstellungen speichern" },
-	"saved": { "message": "Einstellungen gespeichert." },
-	"sources": { "message": "Quellen" },
-	"searchBehavior": { "message": "Suchverhalten" },
-	"autoSearch": { "message": "Automatische Suche" },
-	"badgeDisplay": { "message": "Badge-Anzeige" },
-	"domainFilter": { "message": "Domain-Filter" },
-	"cache": { "message": "Cache" },
-	"aiSummarization": { "message": "KI-Zusammenfassung" },
-	"provider": { "message": "Anbieter" },
-	"model": { "message": "Modell" },
-	"apiKey": { "message": "API-Schlüssel" },
-	"test": { "message": "Testen" },
-	"reportIssue": { "message": "Problem melden" },
-	"submitTo": { "message": "Einreichen bei" },
-	"copyMarkdown": { "message": "Als Markdown kopieren" },
-	"copyPlainText": { "message": "Als Klartext kopieren" },
-	"openInObsidian": { "message": "In Obsidian öffnen" },
-	"obsidianVault": { "message": "Obsidian-Vault-Name" },
-	"obsidianVaultHint": { "message": "Optional. Erforderlich für „In Obsidian öffnen\"." },
-	"exportSection": { "message": "Exportieren" },
-	"sourceArticle": { "message": "Artikel" },
-	"sourcePageComments": { "message": "Seite" },
+	"save": {
+		"message": "Einstellungen speichern"
+	},
+	"sources": {
+		"message": "Quellen"
+	},
+	"badgeDisplay": {
+		"message": "Badge-Anzeige"
+	},
+	"domainFilter": {
+		"message": "Domain-Filter"
+	},
+	"aiSummarization": {
+		"message": "KI-Zusammenfassung"
+	},
+	"provider": {
+		"message": "Anbieter"
+	},
+	"model": {
+		"message": "Modell"
+	},
+	"apiKey": {
+		"message": "API-Schlüssel"
+	},
+	"reportIssue": {
+		"message": "Problem melden"
+	},
+	"submitTo": {
+		"message": "Einreichen bei"
+	},
+	"copyMarkdown": {
+		"message": "Als Markdown kopieren"
+	},
+	"copyPlainText": {
+		"message": "Als Klartext kopieren"
+	},
+	"openInObsidian": {
+		"message": "In Obsidian öffnen"
+	},
+	"obsidianVault": {
+		"message": "Obsidian-Vault-Name"
+	},
+	"obsidianVaultHint": {
+		"message": "Optional. Erforderlich für „In Obsidian öffnen\"."
+	},
+	"exportSection": {
+		"message": "Exportieren"
+	},
+	"sourceArticle": {
+		"message": "Artikel"
+	},
+	"sourcePageComments": {
+		"message": "Seite"
+	},
 	"linkedFrom": {
 		"message": "Verlinkt von $PLATFORM$ →",
-		"placeholders": { "PLATFORM": { "content": "$1" } }
+		"placeholders": {
+			"PLATFORM": {
+				"content": "$1"
+			}
+		}
+	},
+	"openAiSettings": {
+		"message": "KI-Einstellungen öffnen"
+	},
+	"cachedSummaryReady": {
+		"message": "Zwischengespeicherte Zusammenfassung bereit."
+	},
+	"discussionReadyOne": {
+		"message": "1 Diskussion bereit zum Zusammenfassen."
+	},
+	"discussionsReadyMany": {
+		"message": "$COUNT$ Diskussionen bereit zum Zusammenfassen.",
+		"placeholders": {
+			"COUNT": {
+				"content": "$1"
+			}
+		}
+	},
+	"domainFiltered": {
+		"message": "Domain gefiltert"
+	},
+	"domainFilteredBlacklistHint": {
+		"message": "$HOST$ steht auf deiner Blacklist. Du kannst das in den Einstellungen ändern.",
+		"placeholders": {
+			"HOST": {
+				"content": "$1"
+			}
+		}
+	},
+	"domainFilteredWhitelistHint": {
+		"message": "$HOST$ steht nicht auf deiner Whitelist. Du kannst das in den Einstellungen ändern.",
+		"placeholders": {
+			"HOST": {
+				"content": "$1"
+			}
+		}
+	},
+	"unblockDomain": {
+		"message": "Blockierung von $HOST$ aufheben",
+		"placeholders": {
+			"HOST": {
+				"content": "$1"
+			}
+		}
+	},
+	"blockDomain": {
+		"message": "$HOST$ blockieren",
+		"placeholders": {
+			"HOST": {
+				"content": "$1"
+			}
+		}
+	},
+	"refreshScan": {
+		"message": "Diskussionsscan aktualisieren"
+	},
+	"backToOverview": {
+		"message": "Zurück zur Übersicht"
+	},
+	"moreExportOptions": {
+		"message": "Weitere Exportoptionen"
+	},
+	"closeMenu": {
+		"message": "Menü schließen"
+	},
+	"tokensUsed": {
+		"message": "$COUNT$ Tokens",
+		"placeholders": {
+			"COUNT": {
+				"content": "$1"
+			}
+		}
+	},
+	"summarizationFailed": {
+		"message": "Zusammenfassung fehlgeschlagen"
+	},
+	"timeNow": {
+		"message": "jetzt"
+	},
+	"timeMinutes": {
+		"message": "$N$min",
+		"placeholders": {
+			"N": {
+				"content": "$1"
+			}
+		}
+	},
+	"timeHours": {
+		"message": "$N$h",
+		"placeholders": {
+			"N": {
+				"content": "$1"
+			}
+		}
+	},
+	"timeDays": {
+		"message": "$N$T",
+		"placeholders": {
+			"N": {
+				"content": "$1"
+			}
+		}
+	},
+	"timeMonths": {
+		"message": "$N$M",
+		"placeholders": {
+			"N": {
+				"content": "$1"
+			}
+		}
+	},
+	"timeYears": {
+		"message": "$N$J",
+		"placeholders": {
+			"N": {
+				"content": "$1"
+			}
+		}
+	},
+	"basics": {
+		"message": "Grundlagen"
+	},
+	"coreControls": {
+		"message": "Zentrale Einstellungen"
+	},
+	"sourceHintHn": {
+		"message": "HN-Threads für diese Seite prüfen."
+	},
+	"sourceHintMatching": {
+		"message": "Passende Threads einbeziehen."
+	},
+	"linkBehavior": {
+		"message": "Linkverhalten"
+	},
+	"openLinksNewTab": {
+		"message": "Links in neuem Tab öffnen"
+	},
+	"openLinksNewTabHint": {
+		"message": "Das Popup bleibt offen, während Links separat geöffnet werden."
+	},
+	"preferOldReddit": {
+		"message": "old.reddit.com bevorzugen"
+	},
+	"preferOldRedditHint": {
+		"message": "Wenn möglich die klassische Reddit-Ansicht verwenden."
+	},
+	"aiSetup": {
+		"message": "KI-Einrichtung"
+	},
+	"apiBaseUrl": {
+		"message": "API-Basis-URL"
+	},
+	"apiKeyHint": {
+		"message": "Dein Schlüssel wird nur in deinem Browser gespeichert und direkt an den gewählten Anbieter gesendet. Discussed sieht oder sammelt ihn nie."
+	},
+	"testKey": {
+		"message": "Schlüssel testen"
+	},
+	"modelHint": {
+		"message": "Zusammenfassungen funktionieren gut mit leichtgewichtigen Modellen — Flaggschiff-Modelle sind unnötig. $$-Modelle kosten unter $$0.001 pro Zusammenfassung."
+	},
+	"maxCommentsPerSummary": {
+		"message": "Max. Kommentare pro Zusammenfassung"
+	},
+	"summaryLanguage": {
+		"message": "Sprache der Zusammenfassung"
+	},
+	"presets": {
+		"message": "Voreinstellungen"
+	},
+	"advanced": {
+		"message": "Erweitert"
+	},
+	"advancedControls": {
+		"message": "Erweiterte Einstellungen"
+	},
+	"showAdvancedSettings": {
+		"message": "Erweiterte Einstellungen anzeigen"
+	},
+	"hideAdvancedSettings": {
+		"message": "Erweiterte Einstellungen ausblenden"
+	},
+	"matching": {
+		"message": "Abgleich"
+	},
+	"redditExactMatchLabel": {
+		"message": "Exakte Übereinstimmung bei Reddit"
+	},
+	"redditExactMatchHint": {
+		"message": "Erfordert eine exakte URL-Übereinstimmung."
+	},
+	"ignoreQueryStrings": {
+		"message": "Query-Strings ignorieren"
+	},
+	"ignoreQueryStringsHint": {
+		"message": "Tracking- und Sitzungsparameter ignorieren."
+	},
+	"backgroundScanning": {
+		"message": "Hintergrund-Scans"
+	},
+	"scanOnTabUpdate": {
+		"message": "Scannen, wenn sich die Tab-URL ändert"
+	},
+	"scanOnTabUpdateHint": {
+		"message": "Empfohlen. Hält das Badge mit neuen Seiten synchron."
+	},
+	"scanOnTabActivate": {
+		"message": "Scannen beim Wechsel zu einem offenen Tab"
+	},
+	"scanOnTabActivateHint": {
+		"message": "Aktualisiert das Badge, wenn du zu einem offenen Tab zurückkehrst."
+	},
+	"badgeAndCache": {
+		"message": "Badge und Cache"
+	},
+	"badgeDisplayHint": {
+		"message": "Wähle, was das Badge in der Symbolleiste anzeigt."
+	},
+	"badgeTotalDiscussions": {
+		"message": "Diskussionen gesamt"
+	},
+	"badgeTotalComments": {
+		"message": "Kommentare gesamt"
+	},
+	"cacheDurationLabel": {
+		"message": "Cache-Dauer (Minuten)"
+	},
+	"cacheDurationHint": {
+		"message": "Längere Caches reduzieren Anfragen. Kürzere aktualisieren schneller."
+	},
+	"filterMode": {
+		"message": "Filtermodus"
+	},
+	"filterModeHint": {
+		"message": "Die Blacklist überspringt Domains. Die Whitelist scannt nur gelistete."
+	},
+	"filterModeBlacklist": {
+		"message": "Blacklist"
+	},
+	"filterModeWhitelist": {
+		"message": "Whitelist"
+	},
+	"allowedDomains": {
+		"message": "Erlaubte Domains"
+	},
+	"blockedDomains": {
+		"message": "Blockierte Domains"
+	},
+	"domainsWhitelistHint": {
+		"message": "Eine Domain pro Zeile. Nur diese Domains werden gescannt."
+	},
+	"domainsBlacklistHint": {
+		"message": "Eine Domain pro Zeile. Diese Domains werden übersprungen."
+	},
+	"settingsSavedDetail": {
+		"message": "Einstellungen gespeichert. Neue Scans nutzen diese Vorgaben sofort."
+	},
+	"apiSettingsSaved": {
+		"message": "API-Einstellungen gespeichert."
+	},
+	"addKeyFirst": {
+		"message": "Füge zuerst einen API-Schlüssel hinzu."
+	},
+	"checkingApiKey": {
+		"message": "API-Schlüssel wird geprüft..."
+	},
+	"apiKeyWorks": {
+		"message": "API-Schlüssel funktioniert. Zusammenfassungen können diesen Anbieter nutzen."
+	},
+	"couldNotReachProvider": {
+		"message": "Anbieter nicht erreichbar: $ERROR$",
+		"placeholders": {
+			"ERROR": {
+				"content": "$1"
+			}
+		}
+	},
+	"apiKeyRejected": {
+		"message": "Der $PROVIDER$-Schlüssel wurde abgelehnt. Prüfe den gewählten Anbieter und den API-Schlüssel.",
+		"placeholders": {
+			"PROVIDER": {
+				"content": "$1"
+			}
+		}
+	},
+	"endpointNotFoundOpenai": {
+		"message": "Der API-Endpunkt wurde nicht gefunden. Prüfe Basis-URL und Modellnamen."
+	},
+	"endpointNotFound": {
+		"message": "Der $PROVIDER$-Endpunkt wurde nicht gefunden. Prüfe das gewählte Modell.",
+		"placeholders": {
+			"PROVIDER": {
+				"content": "$1"
+			}
+		}
+	},
+	"rateLimited": {
+		"message": "Die $PROVIDER$-API begrenzt gerade die Anfragerate. Warte einen Moment und versuche es erneut.",
+		"placeholders": {
+			"PROVIDER": {
+				"content": "$1"
+			}
+		}
+	},
+	"providerTrouble": {
+		"message": "Die $PROVIDER$-API hat gerade Probleme. Versuche es gleich noch einmal.",
+		"placeholders": {
+			"PROVIDER": {
+				"content": "$1"
+			}
+		}
+	},
+	"apiReturnedStatus": {
+		"message": "Die $PROVIDER$-API hat $STATUS$ zurückgegeben. Prüfe Schlüssel, Modell und Anbieter-Einstellungen.",
+		"placeholders": {
+			"PROVIDER": {
+				"content": "$1"
+			},
+			"STATUS": {
+				"content": "$2"
+			}
+		}
+	},
+	"thisPage": {
+		"message": "diese Seite"
 	}
 }

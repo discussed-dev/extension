@@ -1,71 +1,457 @@
 {
-	"extensionName": { "message": "Discussed" },
+	"extensionName": {
+		"message": "Discussed"
+	},
 	"extensionDescription": {
 		"message": "現在のページに関するコミュニティの議論を自動検出し、AIで要約"
 	},
-	"popupTitle": { "message": "Discussed" },
-	"overview": { "message": "概要" },
-	"summary": { "message": "要約" },
-	"settings": { "message": "設定" },
-	"searching": { "message": "ディスカッションを検索中..." },
-	"searchingHint": { "message": "Hacker News、Reddit、Lobsters を確認しています。" },
-	"noDiscussions": { "message": "ディスカッションが見つかりません" },
+	"summary": {
+		"message": "要約"
+	},
+	"settings": {
+		"message": "設定"
+	},
+	"searching": {
+		"message": "ディスカッションを検索中..."
+	},
+	"searchingHint": {
+		"message": "Hacker News、Reddit、Lobsters を確認しています。"
+	},
+	"noDiscussions": {
+		"message": "ディスカッションが見つかりません"
+	},
 	"noDiscussionsHint": {
-		"message": "このページに関連するスレッドは見つかりませんでした。再スキャンするか、他のソースで検索してください。"
+		"message": "Discussed は $HOST$ に一致するスレッドを見つけられませんでした。再スキャンするか、内蔵ソース以外で検索してください。",
+		"placeholders": {
+			"HOST": {
+				"content": "$1"
+			}
+		}
 	},
-	"discussions": { "message": "件の議論" },
-	"comments": { "message": "件のコメント" },
-	"points": { "message": "ポイント" },
-	"threads": { "message": "スレッド" },
-	"refresh": { "message": "更新" },
-	"scanAgain": { "message": "再スキャン" },
-	"reviewSources": { "message": "ソースを確認" },
-	"summarizeAll": { "message": "すべて要約" },
-	"summarizing": { "message": "要約中..." },
-	"viewSummary": { "message": "要約を表示" },
-	"regenerate": { "message": "再生成" },
-	"generating": { "message": "生成中..." },
-	"copy": { "message": "コピー" },
-	"copied": { "message": "コピーしました！" },
-	"searchElsewhere": { "message": "他で検索" },
-	"verdict": { "message": "結論" },
-	"communityRead": { "message": "コミュニティの議論を要約" },
-	"communityReadHint": { "message": "まず結論を確認し、次にテーマを見てください。" },
-	"window": { "message": "期間" },
-	"heavySignal": { "message": "活発な議論" },
-	"healthySignal": { "message": "適度な議論" },
-	"earlySignal": { "message": "初期の議論" },
-	"discussionSignalFor": {
-		"message": "$HOST$ のディスカッション",
-		"placeholders": { "HOST": { "content": "$1" } }
+	"comments": {
+		"message": "件のコメント"
 	},
-	"scanDescription": { "message": "ページを離れる前に、技術コミュニティの意見を確認しましょう。" },
-	"configureApiKey": { "message": "設定でAPIキーを設定してください" },
-	"save": { "message": "設定を保存" },
-	"saved": { "message": "保存しました。" },
-	"sources": { "message": "ソース" },
-	"searchBehavior": { "message": "検索動作" },
-	"autoSearch": { "message": "自動検索" },
-	"badgeDisplay": { "message": "バッジ表示" },
-	"domainFilter": { "message": "ドメインフィルター" },
-	"cache": { "message": "キャッシュ" },
-	"aiSummarization": { "message": "AI要約" },
-	"provider": { "message": "プロバイダー" },
-	"model": { "message": "モデル" },
-	"apiKey": { "message": "APIキー" },
-	"test": { "message": "テスト" },
-	"reportIssue": { "message": "問題を報告" },
-	"submitTo": { "message": "投稿先" },
-	"copyMarkdown": { "message": "Markdownとしてコピー" },
-	"copyPlainText": { "message": "プレーンテキストとしてコピー" },
-	"openInObsidian": { "message": "Obsidianで開く" },
-	"obsidianVault": { "message": "Obsidianボールト名" },
-	"obsidianVaultHint": { "message": "任意。「Obsidianで開く」機能に必要です。" },
-	"exportSection": { "message": "エクスポート" },
-	"sourceArticle": { "message": "記事" },
-	"sourcePageComments": { "message": "ページ" },
+	"points": {
+		"message": "ポイント"
+	},
+	"scanAgain": {
+		"message": "再スキャン"
+	},
+	"summarizeAll": {
+		"message": "すべて要約"
+	},
+	"summarizing": {
+		"message": "要約中..."
+	},
+	"viewSummary": {
+		"message": "要約を表示"
+	},
+	"regenerate": {
+		"message": "再生成"
+	},
+	"generating": {
+		"message": "生成中..."
+	},
+	"copy": {
+		"message": "コピー"
+	},
+	"copied": {
+		"message": "コピーしました！"
+	},
+	"searchElsewhere": {
+		"message": "他で検索"
+	},
+	"verdict": {
+		"message": "結論"
+	},
+	"configureApiKey": {
+		"message": "設定でAPIキーを設定してください"
+	},
+	"save": {
+		"message": "設定を保存"
+	},
+	"sources": {
+		"message": "ソース"
+	},
+	"badgeDisplay": {
+		"message": "バッジ表示"
+	},
+	"domainFilter": {
+		"message": "ドメインフィルター"
+	},
+	"aiSummarization": {
+		"message": "AI要約"
+	},
+	"provider": {
+		"message": "プロバイダー"
+	},
+	"model": {
+		"message": "モデル"
+	},
+	"apiKey": {
+		"message": "APIキー"
+	},
+	"reportIssue": {
+		"message": "問題を報告"
+	},
+	"submitTo": {
+		"message": "投稿先"
+	},
+	"copyMarkdown": {
+		"message": "Markdownとしてコピー"
+	},
+	"copyPlainText": {
+		"message": "プレーンテキストとしてコピー"
+	},
+	"openInObsidian": {
+		"message": "Obsidianで開く"
+	},
+	"obsidianVault": {
+		"message": "Obsidianボールト名"
+	},
+	"obsidianVaultHint": {
+		"message": "任意。「Obsidianで開く」機能に必要です。"
+	},
+	"exportSection": {
+		"message": "エクスポート"
+	},
+	"sourceArticle": {
+		"message": "記事"
+	},
+	"sourcePageComments": {
+		"message": "ページ"
+	},
 	"linkedFrom": {
 		"message": "$PLATFORM$ からのリンク →",
-		"placeholders": { "PLATFORM": { "content": "$1" } }
+		"placeholders": {
+			"PLATFORM": {
+				"content": "$1"
+			}
+		}
+	},
+	"openAiSettings": {
+		"message": "AI設定を開く"
+	},
+	"cachedSummaryReady": {
+		"message": "キャッシュ済みの要約があります。"
+	},
+	"discussionReadyOne": {
+		"message": "1 件の議論を要約できます。"
+	},
+	"discussionsReadyMany": {
+		"message": "$COUNT$ 件の議論を要約できます。",
+		"placeholders": {
+			"COUNT": {
+				"content": "$1"
+			}
+		}
+	},
+	"domainFiltered": {
+		"message": "ドメインフィルター適用中"
+	},
+	"domainFilteredBlacklistHint": {
+		"message": "$HOST$ はブラックリストに含まれています。設定で変更できます。",
+		"placeholders": {
+			"HOST": {
+				"content": "$1"
+			}
+		}
+	},
+	"domainFilteredWhitelistHint": {
+		"message": "$HOST$ はホワイトリストに含まれていません。設定で変更できます。",
+		"placeholders": {
+			"HOST": {
+				"content": "$1"
+			}
+		}
+	},
+	"unblockDomain": {
+		"message": "$HOST$ のブロックを解除",
+		"placeholders": {
+			"HOST": {
+				"content": "$1"
+			}
+		}
+	},
+	"blockDomain": {
+		"message": "$HOST$ をブロック",
+		"placeholders": {
+			"HOST": {
+				"content": "$1"
+			}
+		}
+	},
+	"refreshScan": {
+		"message": "ディスカッションを再スキャン"
+	},
+	"backToOverview": {
+		"message": "概要に戻る"
+	},
+	"moreExportOptions": {
+		"message": "その他のエクスポート"
+	},
+	"closeMenu": {
+		"message": "メニューを閉じる"
+	},
+	"tokensUsed": {
+		"message": "$COUNT$ トークン",
+		"placeholders": {
+			"COUNT": {
+				"content": "$1"
+			}
+		}
+	},
+	"summarizationFailed": {
+		"message": "要約に失敗しました"
+	},
+	"timeNow": {
+		"message": "今"
+	},
+	"timeMinutes": {
+		"message": "$N$分",
+		"placeholders": {
+			"N": {
+				"content": "$1"
+			}
+		}
+	},
+	"timeHours": {
+		"message": "$N$時間",
+		"placeholders": {
+			"N": {
+				"content": "$1"
+			}
+		}
+	},
+	"timeDays": {
+		"message": "$N$日",
+		"placeholders": {
+			"N": {
+				"content": "$1"
+			}
+		}
+	},
+	"timeMonths": {
+		"message": "$N$ヶ月",
+		"placeholders": {
+			"N": {
+				"content": "$1"
+			}
+		}
+	},
+	"timeYears": {
+		"message": "$N$年",
+		"placeholders": {
+			"N": {
+				"content": "$1"
+			}
+		}
+	},
+	"basics": {
+		"message": "基本"
+	},
+	"coreControls": {
+		"message": "主要な設定"
+	},
+	"sourceHintHn": {
+		"message": "このページの HN スレッドを確認します。"
+	},
+	"sourceHintMatching": {
+		"message": "一致するスレッドを含めます。"
+	},
+	"linkBehavior": {
+		"message": "リンクの動作"
+	},
+	"openLinksNewTab": {
+		"message": "リンクを新しいタブで開く"
+	},
+	"openLinksNewTabHint": {
+		"message": "リンクを別に開いてもポップアップを閉じません。"
+	},
+	"preferOldReddit": {
+		"message": "old.reddit.com を優先"
+	},
+	"preferOldRedditHint": {
+		"message": "可能な場合は従来の Reddit 表示を使用します。"
+	},
+	"aiSetup": {
+		"message": "AI設定"
+	},
+	"apiBaseUrl": {
+		"message": "APIベースURL"
+	},
+	"apiKeyHint": {
+		"message": "キーはブラウザ内にのみ保存され、選択したプロバイダーへ直接送信されます。Discussed が閲覧・収集することはありません。"
+	},
+	"testKey": {
+		"message": "キーをテスト"
+	},
+	"modelHint": {
+		"message": "要約は軽量モデルで十分です。フラッグシップモデルは不要です。$$ のモデルなら要約1回あたり $$0.001 未満です。"
+	},
+	"maxCommentsPerSummary": {
+		"message": "要約あたりの最大コメント数"
+	},
+	"summaryLanguage": {
+		"message": "要約の言語"
+	},
+	"presets": {
+		"message": "プリセット"
+	},
+	"advanced": {
+		"message": "詳細"
+	},
+	"advancedControls": {
+		"message": "詳細設定"
+	},
+	"showAdvancedSettings": {
+		"message": "詳細設定を表示"
+	},
+	"hideAdvancedSettings": {
+		"message": "詳細設定を非表示"
+	},
+	"matching": {
+		"message": "マッチング"
+	},
+	"redditExactMatchLabel": {
+		"message": "Reddit で完全一致を使用"
+	},
+	"redditExactMatchHint": {
+		"message": "URL の完全一致を必須にします。"
+	},
+	"ignoreQueryStrings": {
+		"message": "クエリ文字列を無視"
+	},
+	"ignoreQueryStringsHint": {
+		"message": "トラッキングやセッションのパラメーターを無視します。"
+	},
+	"backgroundScanning": {
+		"message": "バックグラウンドスキャン"
+	},
+	"scanOnTabUpdate": {
+		"message": "タブの URL が変わったらスキャン"
+	},
+	"scanOnTabUpdateHint": {
+		"message": "推奨。バッジを新しいページと同期させます。"
+	},
+	"scanOnTabActivate": {
+		"message": "既存のタブに切り替えたらスキャン"
+	},
+	"scanOnTabActivateHint": {
+		"message": "開いているタブに戻ったときにバッジを更新します。"
+	},
+	"badgeAndCache": {
+		"message": "バッジとキャッシュ"
+	},
+	"badgeDisplayHint": {
+		"message": "ツールバーのバッジに表示する内容を選択します。"
+	},
+	"badgeTotalDiscussions": {
+		"message": "議論の合計"
+	},
+	"badgeTotalComments": {
+		"message": "コメントの合計"
+	},
+	"cacheDurationLabel": {
+		"message": "キャッシュ時間（分）"
+	},
+	"cacheDurationHint": {
+		"message": "長いほどリクエストが減り、短いほど更新が速くなります。"
+	},
+	"filterMode": {
+		"message": "フィルターモード"
+	},
+	"filterModeHint": {
+		"message": "ブラックリストは対象ドメインをスキップし、ホワイトリストは記載ドメインのみスキャンします。"
+	},
+	"filterModeBlacklist": {
+		"message": "ブラックリスト"
+	},
+	"filterModeWhitelist": {
+		"message": "ホワイトリスト"
+	},
+	"allowedDomains": {
+		"message": "許可するドメイン"
+	},
+	"blockedDomains": {
+		"message": "ブロックするドメイン"
+	},
+	"domainsWhitelistHint": {
+		"message": "1行に1ドメイン。これらのドメインのみスキャンします。"
+	},
+	"domainsBlacklistHint": {
+		"message": "1行に1ドメイン。これらのドメインはスキップします。"
+	},
+	"settingsSavedDetail": {
+		"message": "設定を保存しました。新しいスキャンからすぐに反映されます。"
+	},
+	"apiSettingsSaved": {
+		"message": "API設定を保存しました。"
+	},
+	"addKeyFirst": {
+		"message": "まずAPIキーを追加してください。"
+	},
+	"checkingApiKey": {
+		"message": "APIキーを確認中..."
+	},
+	"apiKeyWorks": {
+		"message": "APIキーは有効です。このプロバイダーで要約できます。"
+	},
+	"couldNotReachProvider": {
+		"message": "プロバイダーに接続できませんでした: $ERROR$",
+		"placeholders": {
+			"ERROR": {
+				"content": "$1"
+			}
+		}
+	},
+	"apiKeyRejected": {
+		"message": "$PROVIDER$ のキーが拒否されました。選択したプロバイダーとAPIキーを確認してください。",
+		"placeholders": {
+			"PROVIDER": {
+				"content": "$1"
+			}
+		}
+	},
+	"endpointNotFoundOpenai": {
+		"message": "APIエンドポイントが見つかりません。ベースURLとモデル名を確認してください。"
+	},
+	"endpointNotFound": {
+		"message": "$PROVIDER$ のエンドポイントが見つかりません。選択したモデルを確認してください。",
+		"placeholders": {
+			"PROVIDER": {
+				"content": "$1"
+			}
+		}
+	},
+	"rateLimited": {
+		"message": "$PROVIDER$ API がレート制限中です。しばらく待ってから再試行してください。",
+		"placeholders": {
+			"PROVIDER": {
+				"content": "$1"
+			}
+		}
+	},
+	"providerTrouble": {
+		"message": "$PROVIDER$ API に問題が発生しています。しばらくしてから再試行してください。",
+		"placeholders": {
+			"PROVIDER": {
+				"content": "$1"
+			}
+		}
+	},
+	"apiReturnedStatus": {
+		"message": "$PROVIDER$ API が $STATUS$ を返しました。キー、モデル、プロバイダー設定を確認してください。",
+		"placeholders": {
+			"PROVIDER": {
+				"content": "$1"
+			},
+			"STATUS": {
+				"content": "$2"
+			}
+		}
+	},
+	"thisPage": {
+		"message": "このページ"
 	}
 }

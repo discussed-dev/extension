@@ -1,75 +1,457 @@
 {
-	"extensionName": { "message": "Discussed" },
+	"extensionName": {
+		"message": "Discussed"
+	},
 	"extensionDescription": {
 		"message": "Auto-discover community discussions about the current page and summarize with AI"
 	},
-	"popupTitle": { "message": "Discussed" },
-	"overview": { "message": "Overview" },
-	"summary": { "message": "Summary" },
-	"settings": { "message": "Settings" },
-	"searching": { "message": "Scanning discussion sources..." },
-	"searchingHint": { "message": "Checking Hacker News, Reddit, and Lobsters for this page." },
-	"noDiscussions": { "message": "No discussion signal yet" },
+	"summary": {
+		"message": "Summary"
+	},
+	"settings": {
+		"message": "Settings"
+	},
+	"searching": {
+		"message": "Scanning discussion sources..."
+	},
+	"searchingHint": {
+		"message": "Checking Hacker News, Reddit, and Lobsters for this page."
+	},
+	"noDiscussions": {
+		"message": "No discussion signal yet"
+	},
 	"noDiscussionsHint": {
-		"message": "Discussed did not find matching threads for this page. Try a fresh scan, or search beyond the built-in sources."
+		"message": "Discussed did not find matching threads for $HOST$. Try a fresh scan, or search beyond the built-in sources.",
+		"placeholders": {
+			"HOST": {
+				"content": "$1"
+			}
+		}
 	},
-	"discussions": { "message": "discussions" },
-	"comments": { "message": "comments" },
-	"points": { "message": "points" },
-	"threads": { "message": "Threads" },
-	"refresh": { "message": "Refresh" },
-	"scanAgain": { "message": "Scan again" },
-	"reviewSources": { "message": "Review sources" },
-	"summarizeAll": { "message": "Summarize All" },
-	"summarizing": { "message": "Summarizing..." },
-	"viewSummary": { "message": "View Summary" },
-	"regenerate": { "message": "Regenerate" },
-	"generating": { "message": "Generating..." },
-	"copy": { "message": "Copy" },
-	"copied": { "message": "Copied!" },
-	"searchElsewhere": { "message": "Search elsewhere" },
-	"verdict": { "message": "Verdict" },
-	"communityRead": { "message": "Community read, condensed." },
-	"communityReadHint": { "message": "Start with the verdict, then skim the supporting themes." },
-	"window": { "message": "Window" },
-	"heavySignal": { "message": "Heavy discussion signal" },
-	"healthySignal": { "message": "Healthy discussion signal" },
-	"earlySignal": { "message": "Early discussion signal" },
-	"discussionSignalFor": {
-		"message": "Discussion signal for $HOST$",
-		"placeholders": { "HOST": { "content": "$1" } }
+	"comments": {
+		"message": "comments"
 	},
-	"scanDescription": {
-		"message": "Scan what technical communities are saying before you leave the page."
+	"points": {
+		"message": "points"
+	},
+	"scanAgain": {
+		"message": "Scan again"
+	},
+	"summarizeAll": {
+		"message": "Summarize All"
+	},
+	"summarizing": {
+		"message": "Summarizing..."
+	},
+	"viewSummary": {
+		"message": "View Summary"
+	},
+	"regenerate": {
+		"message": "Regenerate"
+	},
+	"generating": {
+		"message": "Generating..."
+	},
+	"copy": {
+		"message": "Copy"
+	},
+	"copied": {
+		"message": "Copied!"
+	},
+	"searchElsewhere": {
+		"message": "Search elsewhere"
+	},
+	"verdict": {
+		"message": "Verdict"
 	},
 	"configureApiKey": {
 		"message": "Add your own API key in Settings. It stays in your browser — we never see it."
 	},
-	"save": { "message": "Save settings" },
-	"saved": { "message": "Settings saved." },
-	"sources": { "message": "Sources" },
-	"searchBehavior": { "message": "Search Behavior" },
-	"autoSearch": { "message": "Auto-search" },
-	"badgeDisplay": { "message": "Badge Display" },
-	"domainFilter": { "message": "Domain Filter" },
-	"cache": { "message": "Cache" },
-	"aiSummarization": { "message": "AI Summarization" },
-	"provider": { "message": "Provider" },
-	"model": { "message": "Model" },
-	"apiKey": { "message": "API Key" },
-	"test": { "message": "Test" },
-	"reportIssue": { "message": "Report an issue" },
-	"submitTo": { "message": "Submit to" },
-	"copyMarkdown": { "message": "Copy as Markdown" },
-	"copyPlainText": { "message": "Copy as Plain Text" },
-	"openInObsidian": { "message": "Open in Obsidian" },
-	"obsidianVault": { "message": "Obsidian vault name" },
-	"obsidianVaultHint": { "message": "Optional. Required for \"Open in Obsidian\" export." },
-	"exportSection": { "message": "Export" },
-	"sourceArticle": { "message": "Article" },
-	"sourcePageComments": { "message": "Page" },
+	"save": {
+		"message": "Save settings"
+	},
+	"sources": {
+		"message": "Sources"
+	},
+	"badgeDisplay": {
+		"message": "Badge Display"
+	},
+	"domainFilter": {
+		"message": "Domain Filter"
+	},
+	"aiSummarization": {
+		"message": "AI Summarization"
+	},
+	"provider": {
+		"message": "Provider"
+	},
+	"model": {
+		"message": "Model"
+	},
+	"apiKey": {
+		"message": "API Key"
+	},
+	"reportIssue": {
+		"message": "Report an issue"
+	},
+	"submitTo": {
+		"message": "Submit to"
+	},
+	"copyMarkdown": {
+		"message": "Copy as Markdown"
+	},
+	"copyPlainText": {
+		"message": "Copy as Plain Text"
+	},
+	"openInObsidian": {
+		"message": "Open in Obsidian"
+	},
+	"obsidianVault": {
+		"message": "Obsidian vault name"
+	},
+	"obsidianVaultHint": {
+		"message": "Optional. Required for \"Open in Obsidian\" export."
+	},
+	"exportSection": {
+		"message": "Export"
+	},
+	"sourceArticle": {
+		"message": "Article"
+	},
+	"sourcePageComments": {
+		"message": "Page"
+	},
 	"linkedFrom": {
 		"message": "Linked from $PLATFORM$ →",
-		"placeholders": { "PLATFORM": { "content": "$1" } }
+		"placeholders": {
+			"PLATFORM": {
+				"content": "$1"
+			}
+		}
+	},
+	"openAiSettings": {
+		"message": "Open AI Settings"
+	},
+	"cachedSummaryReady": {
+		"message": "Cached summary ready."
+	},
+	"discussionReadyOne": {
+		"message": "1 discussion ready to summarize."
+	},
+	"discussionsReadyMany": {
+		"message": "$COUNT$ discussions ready to summarize.",
+		"placeholders": {
+			"COUNT": {
+				"content": "$1"
+			}
+		}
+	},
+	"domainFiltered": {
+		"message": "Domain filtered"
+	},
+	"domainFilteredBlacklistHint": {
+		"message": "$HOST$ is in your blacklist. You can change this in settings.",
+		"placeholders": {
+			"HOST": {
+				"content": "$1"
+			}
+		}
+	},
+	"domainFilteredWhitelistHint": {
+		"message": "$HOST$ is not in your whitelist. You can change this in settings.",
+		"placeholders": {
+			"HOST": {
+				"content": "$1"
+			}
+		}
+	},
+	"unblockDomain": {
+		"message": "Unblock $HOST$",
+		"placeholders": {
+			"HOST": {
+				"content": "$1"
+			}
+		}
+	},
+	"blockDomain": {
+		"message": "Block $HOST$",
+		"placeholders": {
+			"HOST": {
+				"content": "$1"
+			}
+		}
+	},
+	"refreshScan": {
+		"message": "Refresh discussion scan"
+	},
+	"backToOverview": {
+		"message": "Back to overview"
+	},
+	"moreExportOptions": {
+		"message": "More export options"
+	},
+	"closeMenu": {
+		"message": "Close menu"
+	},
+	"tokensUsed": {
+		"message": "$COUNT$ tokens",
+		"placeholders": {
+			"COUNT": {
+				"content": "$1"
+			}
+		}
+	},
+	"summarizationFailed": {
+		"message": "Summarization failed"
+	},
+	"timeNow": {
+		"message": "now"
+	},
+	"timeMinutes": {
+		"message": "$N$m",
+		"placeholders": {
+			"N": {
+				"content": "$1"
+			}
+		}
+	},
+	"timeHours": {
+		"message": "$N$h",
+		"placeholders": {
+			"N": {
+				"content": "$1"
+			}
+		}
+	},
+	"timeDays": {
+		"message": "$N$d",
+		"placeholders": {
+			"N": {
+				"content": "$1"
+			}
+		}
+	},
+	"timeMonths": {
+		"message": "$N$mo",
+		"placeholders": {
+			"N": {
+				"content": "$1"
+			}
+		}
+	},
+	"timeYears": {
+		"message": "$N$y",
+		"placeholders": {
+			"N": {
+				"content": "$1"
+			}
+		}
+	},
+	"basics": {
+		"message": "Basics"
+	},
+	"coreControls": {
+		"message": "Core controls"
+	},
+	"sourceHintHn": {
+		"message": "Check HN threads for this page."
+	},
+	"sourceHintMatching": {
+		"message": "Include matching threads."
+	},
+	"linkBehavior": {
+		"message": "Link behavior"
+	},
+	"openLinksNewTab": {
+		"message": "Open links in a new tab"
+	},
+	"openLinksNewTabHint": {
+		"message": "Keep the popup open while links open separately."
+	},
+	"preferOldReddit": {
+		"message": "Prefer old.reddit.com"
+	},
+	"preferOldRedditHint": {
+		"message": "Use the classic Reddit view when possible."
+	},
+	"aiSetup": {
+		"message": "AI setup"
+	},
+	"apiBaseUrl": {
+		"message": "API base URL"
+	},
+	"apiKeyHint": {
+		"message": "Your key is stored in your browser only and sent directly to your chosen provider. Discussed never sees or collects it."
+	},
+	"testKey": {
+		"message": "Test key"
+	},
+	"modelHint": {
+		"message": "Summarization works well with lightweight models — no need for flagship ones. $$ models cost under $$0.001 per summary."
+	},
+	"maxCommentsPerSummary": {
+		"message": "Max comments per summary"
+	},
+	"summaryLanguage": {
+		"message": "Summary language"
+	},
+	"presets": {
+		"message": "Presets"
+	},
+	"advanced": {
+		"message": "Advanced"
+	},
+	"advancedControls": {
+		"message": "Advanced controls"
+	},
+	"showAdvancedSettings": {
+		"message": "Show advanced settings"
+	},
+	"hideAdvancedSettings": {
+		"message": "Hide advanced settings"
+	},
+	"matching": {
+		"message": "Matching"
+	},
+	"redditExactMatchLabel": {
+		"message": "Use Reddit exact match"
+	},
+	"redditExactMatchHint": {
+		"message": "Require an exact URL match."
+	},
+	"ignoreQueryStrings": {
+		"message": "Ignore query strings"
+	},
+	"ignoreQueryStringsHint": {
+		"message": "Ignore tracking and session parameters."
+	},
+	"backgroundScanning": {
+		"message": "Background scanning"
+	},
+	"scanOnTabUpdate": {
+		"message": "Scan when a tab URL changes"
+	},
+	"scanOnTabUpdateHint": {
+		"message": "Recommended. Keeps the badge in sync with new pages."
+	},
+	"scanOnTabActivate": {
+		"message": "Scan when switching to an existing tab"
+	},
+	"scanOnTabActivateHint": {
+		"message": "Refresh the badge when you return to an open tab."
+	},
+	"badgeAndCache": {
+		"message": "Badge and cache"
+	},
+	"badgeDisplayHint": {
+		"message": "Choose what the toolbar badge shows."
+	},
+	"badgeTotalDiscussions": {
+		"message": "Total discussions"
+	},
+	"badgeTotalComments": {
+		"message": "Total comments"
+	},
+	"cacheDurationLabel": {
+		"message": "Cache duration (minutes)"
+	},
+	"cacheDurationHint": {
+		"message": "Longer caches reduce requests. Shorter caches refresh faster."
+	},
+	"filterMode": {
+		"message": "Filter mode"
+	},
+	"filterModeHint": {
+		"message": "Blacklist skips domains. Whitelist only scans listed ones."
+	},
+	"filterModeBlacklist": {
+		"message": "Blacklist"
+	},
+	"filterModeWhitelist": {
+		"message": "Whitelist"
+	},
+	"allowedDomains": {
+		"message": "Allowed domains"
+	},
+	"blockedDomains": {
+		"message": "Blocked domains"
+	},
+	"domainsWhitelistHint": {
+		"message": "One domain per line. Only these domains will be scanned."
+	},
+	"domainsBlacklistHint": {
+		"message": "One domain per line. These domains will be skipped."
+	},
+	"settingsSavedDetail": {
+		"message": "Settings saved. New scans use these preferences right away."
+	},
+	"apiSettingsSaved": {
+		"message": "API settings saved."
+	},
+	"addKeyFirst": {
+		"message": "Add an API key first."
+	},
+	"checkingApiKey": {
+		"message": "Checking the API key..."
+	},
+	"apiKeyWorks": {
+		"message": "API key works. Summaries can use this provider."
+	},
+	"couldNotReachProvider": {
+		"message": "Could not reach the provider: $ERROR$",
+		"placeholders": {
+			"ERROR": {
+				"content": "$1"
+			}
+		}
+	},
+	"apiKeyRejected": {
+		"message": "The $PROVIDER$ key was rejected. Double-check the selected provider and API key.",
+		"placeholders": {
+			"PROVIDER": {
+				"content": "$1"
+			}
+		}
+	},
+	"endpointNotFoundOpenai": {
+		"message": "The API endpoint was not found. Check the base URL and model name."
+	},
+	"endpointNotFound": {
+		"message": "The $PROVIDER$ endpoint was not found. Check the selected model.",
+		"placeholders": {
+			"PROVIDER": {
+				"content": "$1"
+			}
+		}
+	},
+	"rateLimited": {
+		"message": "The $PROVIDER$ API is rate-limiting this request. Wait a moment and try again.",
+		"placeholders": {
+			"PROVIDER": {
+				"content": "$1"
+			}
+		}
+	},
+	"providerTrouble": {
+		"message": "The $PROVIDER$ API is having trouble right now. Try again in a moment.",
+		"placeholders": {
+			"PROVIDER": {
+				"content": "$1"
+			}
+		}
+	},
+	"apiReturnedStatus": {
+		"message": "The $PROVIDER$ API returned $STATUS$. Check the key, model, and provider settings.",
+		"placeholders": {
+			"PROVIDER": {
+				"content": "$1"
+			},
+			"STATUS": {
+				"content": "$2"
+			}
+		}
+	},
+	"thisPage": {
+		"message": "this page"
 	}
 }

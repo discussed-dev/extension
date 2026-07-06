@@ -36,7 +36,7 @@ describe('locale files', () => {
 			const entry = messages[key];
 			if (!entry) continue; // covered by the key-set test
 			const enPlaceholders = (enEntry.message.match(/\$[A-Z_]+\$/g) ?? []).sort();
-			const placeholders = (entry.message.match(/\$[A-Z_]+\$/g) ??[]).sort();
+			const placeholders = (entry.message.match(/\$[A-Z_]+\$/g) ?? []).sort();
 			expect(placeholders, `placeholders for "${key}" in ${locale}`).toEqual(enPlaceholders);
 		}
 	});

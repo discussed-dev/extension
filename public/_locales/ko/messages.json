@@ -1,75 +1,457 @@
 {
-	"extensionName": { "message": "Discussed" },
+	"extensionName": {
+		"message": "Discussed"
+	},
 	"extensionDescription": {
 		"message": "현재 페이지에 대한 커뮤니티 토론을 자동으로 찾고 AI로 요약합니다"
 	},
-	"popupTitle": { "message": "Discussed" },
-	"overview": { "message": "개요" },
-	"summary": { "message": "요약" },
-	"settings": { "message": "설정" },
-	"searching": { "message": "토론 소스를 검색 중..." },
+	"summary": {
+		"message": "요약"
+	},
+	"settings": {
+		"message": "설정"
+	},
+	"searching": {
+		"message": "토론 소스를 검색 중..."
+	},
 	"searchingHint": {
 		"message": "이 페이지에 대해 Hacker News, Reddit, Lobsters를 확인하고 있습니다."
 	},
-	"noDiscussions": { "message": "아직 토론 신호 없음" },
+	"noDiscussions": {
+		"message": "아직 토론 신호 없음"
+	},
 	"noDiscussionsHint": {
-		"message": "Discussed가 이 페이지와 관련된 스레드를 찾지 못했습니다. 다시 검색하거나 내장 소스 외의 곳에서 찾아보세요."
+		"message": "Discussed가 $HOST$와 일치하는 스레드를 찾지 못했습니다. 다시 검색하거나 내장 소스 외의 곳에서 찾아보세요.",
+		"placeholders": {
+			"HOST": {
+				"content": "$1"
+			}
+		}
 	},
-	"discussions": { "message": "토론" },
-	"comments": { "message": "댓글" },
-	"points": { "message": "포인트" },
-	"threads": { "message": "스레드" },
-	"refresh": { "message": "새로고침" },
-	"scanAgain": { "message": "다시 검색" },
-	"reviewSources": { "message": "소스 확인" },
-	"summarizeAll": { "message": "전체 요약" },
-	"summarizing": { "message": "요약 중..." },
-	"viewSummary": { "message": "요약 보기" },
-	"regenerate": { "message": "다시 생성" },
-	"generating": { "message": "생성 중..." },
-	"copy": { "message": "복사" },
-	"copied": { "message": "복사됨!" },
-	"searchElsewhere": { "message": "다른 곳에서 검색" },
-	"verdict": { "message": "종합 평가" },
-	"communityRead": { "message": "커뮤니티 의견, 요약본." },
-	"communityReadHint": { "message": "종합 평가부터 시작한 뒤 주요 주제를 살펴보세요." },
-	"window": { "message": "기간" },
-	"heavySignal": { "message": "활발한 토론 신호" },
-	"healthySignal": { "message": "양호한 토론 신호" },
-	"earlySignal": { "message": "초기 토론 신호" },
-	"discussionSignalFor": {
-		"message": "$HOST$에 대한 토론 신호",
-		"placeholders": { "HOST": { "content": "$1" } }
+	"comments": {
+		"message": "댓글"
 	},
-	"scanDescription": {
-		"message": "페이지를 떠나기 전에 기술 커뮤니티에서 어떤 이야기를 하는지 확인하세요."
+	"points": {
+		"message": "포인트"
 	},
-	"configureApiKey": { "message": "활성화하려면 설정에서 API 키를 구성하세요" },
-	"save": { "message": "설정 저장" },
-	"saved": { "message": "설정이 저장되었습니다." },
-	"sources": { "message": "소스" },
-	"searchBehavior": { "message": "검색 동작" },
-	"autoSearch": { "message": "자동 검색" },
-	"badgeDisplay": { "message": "배지 표시" },
-	"domainFilter": { "message": "도메인 필터" },
-	"cache": { "message": "캐시" },
-	"aiSummarization": { "message": "AI 요약" },
-	"provider": { "message": "제공자" },
-	"model": { "message": "모델" },
-	"apiKey": { "message": "API 키" },
-	"test": { "message": "테스트" },
-	"reportIssue": { "message": "문제 신고" },
-	"submitTo": { "message": "제출하기" },
-	"copyMarkdown": { "message": "Markdown으로 복사" },
-	"copyPlainText": { "message": "일반 텍스트로 복사" },
-	"openInObsidian": { "message": "Obsidian에서 열기" },
-	"obsidianVault": { "message": "Obsidian 보관함 이름" },
-	"obsidianVaultHint": { "message": "선택사항. 'Obsidian에서 열기' 기능에 필요합니다." },
-	"exportSection": { "message": "내보내기" },
-	"sourceArticle": { "message": "기사" },
-	"sourcePageComments": { "message": "페이지" },
+	"scanAgain": {
+		"message": "다시 검색"
+	},
+	"summarizeAll": {
+		"message": "전체 요약"
+	},
+	"summarizing": {
+		"message": "요약 중..."
+	},
+	"viewSummary": {
+		"message": "요약 보기"
+	},
+	"regenerate": {
+		"message": "다시 생성"
+	},
+	"generating": {
+		"message": "생성 중..."
+	},
+	"copy": {
+		"message": "복사"
+	},
+	"copied": {
+		"message": "복사됨!"
+	},
+	"searchElsewhere": {
+		"message": "다른 곳에서 검색"
+	},
+	"verdict": {
+		"message": "종합 평가"
+	},
+	"configureApiKey": {
+		"message": "활성화하려면 설정에서 API 키를 구성하세요"
+	},
+	"save": {
+		"message": "설정 저장"
+	},
+	"sources": {
+		"message": "소스"
+	},
+	"badgeDisplay": {
+		"message": "배지 표시"
+	},
+	"domainFilter": {
+		"message": "도메인 필터"
+	},
+	"aiSummarization": {
+		"message": "AI 요약"
+	},
+	"provider": {
+		"message": "제공자"
+	},
+	"model": {
+		"message": "모델"
+	},
+	"apiKey": {
+		"message": "API 키"
+	},
+	"reportIssue": {
+		"message": "문제 신고"
+	},
+	"submitTo": {
+		"message": "제출하기"
+	},
+	"copyMarkdown": {
+		"message": "Markdown으로 복사"
+	},
+	"copyPlainText": {
+		"message": "일반 텍스트로 복사"
+	},
+	"openInObsidian": {
+		"message": "Obsidian에서 열기"
+	},
+	"obsidianVault": {
+		"message": "Obsidian 보관함 이름"
+	},
+	"obsidianVaultHint": {
+		"message": "선택사항. 'Obsidian에서 열기' 기능에 필요합니다."
+	},
+	"exportSection": {
+		"message": "내보내기"
+	},
+	"sourceArticle": {
+		"message": "기사"
+	},
+	"sourcePageComments": {
+		"message": "페이지"
+	},
 	"linkedFrom": {
 		"message": "$PLATFORM$에서 링크됨 →",
-		"placeholders": { "PLATFORM": { "content": "$1" } }
+		"placeholders": {
+			"PLATFORM": {
+				"content": "$1"
+			}
+		}
+	},
+	"openAiSettings": {
+		"message": "AI 설정 열기"
+	},
+	"cachedSummaryReady": {
+		"message": "캐시된 요약이 준비되었습니다."
+	},
+	"discussionReadyOne": {
+		"message": "요약할 수 있는 토론 1개."
+	},
+	"discussionsReadyMany": {
+		"message": "요약할 수 있는 토론 $COUNT$개.",
+		"placeholders": {
+			"COUNT": {
+				"content": "$1"
+			}
+		}
+	},
+	"domainFiltered": {
+		"message": "도메인 필터링됨"
+	},
+	"domainFilteredBlacklistHint": {
+		"message": "$HOST$이(가) 블랙리스트에 있습니다. 설정에서 변경할 수 있습니다.",
+		"placeholders": {
+			"HOST": {
+				"content": "$1"
+			}
+		}
+	},
+	"domainFilteredWhitelistHint": {
+		"message": "$HOST$이(가) 화이트리스트에 없습니다. 설정에서 변경할 수 있습니다.",
+		"placeholders": {
+			"HOST": {
+				"content": "$1"
+			}
+		}
+	},
+	"unblockDomain": {
+		"message": "$HOST$ 차단 해제",
+		"placeholders": {
+			"HOST": {
+				"content": "$1"
+			}
+		}
+	},
+	"blockDomain": {
+		"message": "$HOST$ 차단",
+		"placeholders": {
+			"HOST": {
+				"content": "$1"
+			}
+		}
+	},
+	"refreshScan": {
+		"message": "토론 다시 검색"
+	},
+	"backToOverview": {
+		"message": "개요로 돌아가기"
+	},
+	"moreExportOptions": {
+		"message": "더 많은 내보내기 옵션"
+	},
+	"closeMenu": {
+		"message": "메뉴 닫기"
+	},
+	"tokensUsed": {
+		"message": "$COUNT$ 토큰",
+		"placeholders": {
+			"COUNT": {
+				"content": "$1"
+			}
+		}
+	},
+	"summarizationFailed": {
+		"message": "요약 실패"
+	},
+	"timeNow": {
+		"message": "방금"
+	},
+	"timeMinutes": {
+		"message": "$N$분",
+		"placeholders": {
+			"N": {
+				"content": "$1"
+			}
+		}
+	},
+	"timeHours": {
+		"message": "$N$시간",
+		"placeholders": {
+			"N": {
+				"content": "$1"
+			}
+		}
+	},
+	"timeDays": {
+		"message": "$N$일",
+		"placeholders": {
+			"N": {
+				"content": "$1"
+			}
+		}
+	},
+	"timeMonths": {
+		"message": "$N$개월",
+		"placeholders": {
+			"N": {
+				"content": "$1"
+			}
+		}
+	},
+	"timeYears": {
+		"message": "$N$년",
+		"placeholders": {
+			"N": {
+				"content": "$1"
+			}
+		}
+	},
+	"basics": {
+		"message": "기본"
+	},
+	"coreControls": {
+		"message": "핵심 설정"
+	},
+	"sourceHintHn": {
+		"message": "이 페이지의 HN 스레드를 확인합니다."
+	},
+	"sourceHintMatching": {
+		"message": "일치하는 스레드를 포함합니다."
+	},
+	"linkBehavior": {
+		"message": "링크 동작"
+	},
+	"openLinksNewTab": {
+		"message": "링크를 새 탭에서 열기"
+	},
+	"openLinksNewTabHint": {
+		"message": "링크가 따로 열리는 동안 팝업을 유지합니다."
+	},
+	"preferOldReddit": {
+		"message": "old.reddit.com 우선 사용"
+	},
+	"preferOldRedditHint": {
+		"message": "가능하면 클래식 Reddit 화면을 사용합니다."
+	},
+	"aiSetup": {
+		"message": "AI 설정"
+	},
+	"apiBaseUrl": {
+		"message": "API 기본 URL"
+	},
+	"apiKeyHint": {
+		"message": "키는 브라우저에만 저장되며 선택한 제공자에게 직접 전송됩니다. Discussed는 키를 보거나 수집하지 않습니다."
+	},
+	"testKey": {
+		"message": "키 테스트"
+	},
+	"modelHint": {
+		"message": "요약은 경량 모델로도 충분하며 플래그십 모델이 필요 없습니다. $$ 등급 모델은 요약 1회당 $$0.001 미만입니다."
+	},
+	"maxCommentsPerSummary": {
+		"message": "요약당 최대 댓글 수"
+	},
+	"summaryLanguage": {
+		"message": "요약 언어"
+	},
+	"presets": {
+		"message": "프리셋"
+	},
+	"advanced": {
+		"message": "고급"
+	},
+	"advancedControls": {
+		"message": "고급 설정"
+	},
+	"showAdvancedSettings": {
+		"message": "고급 설정 표시"
+	},
+	"hideAdvancedSettings": {
+		"message": "고급 설정 숨기기"
+	},
+	"matching": {
+		"message": "일치 방식"
+	},
+	"redditExactMatchLabel": {
+		"message": "Reddit 정확히 일치 사용"
+	},
+	"redditExactMatchHint": {
+		"message": "URL이 정확히 일치해야 합니다."
+	},
+	"ignoreQueryStrings": {
+		"message": "쿼리 문자열 무시"
+	},
+	"ignoreQueryStringsHint": {
+		"message": "추적 및 세션 매개변수를 무시합니다."
+	},
+	"backgroundScanning": {
+		"message": "백그라운드 검색"
+	},
+	"scanOnTabUpdate": {
+		"message": "탭 URL이 바뀌면 검색"
+	},
+	"scanOnTabUpdateHint": {
+		"message": "권장. 배지를 새 페이지와 동기화합니다."
+	},
+	"scanOnTabActivate": {
+		"message": "기존 탭으로 전환할 때 검색"
+	},
+	"scanOnTabActivateHint": {
+		"message": "열려 있는 탭으로 돌아올 때 배지를 새로고침합니다."
+	},
+	"badgeAndCache": {
+		"message": "배지 및 캐시"
+	},
+	"badgeDisplayHint": {
+		"message": "툴바 배지에 표시할 내용을 선택하세요."
+	},
+	"badgeTotalDiscussions": {
+		"message": "전체 토론 수"
+	},
+	"badgeTotalComments": {
+		"message": "전체 댓글 수"
+	},
+	"cacheDurationLabel": {
+		"message": "캐시 유지 시간(분)"
+	},
+	"cacheDurationHint": {
+		"message": "캐시가 길수록 요청이 줄고, 짧을수록 더 빨리 갱신됩니다."
+	},
+	"filterMode": {
+		"message": "필터 모드"
+	},
+	"filterModeHint": {
+		"message": "블랙리스트는 해당 도메인을 건너뛰고, 화이트리스트는 등록된 도메인만 검색합니다."
+	},
+	"filterModeBlacklist": {
+		"message": "블랙리스트"
+	},
+	"filterModeWhitelist": {
+		"message": "화이트리스트"
+	},
+	"allowedDomains": {
+		"message": "허용 도메인"
+	},
+	"blockedDomains": {
+		"message": "차단 도메인"
+	},
+	"domainsWhitelistHint": {
+		"message": "한 줄에 도메인 하나. 이 도메인들만 검색합니다."
+	},
+	"domainsBlacklistHint": {
+		"message": "한 줄에 도메인 하나. 이 도메인들은 건너뜁니다."
+	},
+	"settingsSavedDetail": {
+		"message": "설정이 저장되었습니다. 새 검색부터 바로 적용됩니다."
+	},
+	"apiSettingsSaved": {
+		"message": "API 설정이 저장되었습니다."
+	},
+	"addKeyFirst": {
+		"message": "먼저 API 키를 추가하세요."
+	},
+	"checkingApiKey": {
+		"message": "API 키를 확인하는 중..."
+	},
+	"apiKeyWorks": {
+		"message": "API 키가 유효합니다. 이 제공자로 요약할 수 있습니다."
+	},
+	"couldNotReachProvider": {
+		"message": "제공자에 연결할 수 없습니다: $ERROR$",
+		"placeholders": {
+			"ERROR": {
+				"content": "$1"
+			}
+		}
+	},
+	"apiKeyRejected": {
+		"message": "$PROVIDER$ 키가 거부되었습니다. 선택한 제공자와 API 키를 다시 확인하세요.",
+		"placeholders": {
+			"PROVIDER": {
+				"content": "$1"
+			}
+		}
+	},
+	"endpointNotFoundOpenai": {
+		"message": "API 엔드포인트를 찾을 수 없습니다. 기본 URL과 모델 이름을 확인하세요."
+	},
+	"endpointNotFound": {
+		"message": "$PROVIDER$ 엔드포인트를 찾을 수 없습니다. 선택한 모델을 확인하세요.",
+		"placeholders": {
+			"PROVIDER": {
+				"content": "$1"
+			}
+		}
+	},
+	"rateLimited": {
+		"message": "$PROVIDER$ API가 이 요청을 속도 제한하고 있습니다. 잠시 후 다시 시도하세요.",
+		"placeholders": {
+			"PROVIDER": {
+				"content": "$1"
+			}
+		}
+	},
+	"providerTrouble": {
+		"message": "$PROVIDER$ API에 지금 문제가 있습니다. 잠시 후 다시 시도하세요.",
+		"placeholders": {
+			"PROVIDER": {
+				"content": "$1"
+			}
+		}
+	},
+	"apiReturnedStatus": {
+		"message": "$PROVIDER$ API가 $STATUS$을(를) 반환했습니다. 키, 모델, 제공자 설정을 확인하세요.",
+		"placeholders": {
+			"PROVIDER": {
+				"content": "$1"
+			},
+			"STATUS": {
+				"content": "$2"
+			}
+		}
+	},
+	"thisPage": {
+		"message": "이 페이지"
 	}
 }

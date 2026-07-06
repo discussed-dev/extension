@@ -1,75 +1,457 @@
 {
-	"extensionName": { "message": "Discussed" },
+	"extensionName": {
+		"message": "Discussed"
+	},
 	"extensionDescription": {
 		"message": "Descubre automáticamente debates de la comunidad sobre la página actual y resúmelos con IA"
 	},
-	"popupTitle": { "message": "Discussed" },
-	"overview": { "message": "Resumen general" },
-	"summary": { "message": "Resumen" },
-	"settings": { "message": "Ajustes" },
-	"searching": { "message": "Buscando en fuentes de discusión..." },
-	"searchingHint": { "message": "Consultando Hacker News, Reddit y Lobsters para esta página." },
-	"noDiscussions": { "message": "Sin señal de discusión aún" },
+	"summary": {
+		"message": "Resumen"
+	},
+	"settings": {
+		"message": "Ajustes"
+	},
+	"searching": {
+		"message": "Buscando en fuentes de discusión..."
+	},
+	"searchingHint": {
+		"message": "Consultando Hacker News, Reddit y Lobsters para esta página."
+	},
+	"noDiscussions": {
+		"message": "Sin señal de discusión aún"
+	},
 	"noDiscussionsHint": {
-		"message": "Discussed no encontró hilos relacionados con esta página. Intenta un nuevo escaneo o busca más allá de las fuentes integradas."
+		"message": "Discussed no encontró hilos que coincidan con $HOST$. Prueba un nuevo escaneo o busca más allá de las fuentes integradas.",
+		"placeholders": {
+			"HOST": {
+				"content": "$1"
+			}
+		}
 	},
-	"discussions": { "message": "discusiones" },
-	"comments": { "message": "comentarios" },
-	"points": { "message": "puntos" },
-	"threads": { "message": "Hilos" },
-	"refresh": { "message": "Actualizar" },
-	"scanAgain": { "message": "Escanear de nuevo" },
-	"reviewSources": { "message": "Revisar fuentes" },
-	"summarizeAll": { "message": "Resumir todo" },
-	"summarizing": { "message": "Resumiendo..." },
-	"viewSummary": { "message": "Ver resumen" },
-	"regenerate": { "message": "Regenerar" },
-	"generating": { "message": "Generando..." },
-	"copy": { "message": "Copiar" },
-	"copied": { "message": "¡Copiado!" },
-	"searchElsewhere": { "message": "Buscar en otro lugar" },
-	"verdict": { "message": "Veredicto" },
-	"communityRead": { "message": "Lectura comunitaria, condensada." },
-	"communityReadHint": {
-		"message": "Empieza por el veredicto y luego revisa los temas principales."
+	"comments": {
+		"message": "comentarios"
 	},
-	"window": { "message": "Ventana" },
-	"heavySignal": { "message": "Señal de discusión intensa" },
-	"healthySignal": { "message": "Señal de discusión saludable" },
-	"earlySignal": { "message": "Señal de discusión temprana" },
-	"discussionSignalFor": {
-		"message": "Señal de discusión para $HOST$",
-		"placeholders": { "HOST": { "content": "$1" } }
+	"points": {
+		"message": "puntos"
 	},
-	"scanDescription": {
-		"message": "Consulta lo que dicen las comunidades técnicas antes de abandonar la página."
+	"scanAgain": {
+		"message": "Escanear de nuevo"
 	},
-	"configureApiKey": { "message": "Configura una clave API en ajustes para activar" },
-	"save": { "message": "Guardar ajustes" },
-	"saved": { "message": "Ajustes guardados." },
-	"sources": { "message": "Fuentes" },
-	"searchBehavior": { "message": "Comportamiento de búsqueda" },
-	"autoSearch": { "message": "Búsqueda automática" },
-	"badgeDisplay": { "message": "Visualización de insignia" },
-	"domainFilter": { "message": "Filtro de dominio" },
-	"cache": { "message": "Caché" },
-	"aiSummarization": { "message": "Resumen con IA" },
-	"provider": { "message": "Proveedor" },
-	"model": { "message": "Modelo" },
-	"apiKey": { "message": "Clave API" },
-	"test": { "message": "Probar" },
-	"reportIssue": { "message": "Reportar un problema" },
-	"submitTo": { "message": "Enviar a" },
-	"copyMarkdown": { "message": "Copiar como Markdown" },
-	"copyPlainText": { "message": "Copiar como texto plano" },
-	"openInObsidian": { "message": "Abrir en Obsidian" },
-	"obsidianVault": { "message": "Nombre del vault de Obsidian" },
-	"obsidianVaultHint": { "message": "Opcional. Necesario para \"Abrir en Obsidian\"." },
-	"exportSection": { "message": "Exportar" },
-	"sourceArticle": { "message": "Artículo" },
-	"sourcePageComments": { "message": "Página" },
+	"summarizeAll": {
+		"message": "Resumir todo"
+	},
+	"summarizing": {
+		"message": "Resumiendo..."
+	},
+	"viewSummary": {
+		"message": "Ver resumen"
+	},
+	"regenerate": {
+		"message": "Regenerar"
+	},
+	"generating": {
+		"message": "Generando..."
+	},
+	"copy": {
+		"message": "Copiar"
+	},
+	"copied": {
+		"message": "¡Copiado!"
+	},
+	"searchElsewhere": {
+		"message": "Buscar en otro lugar"
+	},
+	"verdict": {
+		"message": "Veredicto"
+	},
+	"configureApiKey": {
+		"message": "Configura una clave API en ajustes para activar"
+	},
+	"save": {
+		"message": "Guardar ajustes"
+	},
+	"sources": {
+		"message": "Fuentes"
+	},
+	"badgeDisplay": {
+		"message": "Visualización de insignia"
+	},
+	"domainFilter": {
+		"message": "Filtro de dominio"
+	},
+	"aiSummarization": {
+		"message": "Resumen con IA"
+	},
+	"provider": {
+		"message": "Proveedor"
+	},
+	"model": {
+		"message": "Modelo"
+	},
+	"apiKey": {
+		"message": "Clave API"
+	},
+	"reportIssue": {
+		"message": "Reportar un problema"
+	},
+	"submitTo": {
+		"message": "Enviar a"
+	},
+	"copyMarkdown": {
+		"message": "Copiar como Markdown"
+	},
+	"copyPlainText": {
+		"message": "Copiar como texto plano"
+	},
+	"openInObsidian": {
+		"message": "Abrir en Obsidian"
+	},
+	"obsidianVault": {
+		"message": "Nombre del vault de Obsidian"
+	},
+	"obsidianVaultHint": {
+		"message": "Opcional. Necesario para \"Abrir en Obsidian\"."
+	},
+	"exportSection": {
+		"message": "Exportar"
+	},
+	"sourceArticle": {
+		"message": "Artículo"
+	},
+	"sourcePageComments": {
+		"message": "Página"
+	},
 	"linkedFrom": {
 		"message": "Enlazado desde $PLATFORM$ →",
-		"placeholders": { "PLATFORM": { "content": "$1" } }
+		"placeholders": {
+			"PLATFORM": {
+				"content": "$1"
+			}
+		}
+	},
+	"openAiSettings": {
+		"message": "Abrir ajustes de IA"
+	},
+	"cachedSummaryReady": {
+		"message": "Resumen en caché listo."
+	},
+	"discussionReadyOne": {
+		"message": "1 discusión lista para resumir."
+	},
+	"discussionsReadyMany": {
+		"message": "$COUNT$ discusiones listas para resumir.",
+		"placeholders": {
+			"COUNT": {
+				"content": "$1"
+			}
+		}
+	},
+	"domainFiltered": {
+		"message": "Dominio filtrado"
+	},
+	"domainFilteredBlacklistHint": {
+		"message": "$HOST$ está en tu lista negra. Puedes cambiarlo en los ajustes.",
+		"placeholders": {
+			"HOST": {
+				"content": "$1"
+			}
+		}
+	},
+	"domainFilteredWhitelistHint": {
+		"message": "$HOST$ no está en tu lista blanca. Puedes cambiarlo en los ajustes.",
+		"placeholders": {
+			"HOST": {
+				"content": "$1"
+			}
+		}
+	},
+	"unblockDomain": {
+		"message": "Desbloquear $HOST$",
+		"placeholders": {
+			"HOST": {
+				"content": "$1"
+			}
+		}
+	},
+	"blockDomain": {
+		"message": "Bloquear $HOST$",
+		"placeholders": {
+			"HOST": {
+				"content": "$1"
+			}
+		}
+	},
+	"refreshScan": {
+		"message": "Actualizar escaneo de discusiones"
+	},
+	"backToOverview": {
+		"message": "Volver al resumen general"
+	},
+	"moreExportOptions": {
+		"message": "Más opciones de exportación"
+	},
+	"closeMenu": {
+		"message": "Cerrar menú"
+	},
+	"tokensUsed": {
+		"message": "$COUNT$ tokens",
+		"placeholders": {
+			"COUNT": {
+				"content": "$1"
+			}
+		}
+	},
+	"summarizationFailed": {
+		"message": "Error al resumir"
+	},
+	"timeNow": {
+		"message": "ahora"
+	},
+	"timeMinutes": {
+		"message": "$N$min",
+		"placeholders": {
+			"N": {
+				"content": "$1"
+			}
+		}
+	},
+	"timeHours": {
+		"message": "$N$h",
+		"placeholders": {
+			"N": {
+				"content": "$1"
+			}
+		}
+	},
+	"timeDays": {
+		"message": "$N$d",
+		"placeholders": {
+			"N": {
+				"content": "$1"
+			}
+		}
+	},
+	"timeMonths": {
+		"message": "$N$mes",
+		"placeholders": {
+			"N": {
+				"content": "$1"
+			}
+		}
+	},
+	"timeYears": {
+		"message": "$N$a",
+		"placeholders": {
+			"N": {
+				"content": "$1"
+			}
+		}
+	},
+	"basics": {
+		"message": "Básicos"
+	},
+	"coreControls": {
+		"message": "Controles principales"
+	},
+	"sourceHintHn": {
+		"message": "Consulta hilos de HN para esta página."
+	},
+	"sourceHintMatching": {
+		"message": "Incluye hilos coincidentes."
+	},
+	"linkBehavior": {
+		"message": "Comportamiento de enlaces"
+	},
+	"openLinksNewTab": {
+		"message": "Abrir enlaces en una pestaña nueva"
+	},
+	"openLinksNewTabHint": {
+		"message": "Mantén el popup abierto mientras los enlaces se abren aparte."
+	},
+	"preferOldReddit": {
+		"message": "Preferir old.reddit.com"
+	},
+	"preferOldRedditHint": {
+		"message": "Usa la vista clásica de Reddit cuando sea posible."
+	},
+	"aiSetup": {
+		"message": "Configuración de IA"
+	},
+	"apiBaseUrl": {
+		"message": "URL base de la API"
+	},
+	"apiKeyHint": {
+		"message": "Tu clave se guarda solo en tu navegador y se envía directamente al proveedor elegido. Discussed nunca la ve ni la recopila."
+	},
+	"testKey": {
+		"message": "Probar clave"
+	},
+	"modelHint": {
+		"message": "El resumen funciona bien con modelos ligeros: no hacen falta modelos insignia. Los modelos $$ cuestan menos de $$0.001 por resumen."
+	},
+	"maxCommentsPerSummary": {
+		"message": "Máx. de comentarios por resumen"
+	},
+	"summaryLanguage": {
+		"message": "Idioma del resumen"
+	},
+	"presets": {
+		"message": "Preajustes"
+	},
+	"advanced": {
+		"message": "Avanzado"
+	},
+	"advancedControls": {
+		"message": "Controles avanzados"
+	},
+	"showAdvancedSettings": {
+		"message": "Mostrar ajustes avanzados"
+	},
+	"hideAdvancedSettings": {
+		"message": "Ocultar ajustes avanzados"
+	},
+	"matching": {
+		"message": "Coincidencia"
+	},
+	"redditExactMatchLabel": {
+		"message": "Usar coincidencia exacta en Reddit"
+	},
+	"redditExactMatchHint": {
+		"message": "Exige una coincidencia exacta de URL."
+	},
+	"ignoreQueryStrings": {
+		"message": "Ignorar cadenas de consulta"
+	},
+	"ignoreQueryStringsHint": {
+		"message": "Ignora parámetros de seguimiento y de sesión."
+	},
+	"backgroundScanning": {
+		"message": "Escaneo en segundo plano"
+	},
+	"scanOnTabUpdate": {
+		"message": "Escanear cuando cambie la URL de una pestaña"
+	},
+	"scanOnTabUpdateHint": {
+		"message": "Recomendado. Mantiene la insignia sincronizada con las páginas nuevas."
+	},
+	"scanOnTabActivate": {
+		"message": "Escanear al cambiar a una pestaña existente"
+	},
+	"scanOnTabActivateHint": {
+		"message": "Actualiza la insignia al volver a una pestaña abierta."
+	},
+	"badgeAndCache": {
+		"message": "Insignia y caché"
+	},
+	"badgeDisplayHint": {
+		"message": "Elige qué muestra la insignia de la barra de herramientas."
+	},
+	"badgeTotalDiscussions": {
+		"message": "Total de discusiones"
+	},
+	"badgeTotalComments": {
+		"message": "Total de comentarios"
+	},
+	"cacheDurationLabel": {
+		"message": "Duración de la caché (minutos)"
+	},
+	"cacheDurationHint": {
+		"message": "Una caché más larga reduce solicitudes. Una más corta se actualiza antes."
+	},
+	"filterMode": {
+		"message": "Modo de filtro"
+	},
+	"filterModeHint": {
+		"message": "La lista negra omite dominios. La lista blanca solo escanea los indicados."
+	},
+	"filterModeBlacklist": {
+		"message": "Lista negra"
+	},
+	"filterModeWhitelist": {
+		"message": "Lista blanca"
+	},
+	"allowedDomains": {
+		"message": "Dominios permitidos"
+	},
+	"blockedDomains": {
+		"message": "Dominios bloqueados"
+	},
+	"domainsWhitelistHint": {
+		"message": "Un dominio por línea. Solo se escanearán estos dominios."
+	},
+	"domainsBlacklistHint": {
+		"message": "Un dominio por línea. Estos dominios se omitirán."
+	},
+	"settingsSavedDetail": {
+		"message": "Ajustes guardados. Los nuevos escaneos usan estas preferencias de inmediato."
+	},
+	"apiSettingsSaved": {
+		"message": "Ajustes de API guardados."
+	},
+	"addKeyFirst": {
+		"message": "Añade primero una clave API."
+	},
+	"checkingApiKey": {
+		"message": "Comprobando la clave API..."
+	},
+	"apiKeyWorks": {
+		"message": "La clave API funciona. Los resúmenes pueden usar este proveedor."
+	},
+	"couldNotReachProvider": {
+		"message": "No se pudo contactar con el proveedor: $ERROR$",
+		"placeholders": {
+			"ERROR": {
+				"content": "$1"
+			}
+		}
+	},
+	"apiKeyRejected": {
+		"message": "La clave de $PROVIDER$ fue rechazada. Verifica el proveedor seleccionado y la clave API.",
+		"placeholders": {
+			"PROVIDER": {
+				"content": "$1"
+			}
+		}
+	},
+	"endpointNotFoundOpenai": {
+		"message": "No se encontró el endpoint de la API. Revisa la URL base y el nombre del modelo."
+	},
+	"endpointNotFound": {
+		"message": "No se encontró el endpoint de $PROVIDER$. Revisa el modelo seleccionado.",
+		"placeholders": {
+			"PROVIDER": {
+				"content": "$1"
+			}
+		}
+	},
+	"rateLimited": {
+		"message": "La API de $PROVIDER$ está limitando esta solicitud. Espera un momento y vuelve a intentarlo.",
+		"placeholders": {
+			"PROVIDER": {
+				"content": "$1"
+			}
+		}
+	},
+	"providerTrouble": {
+		"message": "La API de $PROVIDER$ tiene problemas en este momento. Inténtalo de nuevo en un momento.",
+		"placeholders": {
+			"PROVIDER": {
+				"content": "$1"
+			}
+		}
+	},
+	"apiReturnedStatus": {
+		"message": "La API de $PROVIDER$ devolvió $STATUS$. Revisa la clave, el modelo y los ajustes del proveedor.",
+		"placeholders": {
+			"PROVIDER": {
+				"content": "$1"
+			},
+			"STATUS": {
+				"content": "$2"
+			}
+		}
+	},
+	"thisPage": {
+		"message": "esta página"
 	}
 }

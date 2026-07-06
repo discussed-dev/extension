@@ -32,6 +32,7 @@ export default defineConfig({
 		browser_specific_settings: {
 			gecko: {
 				id: 'discussed@discussed.dev',
+				// @ts-expect-error -- AMO's data_collection_permissions is not yet in WXT's manifest types
 				data_collection_permissions: {
 					required: ['none'],
 				},

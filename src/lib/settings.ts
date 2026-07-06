@@ -187,15 +187,34 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 };
 
 const STORAGE_KEY = 'discussed:settings';
+// The API key is a secret: it lives in storage.local so it never syncs
+// through the browser vendor's servers. Everything else stays in sync.
+const API_KEY_STORAGE_KEY = 'discussed:apiKey';
 
 export const settings = {
 	async getValue(): Promise<Settings> {
-		const result = await browser.storage.sync.get(STORAGE_KEY);
-		const stored = result[STORAGE_KEY] as Partial<Settings> | undefined;
-		return { ...DEFAULTS, ...stored };
+		const [syncResult, localResult] = await Promise.all([
+			browser.storage.sync.get(STORAGE_KEY),
+			browser.storage.local.get(API_KEY_STORAGE_KEY),
+		]);
+		const stored = syncResult[STORAGE_KEY] as Partial<Settings> | undefined;
+		let apiKey = (localResult[API_KEY_STORAGE_KEY] as string | undefined) ?? '';
+
+		// One-time migration: older versions synced the key inside the settings
+		// object. Move it to local storage and strip it from sync.
+		if (!apiKey && stored?.apiKey) {
+			apiKey = stored.apiKey;
+			await this.setValue({ ...DEFAULTS, ...stored, apiKey });
+		}
+
+		return { ...DEFAULTS, ...stored, apiKey };
 	},
 
 	async setValue(value: Settings): Promise<void> {
-		await browser.storage.sync.set({ [STORAGE_KEY]: value });
+		const { apiKey, ...synced } = value;
+		await Promise.all([
+			browser.storage.sync.set({ [STORAGE_KEY]: synced }),
+			browser.storage.local.set({ [API_KEY_STORAGE_KEY]: apiKey }),
+		]);
 	},
 };

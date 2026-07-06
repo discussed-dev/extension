@@ -25,4 +25,35 @@ describe('settings', () => {
 		expect(updated.enableLobsters).toBe(false);
 		expect(updated.enableHn).toBe(true); // unchanged
 	});
+
+	it('keeps the API key out of synced storage', async () => {
+		const value = await settings.getValue();
+		await settings.setValue({ ...value, apiKey: 'sk-secret' });
+
+		const syncRaw = await fakeBrowser.storage.sync.get('discussed:settings');
+		const synced = syncRaw['discussed:settings'] as Record<string, unknown>;
+		expect(synced).toBeTruthy();
+		expect('apiKey' in synced).toBe(false);
+
+		const localRaw = await fakeBrowser.storage.local.get('discussed:apiKey');
+		expect(localRaw['discussed:apiKey']).toBe('sk-secret');
+	});
+
+	it('migrates a legacy synced API key to local storage', async () => {
+		// Simulate settings saved by an older version that synced the key
+		await fakeBrowser.storage.sync.set({
+			'discussed:settings': { apiKey: 'sk-legacy', enableHn: false },
+		});
+
+		const value = await settings.getValue();
+		expect(value.apiKey).toBe('sk-legacy');
+		expect(value.enableHn).toBe(false);
+
+		const localRaw = await fakeBrowser.storage.local.get('discussed:apiKey');
+		expect(localRaw['discussed:apiKey']).toBe('sk-legacy');
+
+		const syncRaw = await fakeBrowser.storage.sync.get('discussed:settings');
+		const synced = syncRaw['discussed:settings'] as Record<string, unknown>;
+		expect('apiKey' in synced).toBe(false);
+	});
 });

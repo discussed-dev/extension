@@ -8,7 +8,9 @@ export default defineConfig({
 		name: '__MSG_extensionName__',
 		description: '__MSG_extensionDescription__',
 		default_locale: 'en',
-		permissions: ['tabs', 'activeTab', 'storage', 'scripting'],
+		// unlimitedStorage: the HN bloom filter (~6MB as base64) plus discussion/summary
+		// caches would otherwise compete for storage.local's 10MB quota.
+		permissions: ['tabs', 'activeTab', 'storage', 'unlimitedStorage', 'scripting'],
 		commands: {
 			_execute_action: {
 				suggested_key: {

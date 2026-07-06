@@ -9,13 +9,40 @@ const BLOOM_STORAGE_KEY = 'bloom:filter';
 const BLOOM_VERSION_KEY = 'bloom:version';
 const BLOOM_REPO = 'discussed-dev/extension';
 
-interface StoredBloom {
-	buffer: number[]; // Uint8Array stored as regular array for JSON compat
+interface BloomFilter {
+	buffer: Uint8Array;
 	numHashes: number;
 	numBits: number;
 }
 
-let cachedFilter: StoredBloom | null = null;
+interface StoredBloom {
+	// base64: a 4.5MB filter serializes to ~6MB JSON vs ~17MB as number[],
+	// which exceeds Chrome's storage.local quota. Legacy number[] still readable.
+	buffer: string | number[];
+	numHashes: number;
+	numBits: number;
+}
+
+let cachedFilter: BloomFilter | null = null;
+
+const BASE64_CHUNK = 0x8000;
+
+function bytesToBase64(bytes: Uint8Array): string {
+	let binary = '';
+	for (let i = 0; i < bytes.length; i += BASE64_CHUNK) {
+		binary += String.fromCharCode(...bytes.subarray(i, i + BASE64_CHUNK));
+	}
+	return btoa(binary);
+}
+
+function base64ToBytes(base64: string): Uint8Array {
+	const binary = atob(base64);
+	const bytes = new Uint8Array(binary.length);
+	for (let i = 0; i < binary.length; i++) {
+		bytes[i] = binary.charCodeAt(i);
+	}
+	return bytes;
+}
 
 // FNV-1a hash variant for Bloom filter probing
 function fnv1a(data: Uint8Array, seed: number): number {
@@ -27,7 +54,7 @@ function fnv1a(data: Uint8Array, seed: number): number {
 	return hash >>> 0;
 }
 
-function bloomCheck(filter: StoredBloom, value: string): boolean {
+function bloomCheck(filter: BloomFilter, value: string): boolean {
 	const encoded = new TextEncoder().encode(value);
 	for (let i = 0; i < filter.numHashes; i++) {
 		const hash = fnv1a(encoded, i);
@@ -41,33 +68,44 @@ function bloomCheck(filter: StoredBloom, value: string): boolean {
 	return true;
 }
 
-function parseBloomFilter(data: ArrayBuffer): StoredBloom {
+function parseBloomFilter(data: ArrayBuffer): BloomFilter {
 	const view = new DataView(data);
 	const numHashes = view.getUint32(0, true);
 	const numBits = view.getUint32(4, true);
-	const buffer = Array.from(new Uint8Array(data, 8));
+	const buffer = new Uint8Array(data, 8);
 	return { buffer, numHashes, numBits };
 }
 
-async function loadFromStorage(): Promise<StoredBloom | null> {
+async function loadFromStorage(): Promise<BloomFilter | null> {
 	const result = await browser.storage.local.get(BLOOM_STORAGE_KEY);
-	return (result[BLOOM_STORAGE_KEY] as StoredBloom) ?? null;
+	const stored = result[BLOOM_STORAGE_KEY] as StoredBloom | undefined;
+	if (!stored) return null;
+	const buffer =
+		typeof stored.buffer === 'string'
+			? base64ToBytes(stored.buffer)
+			: new Uint8Array(stored.buffer);
+	return { buffer, numHashes: stored.numHashes, numBits: stored.numBits };
 }
 
-async function saveToStorage(filter: StoredBloom, version: string): Promise<void> {
+async function saveToStorage(filter: BloomFilter, version: string): Promise<void> {
+	const stored: StoredBloom = {
+		buffer: bytesToBase64(filter.buffer),
+		numHashes: filter.numHashes,
+		numBits: filter.numBits,
+	};
 	await browser.storage.local.set({
-		[BLOOM_STORAGE_KEY]: filter,
+		[BLOOM_STORAGE_KEY]: stored,
 		[BLOOM_VERSION_KEY]: version,
 	});
 }
 
-export async function getBloomFilter(): Promise<StoredBloom | null> {
+export async function getBloomFilter(): Promise<BloomFilter | null> {
 	if (cachedFilter) return cachedFilter;
 	cachedFilter = await loadFromStorage();
 	return cachedFilter;
 }
 
-export function checkBloomFilter(filter: StoredBloom, url: string): boolean {
+export function checkBloomFilter(filter: BloomFilter, url: string): boolean {
 	return bloomCheck(filter, url);
 }
 

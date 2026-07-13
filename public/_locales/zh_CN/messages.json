@@ -112,5 +112,6 @@
 	"tokenCount": {
 		"message": "$N$ tokens",
 		"placeholders": { "N": { "content": "$1" } }
-	}
+	},
+	"loadFailed": { "message": "无法加载讨论，请重试。" }
 }

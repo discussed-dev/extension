@@ -118,5 +118,6 @@
 	"tokenCount": {
 		"message": "$N$ jetons",
 		"placeholders": { "N": { "content": "$1" } }
-	}
+	},
+	"loadFailed": { "message": "Impossible de charger les discussions. Réessayez." }
 }

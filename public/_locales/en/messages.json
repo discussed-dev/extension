@@ -116,5 +116,6 @@
 	"tokenCount": {
 		"message": "$N$ tokens",
 		"placeholders": { "N": { "content": "$1" } }
-	}
+	},
+	"loadFailed": { "message": "Couldn't load discussions. Try again." }
 }

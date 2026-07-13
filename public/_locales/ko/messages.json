@@ -116,5 +116,6 @@
 	"tokenCount": {
 		"message": "토큰 $N$개",
 		"placeholders": { "N": { "content": "$1" } }
-	}
+	},
+	"loadFailed": { "message": "토론을 불러오지 못했습니다. 다시 시도하세요." }
 }

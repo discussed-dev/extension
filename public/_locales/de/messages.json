@@ -120,5 +120,6 @@
 	"tokenCount": {
 		"message": "$N$ Tokens",
 		"placeholders": { "N": { "content": "$1" } }
-	}
+	},
+	"loadFailed": { "message": "Diskussionen konnten nicht geladen werden. Bitte erneut versuchen." }
 }

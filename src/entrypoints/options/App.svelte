@@ -5,6 +5,8 @@ import { PROVIDERS, type Settings, settings } from '@/lib/settings';
 
 type StatusTone = 'neutral' | 'success' | 'error';
 
+const version = browser.runtime.getManifest().version;
+
 const LANGUAGE_OPTIONS = [
 	{ value: 'en', label: 'English' },
 	{ value: 'Chinese', label: 'Chinese (中文)' },
@@ -184,7 +186,7 @@ load();
 <div class="min-h-screen px-2 py-3 text-stone-900 sm:px-4">
   <div class="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
     <header class="min-w-0">
-      <p class="text-xs font-semibold uppercase tracking-[0.24em] text-stone-500">Discussed</p>
+      <p class="text-xs font-semibold uppercase tracking-[0.24em] text-stone-500">Discussed <span class="font-normal normal-case tracking-normal text-stone-400">v{version}</span></p>
       <h1 class="mt-1 text-xl font-semibold tracking-tight text-stone-950">Settings</h1>
     </header>
 

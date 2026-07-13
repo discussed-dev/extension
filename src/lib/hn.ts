@@ -1,4 +1,3 @@
-import { checkBloomFilter, getBloomFilter } from './bloom';
 import type { Discussion } from './types';
 import { normalizeUrl } from './url';
 
@@ -52,15 +51,6 @@ async function queryAlgolia(url: string): Promise<Discussion[]> {
 
 export async function searchHn(url: string): Promise<Discussion[]> {
 	try {
-		const filter = await getBloomFilter();
-
-		if (filter) {
-			// Bloom filter available: check before querying
-			const maybePresent = checkBloomFilter(filter, url);
-			if (!maybePresent) return []; // Definitely not on HN
-		}
-
-		// Either Bloom filter says "maybe" or no filter available — query Algolia
 		return await queryAlgolia(url);
 	} catch {
 		return [];

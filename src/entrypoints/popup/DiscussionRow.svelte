@@ -1,4 +1,5 @@
 <script lang="ts">
+import { t } from '@/lib/i18n';
 import { shouldNavigateCurrentTab } from '@/lib/link';
 import type { Discussion } from '@/lib/types';
 import PlatformMark from './PlatformMark.svelte';
@@ -58,8 +59,8 @@ const href = $derived(
     </div>
 
     <span class="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[0.68rem] text-stone-500">
-      <span class="font-semibold tabular-nums text-stone-800">{discussion.commentCount.toLocaleString()} comments</span>
-      <span class="tabular-nums text-stone-600">{discussion.points.toLocaleString()} points</span>
+      <span class="font-semibold tabular-nums text-stone-800">{t('commentCount', discussion.commentCount.toLocaleString())}</span>
+      <span class="tabular-nums text-stone-600">{t('pointCount', discussion.points.toLocaleString())}</span>
       {#if discussion.subreddit}
         <span class="truncate text-stone-600">r/{discussion.subreddit}</span>
       {/if}

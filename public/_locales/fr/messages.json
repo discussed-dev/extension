@@ -78,5 +78,45 @@
 		"message": "Impossible de joindre $SOURCE$",
 		"placeholders": { "SOURCE": { "content": "$1" } }
 	},
-	"sourceUnavailableHint": { "message": "Vérifiez votre connexion et relancez l'analyse." }
+	"sourceUnavailableHint": { "message": "Vérifiez votre connexion et relancez l'analyse." },
+	"domainFiltered": { "message": "Domaine filtré" },
+	"domainBlacklisted": {
+		"message": "$HOST$ est dans votre liste de blocage. Vous pouvez le modifier dans les paramètres.",
+		"placeholders": { "HOST": { "content": "$1" } }
+	},
+	"domainNotWhitelisted": {
+		"message": "$HOST$ n'est pas dans votre liste d'autorisation. Vous pouvez le modifier dans les paramètres.",
+		"placeholders": { "HOST": { "content": "$1" } }
+	},
+	"unblockDomain": {
+		"message": "Débloquer $HOST$",
+		"placeholders": { "HOST": { "content": "$1" } }
+	},
+	"refreshScan": { "message": "Actualiser l'analyse des discussions" },
+	"openSettings": { "message": "Ouvrir les paramètres" },
+	"openAiSettings": { "message": "Ouvrir les paramètres d'IA" },
+	"cachedSummaryReady": { "message": "Résumé en cache prêt." },
+	"discussionsReady": {
+		"message": "$N$ discussions prêtes à résumer.",
+		"placeholders": { "N": { "content": "$1" } }
+	},
+	"blockDomain": {
+		"message": "Bloquer $HOST$",
+		"placeholders": { "HOST": { "content": "$1" } }
+	},
+	"commentCount": {
+		"message": "$N$ commentaires",
+		"placeholders": { "N": { "content": "$1" } }
+	},
+	"pointCount": {
+		"message": "$N$ points",
+		"placeholders": { "N": { "content": "$1" } }
+	},
+	"backToOverview": { "message": "Retour à l'aperçu" },
+	"moreExportOptions": { "message": "Plus d'options d'export" },
+	"closeMenu": { "message": "Fermer le menu" },
+	"tokenCount": {
+		"message": "$N$ jetons",
+		"placeholders": { "N": { "content": "$1" } }
+	}
 }

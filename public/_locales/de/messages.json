@@ -80,5 +80,45 @@
 		"message": "$SOURCE$ konnte nicht erreicht werden",
 		"placeholders": { "SOURCE": { "content": "$1" } }
 	},
-	"sourceUnavailableHint": { "message": "Überprüfe deine Verbindung und scanne erneut." }
+	"sourceUnavailableHint": { "message": "Überprüfe deine Verbindung und scanne erneut." },
+	"domainFiltered": { "message": "Domain gefiltert" },
+	"domainBlacklisted": {
+		"message": "$HOST$ steht auf deiner Sperrliste. Du kannst dies in den Einstellungen ändern.",
+		"placeholders": { "HOST": { "content": "$1" } }
+	},
+	"domainNotWhitelisted": {
+		"message": "$HOST$ steht nicht auf deiner Zulassungsliste. Du kannst dies in den Einstellungen ändern.",
+		"placeholders": { "HOST": { "content": "$1" } }
+	},
+	"unblockDomain": {
+		"message": "$HOST$ freigeben",
+		"placeholders": { "HOST": { "content": "$1" } }
+	},
+	"refreshScan": { "message": "Diskussionssuche aktualisieren" },
+	"openSettings": { "message": "Einstellungen öffnen" },
+	"openAiSettings": { "message": "KI-Einstellungen öffnen" },
+	"cachedSummaryReady": { "message": "Zwischengespeicherte Zusammenfassung bereit." },
+	"discussionsReady": {
+		"message": "$N$ Diskussionen bereit zur Zusammenfassung.",
+		"placeholders": { "N": { "content": "$1" } }
+	},
+	"blockDomain": {
+		"message": "$HOST$ blockieren",
+		"placeholders": { "HOST": { "content": "$1" } }
+	},
+	"commentCount": {
+		"message": "$N$ Kommentare",
+		"placeholders": { "N": { "content": "$1" } }
+	},
+	"pointCount": {
+		"message": "$N$ Punkte",
+		"placeholders": { "N": { "content": "$1" } }
+	},
+	"backToOverview": { "message": "Zurück zur Übersicht" },
+	"moreExportOptions": { "message": "Weitere Exportoptionen" },
+	"closeMenu": { "message": "Menü schließen" },
+	"tokenCount": {
+		"message": "$N$ Tokens",
+		"placeholders": { "N": { "content": "$1" } }
+	}
 }

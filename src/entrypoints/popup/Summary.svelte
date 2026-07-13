@@ -50,7 +50,7 @@ let copied = $state(false);
 let showExportMenu = $state(false);
 
 const tokenInfo = $derived(
-	usage ? `${(usage.inputTokens + usage.outputTokens).toLocaleString()} tokens` : '',
+	usage ? t('tokenCount', (usage.inputTokens + usage.outputTokens).toLocaleString()) : '',
 );
 
 const exportInput = $derived({
@@ -124,8 +124,8 @@ function renderMarkdown(text: string): string {
         type="button"
         onclick={onBack}
         class="inline-flex size-8.5 shrink-0 cursor-pointer items-center justify-center rounded-full border border-stone-200 bg-white text-stone-500 transition-colors hover:border-stone-300 hover:text-stone-900"
-        title="Back to overview"
-        aria-label="Back to overview"
+        title={t('backToOverview')}
+        aria-label={t('backToOverview')}
       >
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
           <path fill-rule="evenodd" d="M9.78 4.22a.75.75 0 0 1 0 1.06L7.06 8l2.72 2.72a.75.75 0 1 1-1.06 1.06L5.47 8.53a.75.75 0 0 1 0-1.06l3.25-3.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
@@ -151,8 +151,8 @@ function renderMarkdown(text: string): string {
           type="button"
           onclick={() => { showExportMenu = !showExportMenu; }}
           class="inline-flex min-h-9 cursor-pointer items-center justify-center rounded-r-full border border-stone-200 bg-white px-2 text-stone-500 transition-colors hover:border-stone-300 hover:text-stone-900"
-          title="More export options"
-          aria-label="More export options"
+          title={t('moreExportOptions')}
+          aria-label={t('moreExportOptions')}
           aria-expanded={showExportMenu}
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-3.5">
@@ -165,7 +165,7 @@ function renderMarkdown(text: string): string {
           <button
             type="button"
             class="fixed inset-0 z-10 cursor-default"
-            aria-label="Close menu"
+            aria-label={t('closeMenu')}
             onclick={() => { showExportMenu = false; }}
           ></button>
           <div class="absolute right-0 top-full z-20 mt-1 min-w-44 overflow-hidden rounded-[0.85rem] border border-stone-200 bg-white shadow-lg">

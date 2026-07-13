@@ -261,12 +261,12 @@ const resolvedHost = $derived.by(() => {
 
 const ctaDescription = $derived.by(() => {
 	if (summaryResult) {
-		return 'Cached summary ready.';
+		return t('cachedSummaryReady');
 	}
 	if (!hasApiKey) {
-		return 'Add your API key in Settings. It stays in your browser.';
+		return t('configureApiKey');
 	}
-	return `${discussions.length} discussion${discussions.length === 1 ? '' : 's'} ready to summarize.`;
+	return t('discussionsReady', String(discussions.length));
 });
 
 load();
@@ -305,8 +305,8 @@ load();
           type="button"
           onclick={refresh}
           class="inline-flex size-8.5 cursor-pointer items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600 transition-colors hover:border-stone-300 hover:text-stone-950 disabled:cursor-not-allowed disabled:opacity-50"
-          aria-label="Refresh discussion scan"
-          title="Refresh discussion scan"
+          aria-label={t('refreshScan')}
+          title={t('refreshScan')}
           disabled={loading}
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-3.5">
@@ -317,8 +317,8 @@ load();
           type="button"
           onclick={() => browser.runtime.openOptionsPage()}
           class="inline-flex size-8.5 cursor-pointer items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600 transition-colors hover:border-stone-300 hover:text-stone-950"
-          aria-label="Open settings"
-          title="Open settings"
+          aria-label={t('openSettings')}
+          title={t('openSettings')}
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-3.5">
             <path fill-rule="evenodd" d="M6.455 1.45A.5.5 0 0 1 6.952 1h2.096a.5.5 0 0 1 .497.45l.186 1.858a4.996 4.996 0 0 1 1.466.848l1.703-.769a.5.5 0 0 1 .639.206l1.048 1.814a.5.5 0 0 1-.142.656l-1.517 1.09a5.026 5.026 0 0 1 0 1.694l1.517 1.09a.5.5 0 0 1 .142.656l-1.048 1.814a.5.5 0 0 1-.639.206l-1.703-.769c-.433.36-.928.652-1.466.848l-.186 1.858a.5.5 0 0 1-.497.45H6.952a.5.5 0 0 1-.497-.45l-.186-1.858a4.993 4.993 0 0 1-1.466-.848l-1.703.769a.5.5 0 0 1-.639-.206L1.413 11.77a.5.5 0 0 1 .142-.656l1.517-1.09a5.026 5.026 0 0 1 0-1.694l-1.517-1.09a.5.5 0 0 1-.142-.656L2.46 4.77a.5.5 0 0 1 .639-.206l1.703.769c.433-.36.928-.652 1.466-.848l.186-1.858ZM8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" clip-rule="evenodd" />
@@ -331,16 +331,16 @@ load();
       <div class="flex min-h-56 flex-col items-center justify-center gap-3 px-6 text-center" role="status" aria-live="polite">
         <div class="size-9 animate-pulse rounded-full bg-stone-200"></div>
         <div>
-          <p class="text-sm font-medium text-stone-800">Scanning discussion sources...</p>
-          <p class="mt-1 text-sm text-stone-500">Checking Hacker News, Reddit, and Lobsters for this page.</p>
+          <p class="text-sm font-medium text-stone-800">{t('searching')}</p>
+          <p class="mt-1 text-sm text-stone-500">{t('searchingHint')}</p>
         </div>
       </div>
     {:else if blocked}
       <section class="px-4 py-6">
         <div class="rounded-[1.5rem] border border-dashed border-stone-300 bg-stone-50 px-4 py-5">
-          <p class="text-base font-semibold tracking-tight text-stone-950">Domain filtered</p>
+          <p class="text-base font-semibold tracking-tight text-stone-950">{t('domainFiltered')}</p>
           <p class="mt-2 text-sm leading-6 text-stone-600">
-            {currentHost} is {userSettings?.blacklistMode === 'whitelist' ? 'not in your whitelist' : 'in your blacklist'}. You can change this in settings.
+            {userSettings?.blacklistMode === 'whitelist' ? t('domainNotWhitelisted', currentHost) : t('domainBlacklisted', currentHost)}
           </p>
           <div class="mt-4 flex flex-wrap gap-2">
             <button
@@ -348,7 +348,7 @@ load();
               onclick={toggleBlock}
               class="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-full bg-stone-900 px-4 text-sm font-medium text-white transition-colors hover:bg-stone-800"
             >
-              Unblock {currentHost}
+              {t('unblockDomain', currentHost)}
             </button>
           </div>
         </div>
@@ -362,9 +362,9 @@ load();
               {t('sourceUnavailableHint')}
             </p>
           {:else}
-            <p class="text-base font-semibold tracking-tight text-stone-950">No discussion signal yet</p>
+            <p class="text-base font-semibold tracking-tight text-stone-950">{t('noDiscussions')}</p>
             <p class="mt-2 text-sm leading-6 text-stone-600">
-              Discussed did not find matching threads for {currentHost}. Try a fresh scan, or search beyond the built-in sources.
+              {t('noDiscussionsHint')}
             </p>
           {/if}
           <div class="mt-4 flex flex-wrap gap-2">
@@ -373,7 +373,7 @@ load();
               onclick={refresh}
               class="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-full bg-stone-900 px-4 text-sm font-medium text-white transition-colors hover:bg-stone-800"
             >
-              Scan again
+              {t('scanAgain')}
             </button>
           </div>
         </div>
@@ -439,7 +439,7 @@ load();
             onclick={() => { view = 'summary'; }}
             class="inline-flex min-h-9 w-full cursor-pointer items-center justify-center rounded-full bg-stone-900 px-4 text-sm font-medium text-white transition-colors hover:bg-stone-800"
           >
-            View Summary
+            {t('viewSummary')}
           </button>
         {:else}
           <button
@@ -449,7 +449,7 @@ load();
             class="inline-flex min-h-9 w-full cursor-pointer items-center justify-center rounded-full px-4 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60
               {hasApiKey ? 'bg-stone-900 text-white hover:bg-stone-800' : 'bg-stone-200 text-stone-500'}"
           >
-            {summarizing ? 'Summarizing...' : hasApiKey ? 'Summarize All' : 'Open AI Settings'}
+            {summarizing ? t('summarizing') : hasApiKey ? t('summarizeAll') : t('openAiSettings')}
           </button>
         {/if}
 
@@ -462,7 +462,7 @@ load();
           onclick={blockSite}
           class="mt-1 cursor-pointer text-[0.68rem] text-stone-400 transition-colors hover:text-stone-600"
         >
-          Block {currentHost}
+          {t('blockDomain', currentHost)}
         </button>
       </div>
     {/if}

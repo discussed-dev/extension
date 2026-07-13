@@ -72,5 +72,45 @@
 		"message": "无法连接 $SOURCE$",
 		"placeholders": { "SOURCE": { "content": "$1" } }
 	},
-	"sourceUnavailableHint": { "message": "请检查网络连接后重新扫描。" }
+	"sourceUnavailableHint": { "message": "请检查网络连接后重新扫描。" },
+	"domainFiltered": { "message": "域名已过滤" },
+	"domainBlacklisted": {
+		"message": "$HOST$ 在你的黑名单中。可在设置中修改。",
+		"placeholders": { "HOST": { "content": "$1" } }
+	},
+	"domainNotWhitelisted": {
+		"message": "$HOST$ 不在你的白名单中。可在设置中修改。",
+		"placeholders": { "HOST": { "content": "$1" } }
+	},
+	"unblockDomain": {
+		"message": "取消屏蔽 $HOST$",
+		"placeholders": { "HOST": { "content": "$1" } }
+	},
+	"refreshScan": { "message": "重新扫描讨论" },
+	"openSettings": { "message": "打开设置" },
+	"openAiSettings": { "message": "打开 AI 设置" },
+	"cachedSummaryReady": { "message": "已缓存的总结可用。" },
+	"discussionsReady": {
+		"message": "$N$ 条讨论可供总结。",
+		"placeholders": { "N": { "content": "$1" } }
+	},
+	"blockDomain": {
+		"message": "屏蔽 $HOST$",
+		"placeholders": { "HOST": { "content": "$1" } }
+	},
+	"commentCount": {
+		"message": "$N$ 条评论",
+		"placeholders": { "N": { "content": "$1" } }
+	},
+	"pointCount": {
+		"message": "$N$ 分",
+		"placeholders": { "N": { "content": "$1" } }
+	},
+	"backToOverview": { "message": "返回概览" },
+	"moreExportOptions": { "message": "更多导出选项" },
+	"closeMenu": { "message": "关闭菜单" },
+	"tokenCount": {
+		"message": "$N$ tokens",
+		"placeholders": { "N": { "content": "$1" } }
+	}
 }

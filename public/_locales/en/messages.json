@@ -76,5 +76,45 @@
 		"message": "$SOURCE$ couldn't be reached",
 		"placeholders": { "SOURCE": { "content": "$1" } }
 	},
-	"sourceUnavailableHint": { "message": "Check your connection and scan again." }
+	"sourceUnavailableHint": { "message": "Check your connection and scan again." },
+	"domainFiltered": { "message": "Domain filtered" },
+	"domainBlacklisted": {
+		"message": "$HOST$ is in your blocklist. You can change this in settings.",
+		"placeholders": { "HOST": { "content": "$1" } }
+	},
+	"domainNotWhitelisted": {
+		"message": "$HOST$ is not in your allowlist. You can change this in settings.",
+		"placeholders": { "HOST": { "content": "$1" } }
+	},
+	"unblockDomain": {
+		"message": "Unblock $HOST$",
+		"placeholders": { "HOST": { "content": "$1" } }
+	},
+	"refreshScan": { "message": "Refresh discussion scan" },
+	"openSettings": { "message": "Open settings" },
+	"openAiSettings": { "message": "Open AI Settings" },
+	"cachedSummaryReady": { "message": "Cached summary ready." },
+	"discussionsReady": {
+		"message": "$N$ discussions ready to summarize.",
+		"placeholders": { "N": { "content": "$1" } }
+	},
+	"blockDomain": {
+		"message": "Block $HOST$",
+		"placeholders": { "HOST": { "content": "$1" } }
+	},
+	"commentCount": {
+		"message": "$N$ comments",
+		"placeholders": { "N": { "content": "$1" } }
+	},
+	"pointCount": {
+		"message": "$N$ points",
+		"placeholders": { "N": { "content": "$1" } }
+	},
+	"backToOverview": { "message": "Back to overview" },
+	"moreExportOptions": { "message": "More export options" },
+	"closeMenu": { "message": "Close menu" },
+	"tokenCount": {
+		"message": "$N$ tokens",
+		"placeholders": { "N": { "content": "$1" } }
+	}
 }

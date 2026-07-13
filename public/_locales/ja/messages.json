@@ -72,5 +72,45 @@
 		"message": "$SOURCE$ に接続できませんでした",
 		"placeholders": { "SOURCE": { "content": "$1" } }
 	},
-	"sourceUnavailableHint": { "message": "接続を確認して再スキャンしてください。" }
+	"sourceUnavailableHint": { "message": "接続を確認して再スキャンしてください。" },
+	"domainFiltered": { "message": "ドメインを除外中" },
+	"domainBlacklisted": {
+		"message": "$HOST$ はブロックリストに含まれています。設定で変更できます。",
+		"placeholders": { "HOST": { "content": "$1" } }
+	},
+	"domainNotWhitelisted": {
+		"message": "$HOST$ は許可リストに含まれていません。設定で変更できます。",
+		"placeholders": { "HOST": { "content": "$1" } }
+	},
+	"unblockDomain": {
+		"message": "$HOST$ のブロックを解除",
+		"placeholders": { "HOST": { "content": "$1" } }
+	},
+	"refreshScan": { "message": "ディスカッションを再スキャン" },
+	"openSettings": { "message": "設定を開く" },
+	"openAiSettings": { "message": "AI 設定を開く" },
+	"cachedSummaryReady": { "message": "キャッシュされた要約があります。" },
+	"discussionsReady": {
+		"message": "$N$ 件のディスカッションを要約できます。",
+		"placeholders": { "N": { "content": "$1" } }
+	},
+	"blockDomain": {
+		"message": "$HOST$ をブロック",
+		"placeholders": { "HOST": { "content": "$1" } }
+	},
+	"commentCount": {
+		"message": "コメント $N$ 件",
+		"placeholders": { "N": { "content": "$1" } }
+	},
+	"pointCount": {
+		"message": "$N$ ポイント",
+		"placeholders": { "N": { "content": "$1" } }
+	},
+	"backToOverview": { "message": "概要に戻る" },
+	"moreExportOptions": { "message": "その他のエクスポート" },
+	"closeMenu": { "message": "メニューを閉じる" },
+	"tokenCount": {
+		"message": "$N$ トークン",
+		"placeholders": { "N": { "content": "$1" } }
+	}
 }

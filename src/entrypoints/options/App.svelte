@@ -299,12 +299,14 @@ load();
 
           <div>
             <div class="block">
-              <span class="block text-sm font-medium text-stone-900">API key</span>
-              <span class="mt-0.5 block text-xs leading-5 text-stone-600">Your key is stored in your browser only and sent directly to your chosen provider. Discussed never sees or collects it.</span>
+              <label for="api-key-input" class="block text-sm font-medium text-stone-900">API key</label>
+              <span id="api-key-hint" class="mt-0.5 block text-xs leading-5 text-stone-600">Your key is stored in your browser only and sent directly to your chosen provider. Discussed never sees or collects it.</span>
             </div>
             <div class="mt-2 flex flex-col gap-2.5 sm:flex-row">
               <input
+                id="api-key-input"
                 type="password"
+                aria-describedby="api-key-hint"
                 bind:value={current.apiKey}
                 placeholder={providerConfig?.keyPlaceholder ?? 'your-api-key'}
                 class="min-h-10 flex-1 rounded-2xl border border-stone-300 bg-white px-4 text-sm text-stone-900"
@@ -322,16 +324,18 @@ load();
         </section>
 
         <section class="space-y-3">
-          <label class="block">
-            <span class="block text-sm font-medium text-stone-900">Model</span>
+          <div class="block">
+            <label for="model-input" class="block text-sm font-medium text-stone-900">Model</label>
             <div class="mt-2 flex flex-col gap-2.5 sm:flex-row">
               <input
+                id="model-input"
                 type="text"
                 bind:value={current.model}
                 class="min-h-10 flex-1 rounded-2xl border border-stone-300 bg-white px-4 text-sm text-stone-900"
               />
               {#if modelOptions.length > 0}
                 <select
+                  aria-label="Model presets"
                   onchange={(e) => { if (current) current.model = (e.target as HTMLSelectElement).value; }}
                   class="min-h-10 rounded-2xl border border-stone-300 bg-white px-4 text-sm text-stone-700"
                 >
@@ -343,7 +347,7 @@ load();
               {/if}
             </div>
             <p class="mt-1 text-xs text-stone-500">Summarization works well with lightweight models — no need for flagship ones. $ models cost under $0.001 per summary.</p>
-          </label>
+          </div>
 
           <label class="block">
             <span class="block text-sm font-medium text-stone-900">Max comments per summary</span>
@@ -399,6 +403,7 @@ load();
           onclick={() => { showAdvanced = !showAdvanced; }}
           class="inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-stone-300 bg-white px-4 text-sm font-medium text-stone-700 transition-colors hover:border-stone-400 hover:text-stone-950"
           aria-expanded={showAdvanced}
+          aria-controls="advanced-settings"
         >
           <span>{showAdvanced ? 'Hide advanced settings' : 'Show advanced settings'}</span>
           <svg
@@ -413,7 +418,7 @@ load();
       </div>
 
       {#if showAdvanced}
-        <div class="mt-3 grid gap-3 md:grid-cols-2">
+        <div id="advanced-settings" class="mt-3 grid gap-3 md:grid-cols-2">
           <section class="rounded-[0.95rem] border border-stone-200 bg-stone-50 p-3">
             <h3 class="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-stone-500">Matching</h3>
             <div class="mt-2.5 space-y-2">

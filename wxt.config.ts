@@ -25,7 +25,6 @@ export default defineConfig({
 			'https://api.anthropic.com/*',
 			'https://api.openai.com/*',
 			'https://generativelanguage.googleapis.com/*',
-			'https://api.github.com/*',
 		],
 		browser_specific_settings: {
 			gecko: {

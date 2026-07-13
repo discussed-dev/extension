@@ -46,7 +46,6 @@ bun run lint:fix               # biome auto-fix
 - **Options** (`src/entrypoints/options/`) — full settings page, opens in new tab
 - **Discovery** (`src/lib/discovery.ts`) — orchestrates URL normalization → cache check → parallel platform queries (HN, Reddit, Lobsters) with per-source timeout
 - **API helpers** (`src/lib/hn.ts`, `reddit.ts`, `lobsters.ts`) — each returns `Discussion[]`, graceful error handling
-- **Bloom filter** (`src/lib/bloom.ts`) — HN URL pre-screening (~4.5MB, FNV-1a hash, auto-updated from GitHub Releases weekly)
 - **LLM** (`src/lib/llm.ts`) — multi-provider router: Anthropic, OpenAI-compatible, Google Gemini
 - **Cache** (`src/lib/cache.ts`) — generic TTL cache over `browser.storage.local`
 - **Settings** (`src/lib/settings.ts`) — typed settings with provider presets and cost tiers
@@ -125,9 +124,3 @@ Submitting the OAuth app for verification removes this expiry but adds Google re
 ### Workflow change timing
 
 Tag-triggered workflows run the workflow file at the tag's commit, not main HEAD. `release.yml` edits only take effect on tags pushed AFTER the change merges to main — fixing a broken workflow always means cutting a new tag.
-
-## Bloom Filter Pipeline
-
-- `scripts/generate-bloom.py` — queries BigQuery public HN dataset, normalizes URLs, generates bloom filter binary
-- `.github/workflows/bloom-filter.yml` — runs weekly (Sunday 03:00 UTC), publishes as GitHub Release
-- Extension auto-downloads latest bloom filter on startup

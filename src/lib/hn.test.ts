@@ -1,5 +1,4 @@
 import { type Mock, beforeEach, describe, expect, it, vi } from 'vitest';
-import * as bloom from './bloom';
 import { searchHn } from './hn';
 
 const mockFetch = vi.fn() as Mock;
@@ -79,19 +78,5 @@ describe('searchHn', () => {
 
 		const results = await searchHn('https://example.com');
 		expect(results).toEqual([]);
-	});
-
-	it('queries Algolia even when the bloom filter has not seen the URL', async () => {
-		// Fresh HN submissions are absent from the weekly bloom snapshot; the
-		// filter must not gate them out of the Algolia query.
-		const filterStub = {} as unknown as Awaited<ReturnType<typeof bloom.getBloomFilter>>;
-		vi.spyOn(bloom, 'getBloomFilter').mockResolvedValueOnce(filterStub);
-		vi.spyOn(bloom, 'checkBloomFilter').mockReturnValueOnce(false);
-		mockFetch.mockResolvedValueOnce(algoliaResponse([HIT]));
-
-		const results = await searchHn('https://example.com');
-
-		expect(mockFetch).toHaveBeenCalledTimes(1);
-		expect(results).toHaveLength(1);
 	});
 });

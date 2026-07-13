@@ -13,6 +13,7 @@ import { isBlacklisted } from '@/lib/url';
 import DiscussionRow from './DiscussionRow.svelte';
 import ExternalLinks from './ExternalLinks.svelte';
 import PopupBrand from './PopupBrand.svelte';
+import SignalBar from './SignalBar.svelte';
 import Summary from './Summary.svelte';
 
 type View = 'overview' | 'summary';
@@ -403,6 +404,7 @@ load();
           <span>{t('sourceUnavailable', unavailableLabel)}</span>
         </div>
       {/if}
+      <SignalBar {discussions} />
       <div class="max-h-[19rem] min-h-0 flex-1 space-y-2.5 overflow-y-auto px-4 py-3">
         {#each groupedDiscussions as group (group.platform)}
           <section id={`platform-${group.platform}`} class="scroll-mt-3">

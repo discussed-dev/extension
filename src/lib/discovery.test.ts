@@ -61,12 +61,15 @@ describe('discoverDiscussions', () => {
 		redditMock.mockResolvedValueOnce([REDDIT_RESULT]);
 		lobstersMock.mockResolvedValueOnce([LOBSTERS_RESULT]);
 
-		const results = await discoverDiscussions('https://www.example.com/page?ref=x');
+		const { discussions, unavailable } = await discoverDiscussions(
+			'https://www.example.com/page?ref=x',
+		);
 
-		expect(results).toHaveLength(3);
-		expect(results.map((d) => d.platform)).toEqual(
+		expect(discussions).toHaveLength(3);
+		expect(discussions.map((d) => d.platform)).toEqual(
 			expect.arrayContaining(['hn', 'reddit', 'lobsters']),
 		);
+		expect(unavailable).toEqual([]);
 	});
 
 	it('passes normalized URL to platform searches', async () => {
@@ -108,20 +111,40 @@ describe('discoverDiscussions', () => {
 		expect(hnMock).toHaveBeenCalledTimes(2);
 	});
 
-	it('handles partial platform failures gracefully', async () => {
+	it('reports a failed source as unavailable while keeping the rest', async () => {
 		hnMock.mockResolvedValueOnce([HN_RESULT]);
 		redditMock.mockRejectedValueOnce(new Error('Reddit down'));
 		lobstersMock.mockResolvedValueOnce([LOBSTERS_RESULT]);
 
-		const results = await discoverDiscussions('https://example.com');
+		const { discussions, unavailable } = await discoverDiscussions('https://example.com');
 
-		expect(results).toHaveLength(2);
-		expect(results.map((d) => d.platform)).toEqual(expect.arrayContaining(['hn', 'lobsters']));
+		expect(discussions).toHaveLength(2);
+		expect(discussions.map((d) => d.platform)).toEqual(expect.arrayContaining(['hn', 'lobsters']));
+		expect(unavailable).toEqual(['reddit']);
+	});
+
+	it('does not cache when a source failed, so the next scan retries it', async () => {
+		hnMock.mockResolvedValue([HN_RESULT]);
+		redditMock.mockRejectedValueOnce(new Error('Reddit down'));
+		lobstersMock.mockResolvedValue([]);
+
+		const first = await discoverDiscussions('https://example.com');
+		expect(first.unavailable).toEqual(['reddit']);
+
+		// Reddit recovers on the retry; result must reflect it (not a stale cache).
+		redditMock.mockResolvedValueOnce([REDDIT_RESULT]);
+		const second = await discoverDiscussions('https://example.com');
+
+		expect(redditMock).toHaveBeenCalledTimes(2);
+		expect(second.unavailable).toEqual([]);
+		expect(second.discussions.map((d) => d.platform)).toEqual(
+			expect.arrayContaining(['hn', 'reddit']),
+		);
 	});
 
 	it('skips root URLs whose query string was stripped', async () => {
-		const results = await discoverDiscussions('https://www.douban.com/?p=13');
-		expect(results).toEqual([]);
+		const { discussions } = await discoverDiscussions('https://www.douban.com/?p=13');
+		expect(discussions).toEqual([]);
 		expect(hnMock).not.toHaveBeenCalled();
 	});
 
@@ -130,8 +153,8 @@ describe('discoverDiscussions', () => {
 		redditMock.mockResolvedValueOnce([]);
 		lobstersMock.mockResolvedValueOnce([]);
 
-		const results = await discoverDiscussions('https://example.com/');
-		expect(results).toHaveLength(1);
+		const { discussions } = await discoverDiscussions('https://example.com/');
+		expect(discussions).toHaveLength(1);
 		expect(hnMock).toHaveBeenCalled();
 	});
 
@@ -140,8 +163,8 @@ describe('discoverDiscussions', () => {
 		redditMock.mockResolvedValueOnce([]);
 		lobstersMock.mockResolvedValueOnce([]);
 
-		const results = await discoverDiscussions('https://douban.com/subject/12345/?from=tag');
-		expect(results).toHaveLength(1);
+		const { discussions } = await discoverDiscussions('https://douban.com/subject/12345/?from=tag');
+		expect(discussions).toHaveLength(1);
 		expect(hnMock).toHaveBeenCalled();
 	});
 
@@ -150,12 +173,14 @@ describe('discoverDiscussions', () => {
 		redditMock.mockResolvedValueOnce([]);
 		lobstersMock.mockResolvedValueOnce([]);
 
-		const results = await discoverDiscussions('https://www.douban.com/?p=13', { force: true });
-		expect(results).toHaveLength(1);
+		const { discussions } = await discoverDiscussions('https://www.douban.com/?p=13', {
+			force: true,
+		});
+		expect(discussions).toHaveLength(1);
 		expect(hnMock).toHaveBeenCalled();
 	});
 
-	it('returns available results when one platform hangs', async () => {
+	it('marks a timed-out source unavailable but returns the rest', async () => {
 		vi.useFakeTimers();
 		hnMock.mockImplementationOnce(
 			() =>
@@ -168,9 +193,12 @@ describe('discoverDiscussions', () => {
 
 		const pending = discoverDiscussions('https://example.com');
 		await vi.advanceTimersByTimeAsync(5000);
-		const results = await pending;
+		const { discussions, unavailable } = await pending;
 
-		expect(results).toHaveLength(2);
-		expect(results.map((d) => d.platform)).toEqual(expect.arrayContaining(['reddit', 'lobsters']));
+		expect(discussions).toHaveLength(2);
+		expect(discussions.map((d) => d.platform)).toEqual(
+			expect.arrayContaining(['reddit', 'lobsters']),
+		);
+		expect(unavailable).toEqual(['hn']);
 	});
 });

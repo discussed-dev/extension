@@ -25,7 +25,7 @@ async function queryAlgolia(url: string): Promise<Discussion[]> {
 	});
 
 	const response = await fetch(`${ALGOLIA_SEARCH}?${params}`);
-	if (!response.ok) return [];
+	if (!response.ok) throw new Error(`HN search failed: ${response.status}`);
 
 	const data: AlgoliaResponse = await response.json();
 	const normalizedTarget = normalizeUrl(url);
@@ -50,9 +50,5 @@ async function queryAlgolia(url: string): Promise<Discussion[]> {
 }
 
 export async function searchHn(url: string): Promise<Discussion[]> {
-	try {
-		return await queryAlgolia(url);
-	} catch {
-		return [];
-	}
+	return queryAlgolia(url);
 }

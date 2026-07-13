@@ -71,5 +71,10 @@
 	"linkedFrom": {
 		"message": "Enlazado desde $PLATFORM$ →",
 		"placeholders": { "PLATFORM": { "content": "$1" } }
-	}
+	},
+	"sourceUnavailable": {
+		"message": "No se pudo conectar con $SOURCE$",
+		"placeholders": { "SOURCE": { "content": "$1" } }
+	},
+	"sourceUnavailableHint": { "message": "Comprueba tu conexión y vuelve a escanear." }
 }

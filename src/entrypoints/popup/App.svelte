@@ -38,6 +38,7 @@ let hasApiKey = $state(false);
 let userSettings = $state<Settings | null>(null);
 let lastPageContent = $state<PageContent | undefined>(undefined);
 let resolved = $state<ResolvedDiscussion | null>(null);
+let unavailable = $state<Platform[]>([]);
 
 async function load() {
 	loading = true;
@@ -54,6 +55,7 @@ async function load() {
 		if (isBlacklisted(tab.url, userSettings.blacklist, userSettings.blacklistMode)) {
 			blocked = true;
 			discussions = [];
+			unavailable = [];
 			if (currentTabId != null) {
 				await setToolbarBadge(browser, { tabId: currentTabId, text: '' });
 			}
@@ -65,10 +67,13 @@ async function load() {
 		resolved = resolveResult;
 		if (!resolveResult && isPlatformUrl(tab.url)) {
 			discussions = [];
+			unavailable = [];
 			return;
 		}
 		const targetUrl = resolveResult?.linkedUrl ?? tab.url;
-		const allDiscussions = await discoverDiscussions(targetUrl);
+		const { discussions: allDiscussions, unavailable: sourcesDown } =
+			await discoverDiscussions(targetUrl);
+		unavailable = sourcesDown;
 
 		discussions = resolveResult
 			? allDiscussions.filter(
@@ -105,6 +110,7 @@ async function refresh() {
 		if (isBlacklisted(currentUrl, currentSettings.blacklist, currentSettings.blacklistMode)) {
 			blocked = true;
 			discussions = [];
+			unavailable = [];
 			await setToolbarBadge(browser, { tabId: currentTabId, text: '' });
 			return;
 		}
@@ -114,10 +120,15 @@ async function refresh() {
 		resolved = resolveResult;
 		if (!resolveResult && isPlatformUrl(currentUrl)) {
 			discussions = [];
+			unavailable = [];
 			return;
 		}
 		const targetUrl = resolveResult?.linkedUrl ?? currentUrl;
-		const allDiscussions = await discoverDiscussions(targetUrl, { force: true });
+		const { discussions: allDiscussions, unavailable: sourcesDown } = await discoverDiscussions(
+			targetUrl,
+			{ force: true },
+		);
+		unavailable = sourcesDown;
 
 		discussions = resolveResult
 			? allDiscussions.filter(
@@ -213,6 +224,8 @@ async function doSummarize(force = false) {
 		summarizing = false;
 	}
 }
+
+const unavailableLabel = $derived(unavailable.map((p) => PLATFORM_LABELS[p]).join(', '));
 
 const sorted = $derived([...discussions].sort((a, b) => b.commentCount - a.commentCount));
 
@@ -343,10 +356,17 @@ load();
     {:else if discussions.length === 0}
       <section class="px-4 py-6">
         <div class="rounded-[1.5rem] border border-dashed border-stone-300 bg-stone-50 px-4 py-5">
-          <p class="text-base font-semibold tracking-tight text-stone-950">No discussion signal yet</p>
-          <p class="mt-2 text-sm leading-6 text-stone-600">
-            Discussed did not find matching threads for {currentHost}. Try a fresh scan, or search beyond the built-in sources.
-          </p>
+          {#if unavailable.length > 0}
+            <p class="text-base font-semibold tracking-tight text-stone-950">{t('sourceUnavailable', unavailableLabel)}</p>
+            <p class="mt-2 text-sm leading-6 text-stone-600">
+              {t('sourceUnavailableHint')}
+            </p>
+          {:else}
+            <p class="text-base font-semibold tracking-tight text-stone-950">No discussion signal yet</p>
+            <p class="mt-2 text-sm leading-6 text-stone-600">
+              Discussed did not find matching threads for {currentHost}. Try a fresh scan, or search beyond the built-in sources.
+            </p>
+          {/if}
           <div class="mt-4 flex flex-wrap gap-2">
             <button
               type="button"
@@ -373,6 +393,14 @@ load();
           >
             {resolvedHost}
           </a>
+        </div>
+      {/if}
+      {#if unavailable.length > 0}
+        <div class="flex items-center gap-2 border-b border-amber-200/70 bg-amber-50 px-4 py-2 text-xs text-amber-800" role="status">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-3.5 shrink-0">
+            <path fill-rule="evenodd" d="M8 1.5a1.13 1.13 0 0 1 .98.567l5.7 9.86A1.13 1.13 0 0 1 13.7 13.6H2.3a1.13 1.13 0 0 1-.98-1.7l5.7-9.86A1.13 1.13 0 0 1 8 1.5Zm0 3.5a.6.6 0 0 0-.6.62l.16 3.1a.44.44 0 0 0 .88 0l.16-3.1A.6.6 0 0 0 8 5Zm0 5.1a.66.66 0 1 0 0 1.32.66.66 0 0 0 0-1.32Z" clip-rule="evenodd" />
+          </svg>
+          <span>{t('sourceUnavailable', unavailableLabel)}</span>
         </div>
       {/if}
       <div class="max-h-[19rem] min-h-0 flex-1 space-y-2.5 overflow-y-auto px-4 py-3">

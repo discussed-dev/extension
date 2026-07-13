@@ -39,48 +39,44 @@ export async function searchReddit(
 	url: string,
 	options: RedditSearchOptions = {},
 ): Promise<Discussion[]> {
-	try {
-		const params = new URLSearchParams({
-			q: `url:${url}`,
-			sort: 'top',
-			limit: '25',
-		});
+	const params = new URLSearchParams({
+		q: `url:${url}`,
+		sort: 'top',
+		limit: '25',
+	});
 
-		const response = await fetch(`${REDDIT_SEARCH}?${params}`, {
-			headers: { 'User-Agent': 'web:discussed:v0.1.0 (https://discussed.dev)' },
-		});
-		if (!response.ok) return [];
+	const response = await fetch(`${REDDIT_SEARCH}?${params}`, {
+		headers: { 'User-Agent': 'web:discussed:v0.1.0 (https://discussed.dev)' },
+	});
+	if (!response.ok) throw new Error(`Reddit search failed: ${response.status}`);
 
-		const data: RedditListing = await response.json();
-		const searchHost = new URL(url).hostname;
+	const data: RedditListing = await response.json();
+	const searchHost = new URL(url).hostname;
 
-		return data.data.children
-			.filter(({ data: post }) => {
-				if (post.url == null) return false;
-				if (options.exactMatch) {
-					try {
-						return normalizeUrl(post.url) === normalizeUrl(url);
-					} catch {
-						return false;
-					}
-				}
+	return data.data.children
+		.filter(({ data: post }) => {
+			if (post.url == null) return false;
+			if (options.exactMatch) {
 				try {
-					return hostnamesMatch(new URL(post.url).hostname, searchHost);
+					return normalizeUrl(post.url) === normalizeUrl(url);
 				} catch {
 					return false;
 				}
-			})
-			.map(({ data: post }) => ({
-				platform: 'reddit' as const,
-				title: post.title,
-				url: `https://www.reddit.com${post.permalink}`,
-				points: post.score,
-				commentCount: post.num_comments,
-				createdAt: new Date(post.created_utc * 1000).toISOString(),
-				externalId: post.name,
-				subreddit: post.subreddit,
-			}));
-	} catch {
-		return [];
-	}
+			}
+			try {
+				return hostnamesMatch(new URL(post.url).hostname, searchHost);
+			} catch {
+				return false;
+			}
+		})
+		.map(({ data: post }) => ({
+			platform: 'reddit' as const,
+			title: post.title,
+			url: `https://www.reddit.com${post.permalink}`,
+			points: post.score,
+			commentCount: post.num_comments,
+			createdAt: new Date(post.created_utc * 1000).toISOString(),
+			externalId: post.name,
+			subreddit: post.subreddit,
+		}));
 }

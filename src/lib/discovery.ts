@@ -3,11 +3,17 @@ import { searchHn } from './hn';
 import { searchLobsters } from './lobsters';
 import { searchReddit } from './reddit';
 import { settings } from './settings';
-import type { Discussion } from './types';
+import type { Discussion, Platform } from './types';
 import { normalizeUrl, shouldSkipUrl } from './url';
 
 export interface DiscoverOptions {
 	force?: boolean;
+}
+
+export interface DiscoveryResult {
+	discussions: Discussion[];
+	/** Enabled sources that could not be reached (blocked, rate-limited, timed out). */
+	unavailable: Platform[];
 }
 
 const SOURCE_TIMEOUT_MS = 4000;
@@ -34,8 +40,8 @@ function withTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T> {
 export async function discoverDiscussions(
 	rawUrl: string,
 	options: DiscoverOptions = {},
-): Promise<Discussion[]> {
-	if (shouldSkipUrl(rawUrl)) return [];
+): Promise<DiscoveryResult> {
+	if (shouldSkipUrl(rawUrl)) return { discussions: [], unavailable: [] };
 
 	const userSettings = await settings.getValue();
 	const keepQuery = !userSettings.ignoreQueryString;
@@ -46,7 +52,9 @@ export async function discoverDiscussions(
 		try {
 			const original = new URL(rawUrl);
 			const normalized = new URL(url);
-			if (original.search && normalized.pathname === '/') return [];
+			if (original.search && normalized.pathname === '/') {
+				return { discussions: [], unavailable: [] };
+			}
 		} catch {
 			// ignore parse errors
 		}
@@ -57,28 +65,42 @@ export async function discoverDiscussions(
 
 	if (!options.force) {
 		const cached = await cacheGet<Discussion[]>(cacheKey);
-		if (cached) return cached;
+		if (cached) return { discussions: cached, unavailable: [] };
 	}
 
-	const searches: Array<Promise<Discussion[]>> = [];
-	if (userSettings.enableHn) searches.push(withTimeout(searchHn(url), SOURCE_TIMEOUT_MS));
+	const searches: Array<{ platform: Platform; promise: Promise<Discussion[]> }> = [];
+	if (userSettings.enableHn)
+		searches.push({ platform: 'hn', promise: withTimeout(searchHn(url), SOURCE_TIMEOUT_MS) });
 	if (userSettings.enableReddit)
-		searches.push(
-			withTimeout(
+		searches.push({
+			platform: 'reddit',
+			promise: withTimeout(
 				searchReddit(url, { exactMatch: userSettings.redditExactMatch }),
 				SOURCE_TIMEOUT_MS,
 			),
-		);
+		});
 	if (userSettings.enableLobsters)
-		searches.push(withTimeout(searchLobsters(url), SOURCE_TIMEOUT_MS));
+		searches.push({
+			platform: 'lobsters',
+			promise: withTimeout(searchLobsters(url), SOURCE_TIMEOUT_MS),
+		});
 
-	const results = await Promise.allSettled(searches);
+	const results = await Promise.allSettled(searches.map((search) => search.promise));
 
-	const discussions = results.flatMap((result) =>
-		result.status === 'fulfilled' ? result.value : [],
-	);
+	const discussions: Discussion[] = [];
+	const unavailable: Platform[] = [];
+	results.forEach((result, index) => {
+		if (result.status === 'fulfilled') {
+			discussions.push(...result.value);
+		} else {
+			unavailable.push(searches[index].platform);
+		}
+	});
 
-	await cacheSet(cacheKey, discussions, cacheTtlMs);
+	// Only cache a clean sweep; a transient failure must not freeze a source as empty.
+	if (unavailable.length === 0) {
+		await cacheSet(cacheKey, discussions, cacheTtlMs);
+	}
 
-	return discussions;
+	return { discussions, unavailable };
 }

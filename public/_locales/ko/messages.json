@@ -71,5 +71,10 @@
 	"linkedFrom": {
 		"message": "$PLATFORM$에서 링크됨 →",
 		"placeholders": { "PLATFORM": { "content": "$1" } }
-	}
+	},
+	"sourceUnavailable": {
+		"message": "$SOURCE$에 연결할 수 없습니다",
+		"placeholders": { "SOURCE": { "content": "$1" } }
+	},
+	"sourceUnavailableHint": { "message": "연결을 확인한 후 다시 검색하세요." }
 }

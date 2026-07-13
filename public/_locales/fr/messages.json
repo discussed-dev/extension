@@ -73,5 +73,10 @@
 	"linkedFrom": {
 		"message": "Lié depuis $PLATFORM$ →",
 		"placeholders": { "PLATFORM": { "content": "$1" } }
-	}
+	},
+	"sourceUnavailable": {
+		"message": "Impossible de joindre $SOURCE$",
+		"placeholders": { "SOURCE": { "content": "$1" } }
+	},
+	"sourceUnavailableHint": { "message": "Vérifiez votre connexion et relancez l'analyse." }
 }

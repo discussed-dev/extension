@@ -31,7 +31,7 @@ async function onTabUpdated(tabId: number, url: string): Promise<void> {
 			return;
 		}
 		const targetUrl = resolved?.linkedUrl ?? url;
-		const discussions = await discoverDiscussions(targetUrl);
+		const { discussions } = await discoverDiscussions(targetUrl);
 
 		const filtered = resolved
 			? discussions.filter(

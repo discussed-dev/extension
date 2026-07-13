@@ -45,7 +45,7 @@ bun run lint:fix               # biome auto-fix
 - **Popup** (`src/entrypoints/popup/`) — Svelte 5 app with Overview (grouped discussion cards) and Summary (AI output with markdown rendering) views
 - **Options** (`src/entrypoints/options/`) — full settings page, opens in new tab
 - **Discovery** (`src/lib/discovery.ts`) — orchestrates URL normalization → cache check → parallel platform queries (HN, Reddit, Lobsters) with per-source timeout
-- **API helpers** (`src/lib/hn.ts`, `reddit.ts`, `lobsters.ts`) — each returns `Discussion[]`, graceful error handling
+- **API helpers** (`src/lib/hn.ts`, `reddit.ts`, `lobsters.ts`) — each returns `Discussion[]`; **throws** on an unreachable source (non-ok/network) so discovery can flag it as unavailable
 - **LLM** (`src/lib/llm.ts`) — multi-provider router: Anthropic, OpenAI-compatible, Google Gemini
 - **Cache** (`src/lib/cache.ts`) — generic TTL cache over `browser.storage.local`
 - **Settings** (`src/lib/settings.ts`) — typed settings with provider presets and cost tiers
@@ -58,7 +58,8 @@ bun run lint:fix               # biome auto-fix
 ## Key Design Decisions
 
 - `Discussion.createdAt` is ISO string (not Date) for storage serialization safety
-- Lobsters results filtered by normalized URL match (domain API returns all domain results)
+- Lobsters results filtered by normalized URL match (domain API returns all domain results); Lobsters `404` = domain has no submissions (empty), not an unavailable source
+- `discoverDiscussions` returns `{ discussions, unavailable }`; a source that throws (403/429/timeout) is tagged `unavailable` and the result is **not cached**, so a transient block is retried rather than frozen as empty. Popup renders unavailable sources distinctly from "found nothing"
 - Internal URLs (`about:`, `chrome://`, etc.) skip discovery entirely
 - Reddit uses exact match by default; fuzzy search delegated to Google Forums external link
 - URL normalization strips `index.html/htm/php`, query strings, fragments, `www.`, trailing slashes, tracking params (`utm_*`, `fbclid`, `gclid`, etc.); normalizes mobile Wikipedia (`en.m.` → `en.`); unwraps `web.archive.org` URLs

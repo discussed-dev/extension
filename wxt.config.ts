@@ -8,9 +8,7 @@ export default defineConfig({
 		name: '__MSG_extensionName__',
 		description: '__MSG_extensionDescription__',
 		default_locale: 'en',
-		// unlimitedStorage: the HN bloom filter (~6MB as base64) plus discussion/summary
-		// caches would otherwise compete for storage.local's 10MB quota.
-		permissions: ['tabs', 'activeTab', 'storage', 'unlimitedStorage', 'scripting'],
+		permissions: ['tabs', 'activeTab', 'storage', 'scripting'],
 		commands: {
 			_execute_action: {
 				suggested_key: {
@@ -27,7 +25,6 @@ export default defineConfig({
 			'https://api.anthropic.com/*',
 			'https://api.openai.com/*',
 			'https://generativelanguage.googleapis.com/*',
-			'https://api.github.com/*',
 		],
 		browser_specific_settings: {
 			gecko: {

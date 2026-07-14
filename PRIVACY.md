@@ -17,7 +17,6 @@ When you browse the web with Discussed installed, the following data is processe
 ### Page URLs
 - The URL of the page you are viewing is sent to public APIs (HN Algolia, Reddit, Lobsters) to search for related discussions.
 - URLs are normalized (query strings and fragments stripped) before searching.
-- URLs are checked against a locally-stored Bloom filter before making API calls, to minimize unnecessary network requests.
 
 ### Discussion Data
 - Discussion metadata (titles, scores, comment counts) retrieved from HN, Reddit, and Lobsters is cached in your browser's local storage.
@@ -36,9 +35,6 @@ When you browse the web with Discussed installed, the following data is processe
 - **Your API key** is stored in your browser's synced storage and is sent directly to the AI provider. It is never sent to us.
 - Summaries are cached locally in your browser for 7 days.
 
-### Bloom Filter
-- The extension periodically downloads a Bloom filter file (~4.5 MB) from GitHub Releases. This is a static binary file and does not contain personal data.
-
 ## Third-Party Services
 
 Discussed communicates directly with these third-party services from your browser:
@@ -48,7 +44,6 @@ Discussed communicates directly with these third-party services from your browse
 | HN Algolia API | Search Hacker News discussions | [algolia.com/policies/privacy](https://www.algolia.com/policies/privacy/) |
 | Reddit | Search Reddit discussions | [reddit.com/policies/privacy-policy](https://www.reddit.com/policies/privacy-policy) |
 | Lobsters | Search Lobsters discussions | [lobste.rs/about](https://lobste.rs/about) |
-| GitHub API | Download Bloom filter updates | [docs.github.com/site-policy/privacy-policies](https://docs.github.com/en/site-policy/privacy-policies) |
 | Your chosen AI provider | Generate summaries (user-triggered only) | See your provider's privacy policy |
 
 ## Permissions
@@ -58,14 +53,13 @@ Discussed communicates directly with these third-party services from your browse
 | `tabs` | Read the current tab's URL to search for discussions |
 | `activeTab` | Access the active tab when you click Summarize (reads page content) |
 | `scripting` | Inject content script to extract article text and page comments on demand |
-| `storage` | Cache discussion results, summaries, settings, and Bloom filter locally |
+| `storage` | Cache discussion results, summaries, and settings locally |
 | Host permissions | Make API calls directly to discussion platforms and AI providers |
 
 ## Data Retention
 
 - Discussion cache: configurable (default 6 hours)
 - Summary cache: 7 days
-- Bloom filter: updated weekly, stored locally
 - Settings and API key: stored until you remove them or uninstall the extension
 
 ## Your Control

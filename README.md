@@ -9,7 +9,6 @@
 ## Features
 
 - **Auto-discovery** — detects discussions on Hacker News, Reddit, and Lobsters as you browse
-- **HN Bloom filter** — instant offline pre-screening of ~4.5M URLs, updated weekly
 - **AI summaries** — one-click synthesis across all threads with 8 providers (Anthropic, OpenAI, Gemini, DeepSeek, Groq, xAI, OpenRouter, Ollama)
 - **Bring your own API key** — no account needed, no data sent to our servers
 - **Multi-language summaries** — English, Chinese, Japanese, Spanish, Korean, French, German
@@ -45,7 +44,7 @@ Output is in `.output/chrome-mv3/` or `.output/firefox-mv2/`. Load as an unpacke
 ## How it works
 
 1. You visit a page
-2. Discussed searches HN (via Bloom filter + Algolia), Reddit, and Lobsters in parallel
+2. Discussed searches HN (via Algolia), Reddit, and Lobsters in parallel
 3. The toolbar badge shows how many discussions were found
 4. Click the icon to browse threads sorted by engagement
 5. Hit **Summarize All** to get an AI-generated cross-thread synthesis

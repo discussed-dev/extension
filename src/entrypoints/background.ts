@@ -1,5 +1,4 @@
 import { syncToolbarBadgeForDiscussions } from '@/lib/badge';
-import { updateBloomFilter } from '@/lib/bloom';
 import { discoverDiscussions } from '@/lib/discovery';
 import { isPlatformUrl, resolveLinkedUrl } from '@/lib/resolve-discussion';
 import { settings } from '@/lib/settings';
@@ -48,7 +47,8 @@ async function onTabUpdated(tabId: number, url: string): Promise<void> {
 }
 
 export default defineBackground(() => {
-	updateBloomFilter();
+	// Reclaim the base64 HN bloom filter left by the retired pipeline in existing installs.
+	browser.storage.local.remove(['bloom:filter', 'bloom:version']);
 
 	browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
 		if (changeInfo.status !== 'complete' || !tab.url) return;

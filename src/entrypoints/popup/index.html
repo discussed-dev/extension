@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Discussed</title>
     <meta name="manifest.type" content="browser_action" />
+    <style>
+      /* Size the popup before the bundled stylesheet loads, so Firefox opens
+         it at full size instead of a tiny box that grows on mount. */
+      body { min-width: 28rem; min-height: 12rem; margin: 0; background: #f1f5f9; }
+    </style>
   </head>
   <body>
     <div id="app"></div>

@@ -323,13 +323,13 @@ load();
                 id="model-input"
                 type="text"
                 bind:value={current.model}
-                class="min-h-10 flex-1 rounded-2xl border border-stone-300 bg-white px-4 text-sm text-stone-900"
+                class="min-h-10 min-w-0 flex-1 rounded-2xl border border-stone-300 bg-white px-4 text-sm text-stone-900"
               />
               {#if modelOptions.length > 0}
                 <select
                   aria-label={t('presets')}
                   onchange={(e) => { if (current) current.model = (e.target as HTMLSelectElement).value; }}
-                  class="min-h-10 rounded-2xl border border-stone-300 bg-white px-4 text-sm text-stone-700"
+                  class="min-h-10 min-w-0 shrink rounded-2xl border border-stone-300 bg-white px-4 text-sm text-stone-700 sm:max-w-40"
                 >
                   <option value="" disabled selected>{t('presets')}</option>
                   {#each modelOptions as preset}

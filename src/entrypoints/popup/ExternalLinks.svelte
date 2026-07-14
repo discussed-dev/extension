@@ -51,7 +51,7 @@ const submitLinks = $derived([
       href={link.href}
       target="_blank"
       rel="noopener noreferrer"
-      class="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-stone-200 bg-white px-2.5 text-[0.72rem] font-medium text-stone-700 transition-colors hover:border-stone-300 hover:text-stone-950"
+      class="inline-flex min-h-8 items-center gap-1.5 rounded-lg border border-stone-200 bg-white px-2.5 text-[0.72rem] font-medium text-stone-700 transition-colors hover:border-stone-300 hover:text-stone-950"
     >
       <PlatformMark platform={link.platform} sizeClass="size-3.5" />
       {link.label}
@@ -66,7 +66,7 @@ const submitLinks = $derived([
       href={link.href}
       target="_blank"
       rel="noopener noreferrer"
-      class="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-stone-200 bg-white px-2.5 text-[0.72rem] font-medium text-stone-700 transition-colors hover:border-stone-300 hover:text-stone-950"
+      class="inline-flex min-h-8 items-center gap-1.5 rounded-lg border border-stone-200 bg-white px-2.5 text-[0.72rem] font-medium text-stone-700 transition-colors hover:border-stone-300 hover:text-stone-950"
     >
       {#if link.icon === 'x'}
         <svg class="size-3" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

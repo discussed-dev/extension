@@ -189,7 +189,7 @@ load();
       <button
         type="button"
         onclick={save}
-        class="inline-flex min-h-10 items-center justify-center rounded-full bg-stone-900 px-5 text-sm font-medium text-white transition-colors hover:bg-stone-800"
+        class="inline-flex min-h-10 items-center justify-center rounded-lg bg-stone-900 px-5 text-sm font-medium text-white transition-colors hover:bg-stone-800"
       >
         {t('save')}
       </button>
@@ -197,7 +197,7 @@ load();
   </div>
 
   <div class="space-y-3">
-    <section class="rounded-[1.15rem] border border-stone-200 bg-white/95 p-3 shadow-sm">
+    <section class="rounded-xl border border-stone-200 bg-white/95 p-3 shadow-sm">
       <div>
         <p class="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">{t('basics')}</p>
         <h2 class="mt-1 text-base font-semibold tracking-tight text-stone-950">{t('coreControls')}</h2>
@@ -206,7 +206,7 @@ load();
       <div class="mt-3 grid gap-3 md:grid-cols-2">
         <section>
           <h3 class="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-stone-500">{t('sources')}</h3>
-          <div class="mt-2 overflow-hidden rounded-[0.95rem] border border-stone-200 bg-stone-50">
+          <div class="mt-2 overflow-hidden rounded-md border border-stone-200 bg-stone-50">
             <label class="flex items-start gap-3 px-3 py-2">
               <input type="checkbox" bind:checked={current.enableHn} class="mt-1 rounded border-stone-300" />
               <span>
@@ -235,7 +235,7 @@ load();
 
         <section>
           <h3 class="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-stone-500">{t('linkBehavior')}</h3>
-          <div class="mt-2 overflow-hidden rounded-[0.95rem] border border-stone-200 bg-stone-50">
+          <div class="mt-2 overflow-hidden rounded-md border border-stone-200 bg-stone-50">
             <label class="flex items-start gap-3 px-3 py-2">
               <input type="checkbox" bind:checked={current.openLinksInNewTab} class="mt-1 rounded border-stone-300" />
               <span>
@@ -256,7 +256,7 @@ load();
       </div>
     </section>
 
-    <section class="rounded-[1.15rem] border border-stone-200 bg-white/95 p-3 shadow-sm">
+    <section class="rounded-xl border border-stone-200 bg-white/95 p-3 shadow-sm">
       <div>
         <p class="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">{t('aiSummarization')}</p>
         <h2 class="mt-1 text-base font-semibold tracking-tight text-stone-950">{t('aiSetup')}</h2>
@@ -269,7 +269,7 @@ load();
             <select
               bind:value={current.selectedProvider}
               onchange={onProviderChange}
-              class="mt-2 min-h-10 w-full rounded-2xl border border-stone-300 bg-white px-4 text-sm text-stone-900"
+              class="mt-2 min-h-10 w-full rounded-lg border border-stone-300 bg-white px-4 text-sm text-stone-900"
             >
               {#each providerEntries as [key, config]}
                 <option value={key}>{config.label}</option>
@@ -284,7 +284,7 @@ load();
                 type="text"
                 bind:value={current.openaiBaseUrl}
                 placeholder="https://api.openai.com/v1"
-                class="mt-2 min-h-10 w-full rounded-2xl border border-stone-300 bg-white px-4 text-sm text-stone-900"
+                class="mt-2 min-h-10 w-full rounded-lg border border-stone-300 bg-white px-4 text-sm text-stone-900"
               />
             </label>
           {/if}
@@ -301,12 +301,12 @@ load();
                 aria-describedby="api-key-hint"
                 bind:value={current.apiKey}
                 placeholder={providerConfig?.keyPlaceholder ?? 'your-api-key'}
-                class="min-h-10 flex-1 rounded-2xl border border-stone-300 bg-white px-4 text-sm text-stone-900"
+                class="min-h-10 flex-1 rounded-lg border border-stone-300 bg-white px-4 text-sm text-stone-900"
               />
               <button
                 type="button"
                 onclick={testApiKey}
-                class="inline-flex min-h-10 items-center justify-center rounded-full border border-stone-300 bg-white px-5 text-sm font-medium text-stone-700 transition-colors hover:border-stone-400 hover:text-stone-950"
+                class="inline-flex min-h-10 items-center justify-center rounded-lg border border-stone-300 bg-white px-5 text-sm font-medium text-stone-700 transition-colors hover:border-stone-400 hover:text-stone-950"
               >
                 {t('testKey')}
               </button>
@@ -323,13 +323,13 @@ load();
                 id="model-input"
                 type="text"
                 bind:value={current.model}
-                class="min-h-10 min-w-0 flex-1 rounded-2xl border border-stone-300 bg-white px-4 text-sm text-stone-900"
+                class="min-h-10 min-w-0 flex-1 rounded-lg border border-stone-300 bg-white px-4 text-sm text-stone-900"
               />
               {#if modelOptions.length > 0}
                 <select
                   aria-label={t('presets')}
                   onchange={(e) => { if (current) current.model = (e.target as HTMLSelectElement).value; }}
-                  class="min-h-10 min-w-0 shrink rounded-2xl border border-stone-300 bg-white px-4 text-sm text-stone-700 sm:max-w-40"
+                  class="min-h-10 min-w-0 shrink rounded-lg border border-stone-300 bg-white px-4 text-sm text-stone-700 sm:max-w-40"
                 >
                   <option value="" disabled selected>{t('presets')}</option>
                   {#each modelOptions as preset}
@@ -348,13 +348,13 @@ load();
               bind:value={current.maxCommentsForSummary}
               min="10"
               max="100"
-              class="mt-2 min-h-10 w-full rounded-2xl border border-stone-300 bg-white px-4 text-sm text-stone-900"
+              class="mt-2 min-h-10 w-full rounded-lg border border-stone-300 bg-white px-4 text-sm text-stone-900"
             />
           </label>
 
           <label class="block">
             <span class="block text-sm font-medium text-stone-900">{t('summaryLanguage')}</span>
-            <select bind:value={current.summaryLanguage} class="mt-2 min-h-10 w-full rounded-2xl border border-stone-300 bg-white px-4 text-sm text-stone-900">
+            <select bind:value={current.summaryLanguage} class="mt-2 min-h-10 w-full rounded-lg border border-stone-300 bg-white px-4 text-sm text-stone-900">
               {#each LANGUAGE_OPTIONS as option}
                 <option value={option.value}>{option.label}</option>
               {/each}
@@ -364,7 +364,7 @@ load();
       </div>
     </section>
 
-    <section class="rounded-[1.15rem] border border-stone-200 bg-white/95 p-3 shadow-sm">
+    <section class="rounded-xl border border-stone-200 bg-white/95 p-3 shadow-sm">
       <div>
         <p class="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">{t('exportSection')}</p>
         <h2 class="mt-1 text-base font-semibold tracking-tight text-stone-950">{t('exportSection')}</h2>
@@ -377,13 +377,13 @@ load();
             type="text"
             bind:value={current.obsidianVault}
             placeholder="My Vault"
-            class="mt-2 min-h-10 w-full rounded-2xl border border-stone-300 bg-white px-4 text-sm text-stone-900"
+            class="mt-2 min-h-10 w-full rounded-lg border border-stone-300 bg-white px-4 text-sm text-stone-900"
           />
         </label>
       </div>
     </section>
 
-    <section class="rounded-[1.15rem] border border-stone-200 bg-white/95 p-3 shadow-sm">
+    <section class="rounded-xl border border-stone-200 bg-white/95 p-3 shadow-sm">
       <div class="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
         <div>
           <p class="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">{t('advanced')}</p>
@@ -393,7 +393,7 @@ load();
         <button
           type="button"
           onclick={() => { showAdvanced = !showAdvanced; }}
-          class="inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-stone-300 bg-white px-4 text-sm font-medium text-stone-700 transition-colors hover:border-stone-400 hover:text-stone-950"
+          class="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-stone-300 bg-white px-4 text-sm font-medium text-stone-700 transition-colors hover:border-stone-400 hover:text-stone-950"
           aria-expanded={showAdvanced}
           aria-controls="advanced-settings"
         >
@@ -411,7 +411,7 @@ load();
 
       {#if showAdvanced}
         <div id="advanced-settings" class="mt-3 grid gap-3 md:grid-cols-2">
-          <section class="rounded-[0.95rem] border border-stone-200 bg-stone-50 p-3">
+          <section class="rounded-md border border-stone-200 bg-stone-50 p-3">
             <h3 class="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-stone-500">{t('matching')}</h3>
             <div class="mt-2.5 space-y-2">
               <label class="flex items-start gap-3">
@@ -431,7 +431,7 @@ load();
             </div>
           </section>
 
-          <section class="rounded-[0.95rem] border border-stone-200 bg-stone-50 p-3">
+          <section class="rounded-md border border-stone-200 bg-stone-50 p-3">
             <h3 class="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-stone-500">{t('backgroundScanning')}</h3>
             <div class="mt-2.5 space-y-2">
               <label class="flex items-start gap-3">
@@ -451,13 +451,13 @@ load();
             </div>
           </section>
 
-          <section class="rounded-[0.95rem] border border-stone-200 bg-stone-50 p-3">
+          <section class="rounded-md border border-stone-200 bg-stone-50 p-3">
             <h3 class="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-stone-500">{t('badgeAndCache')}</h3>
             <div class="mt-2.5 space-y-3">
               <label class="block">
                 <span class="block text-sm font-medium text-stone-900">{t('badgeDisplay')}</span>
                 <span class="mt-0.5 block text-xs leading-5 text-stone-600">{t('badgeDisplayHint')}</span>
-                <select bind:value={current.badgeDisplay} class="mt-2 min-h-10 w-full rounded-2xl border border-stone-300 bg-white px-4 text-sm text-stone-900">
+                <select bind:value={current.badgeDisplay} class="mt-2 min-h-10 w-full rounded-lg border border-stone-300 bg-white px-4 text-sm text-stone-900">
                   <option value="discussions">{t('badgeTotalDiscussions')}</option>
                   <option value="comments">{t('badgeTotalComments')}</option>
                 </select>
@@ -471,19 +471,19 @@ load();
                   bind:value={current.cacheDurationMinutes}
                   min="1"
                   max="1440"
-                  class="mt-2 min-h-10 w-full rounded-2xl border border-stone-300 bg-white px-4 text-sm text-stone-900"
+                  class="mt-2 min-h-10 w-full rounded-lg border border-stone-300 bg-white px-4 text-sm text-stone-900"
                 />
               </label>
             </div>
           </section>
 
-          <section class="rounded-[0.95rem] border border-stone-200 bg-stone-50 p-3">
+          <section class="rounded-md border border-stone-200 bg-stone-50 p-3">
             <h3 class="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-stone-500">{t('domainFilter')}</h3>
             <div class="mt-2.5 space-y-3">
               <label class="block">
                 <span class="block text-sm font-medium text-stone-900">{t('filterMode')}</span>
                 <span class="mt-0.5 block text-xs leading-5 text-stone-600">{t('filterModeHint')}</span>
-                <select bind:value={current.blacklistMode} class="mt-2 min-h-10 w-full rounded-2xl border border-stone-300 bg-white px-4 text-sm text-stone-900">
+                <select bind:value={current.blacklistMode} class="mt-2 min-h-10 w-full rounded-lg border border-stone-300 bg-white px-4 text-sm text-stone-900">
                   <option value="blacklist">{t('filterModeBlacklist')}</option>
                   <option value="whitelist">{t('filterModeWhitelist')}</option>
                 </select>
@@ -502,7 +502,7 @@ load();
                     ? 'github.com\nnews.ycombinator.com\nlobste.rs'
                     : 'facebook.com\nreddit.com\ntwitter.com'}
                   rows="4"
-                  class="mt-2 w-full rounded-[1.25rem] border border-stone-300 bg-white px-4 py-3 text-sm leading-6 text-stone-900"
+                  class="mt-2 w-full rounded-xl border border-stone-300 bg-white px-4 py-3 text-sm leading-6 text-stone-900"
                 ></textarea>
               </label>
             </div>

@@ -42,7 +42,7 @@ const href = $derived(
   target="_blank"
   rel="noopener noreferrer"
   onclick={handleClick}
-  class="group flex min-w-0 items-start gap-2 rounded-[0.95rem] border border-stone-200 bg-white px-2.5 py-1.5 transition-colors hover:border-stone-300 hover:bg-stone-50"
+  class="group flex min-w-0 items-start gap-2 rounded-md border border-stone-200 bg-white px-2.5 py-1.5 transition-colors hover:border-stone-300 hover:bg-stone-50"
 >
   <div class="flex w-9 shrink-0 self-center flex-col items-center justify-center gap-1.5 text-center">
     <PlatformMark platform={discussion.platform} sizeClass="size-4" />

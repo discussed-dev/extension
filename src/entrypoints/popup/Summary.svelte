@@ -134,13 +134,13 @@ function renderMarkdown(text: string): string {
 
 <svelte:window onkeydown={handleWindowKeydown} />
 
-<div class="w-[28rem] overflow-hidden border border-stone-200/80 bg-white/95 text-stone-900 shadow-[0_18px_45px_rgba(15,23,42,0.08)] backdrop-blur-sm">
+<div class="w-[28rem] overflow-hidden border border-stone-200/80 bg-white/95 text-stone-900 shadow-lg backdrop-blur-sm">
   <div class="flex items-center justify-between gap-4 border-b border-stone-200/80 px-4 py-3">
     <div class="flex min-w-0 items-center gap-2">
       <button
         type="button"
         onclick={onBack}
-        class="inline-flex size-8.5 shrink-0 cursor-pointer items-center justify-center rounded-full border border-stone-200 bg-white text-stone-500 transition-colors hover:border-stone-300 hover:text-stone-900"
+        class="inline-flex size-8.5 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-stone-200 bg-white text-stone-500 transition-colors hover:border-stone-300 hover:text-stone-900"
         title={t('backToOverview')}
         aria-label={t('backToOverview')}
       >
@@ -159,7 +159,7 @@ function renderMarkdown(text: string): string {
         <button
           type="button"
           onclick={copyAsMarkdown}
-          class="inline-flex min-h-9 cursor-pointer items-center justify-center rounded-l-full border border-r-0 border-stone-200 bg-white px-3.5 text-sm font-medium text-stone-700 transition-colors hover:border-stone-300 hover:text-stone-950"
+          class="inline-flex min-h-9 cursor-pointer items-center justify-center rounded-l-lg border border-r-0 border-stone-200 bg-white px-3.5 text-sm font-medium text-stone-700 transition-colors hover:border-stone-300 hover:text-stone-950"
           title={t('copyMarkdown')}
         >
           {copied ? t('copied') : t('copy')}
@@ -168,7 +168,7 @@ function renderMarkdown(text: string): string {
           type="button"
           bind:this={exportToggle}
           onclick={() => { showExportMenu = !showExportMenu; }}
-          class="inline-flex min-h-9 cursor-pointer items-center justify-center rounded-r-full border border-stone-200 bg-white px-2 text-stone-500 transition-colors hover:border-stone-300 hover:text-stone-900"
+          class="inline-flex min-h-9 cursor-pointer items-center justify-center rounded-r-lg border border-stone-200 bg-white px-2 text-stone-500 transition-colors hover:border-stone-300 hover:text-stone-900"
           title={t('moreExportOptions')}
           aria-label={t('moreExportOptions')}
           aria-haspopup="true"
@@ -188,7 +188,7 @@ function renderMarkdown(text: string): string {
             aria-label={t('closeMenu')}
             onclick={closeExportMenu}
           ></button>
-          <div class="absolute right-0 top-full z-20 mt-1 min-w-44 overflow-hidden rounded-[0.85rem] border border-stone-200 bg-white shadow-lg">
+          <div class="absolute right-0 top-full z-20 mt-1 min-w-44 overflow-hidden rounded-md border border-stone-200 bg-white shadow-lg">
             <button
               type="button"
               bind:this={firstExportItem}
@@ -222,7 +222,7 @@ function renderMarkdown(text: string): string {
         type="button"
         onclick={onRegenerate}
         disabled={regenerating}
-        class="inline-flex min-h-9 cursor-pointer items-center justify-center rounded-full border border-stone-200 bg-white px-3.5 text-sm font-medium text-stone-700 transition-colors hover:border-stone-300 hover:text-stone-950 disabled:cursor-not-allowed disabled:opacity-50"
+        class="inline-flex min-h-9 cursor-pointer items-center justify-center rounded-lg border border-stone-200 bg-white px-3.5 text-sm font-medium text-stone-700 transition-colors hover:border-stone-300 hover:text-stone-950 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {regenerating ? t('generating') : t('regenerate')}
       </button>
@@ -230,7 +230,7 @@ function renderMarkdown(text: string): string {
   </div>
 
   <div class="max-h-[28rem] space-y-3 overflow-y-auto px-4 py-3">
-    <section class="rounded-[1.35rem] border border-stone-200 bg-stone-50 px-4 py-3">
+    <section class="rounded-xl border border-stone-200 bg-stone-50 px-4 py-3">
       <p class="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-stone-500">{t('verdict')}</p>
       <div class="mt-2 text-[0.95rem] font-medium leading-6 text-stone-900">
         {@html renderMarkdown(verdict)}
@@ -250,26 +250,26 @@ function renderMarkdown(text: string): string {
 
   <div class="flex flex-wrap items-center gap-2 border-t border-stone-200/80 px-4 py-3 text-xs text-stone-500">
     {#if platforms?.includes('hn')}
-      <span class="rounded-full border border-orange-200 bg-orange-50 px-2.5 py-1 text-orange-700">HN</span>
+      <span class="rounded-lg border border-orange-200 bg-orange-50 px-2.5 py-1 text-orange-700">HN</span>
     {/if}
     {#if platforms?.includes('reddit')}
-      <span class="rounded-full border border-orange-200 bg-orange-50 px-2.5 py-1 text-orange-700">Reddit</span>
+      <span class="rounded-lg border border-orange-200 bg-orange-50 px-2.5 py-1 text-orange-700">Reddit</span>
     {/if}
     {#if platforms?.includes('lobsters')}
-      <span class="rounded-full border border-red-200 bg-red-50 px-2.5 py-1 text-red-700">Lobsters</span>
+      <span class="rounded-lg border border-red-200 bg-red-50 px-2.5 py-1 text-red-700">Lobsters</span>
     {/if}
     {#if hasArticleContext}
-      <span class="rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-blue-700">{t('sourceArticle')}</span>
+      <span class="rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1 text-blue-700">{t('sourceArticle')}</span>
     {/if}
     {#if hasPageComments}
-      <span class="rounded-full border border-green-200 bg-green-50 px-2.5 py-1 text-green-700">{t('sourcePageComments')}</span>
+      <span class="rounded-lg border border-green-200 bg-green-50 px-2.5 py-1 text-green-700">{t('sourcePageComments')}</span>
     {/if}
-    <span class="rounded-full border border-stone-200 bg-stone-50 px-2.5 py-1">{model}</span>
-    <span class="rounded-full border border-stone-200 bg-stone-50 px-2.5 py-1">
+    <span class="rounded-lg border border-stone-200 bg-stone-50 px-2.5 py-1">{model}</span>
+    <span class="rounded-lg border border-stone-200 bg-stone-50 px-2.5 py-1">
       {new Date(createdAt).toLocaleDateString()}
     </span>
     {#if tokenInfo}
-      <span class="rounded-full border border-stone-200 bg-stone-50 px-2.5 py-1">{tokenInfo}</span>
+      <span class="rounded-lg border border-stone-200 bg-stone-50 px-2.5 py-1">{tokenInfo}</span>
     {/if}
   </div>
 </div>

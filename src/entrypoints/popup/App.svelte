@@ -305,7 +305,7 @@ load();
     platforms={[...new Set(discussions.map(d => d.platform))]}
   />
 {:else}
-  <main class="flex max-h-[42rem] w-[28rem] min-h-48 flex-col overflow-hidden border border-stone-200/80 bg-white/95 text-stone-900 shadow-[0_18px_45px_rgba(15,23,42,0.08)] backdrop-blur-sm">
+  <main class="flex max-h-[42rem] w-[28rem] min-h-48 flex-col overflow-hidden border border-stone-200/80 bg-white/95 text-stone-900 shadow-lg backdrop-blur-sm">
     <header class="flex items-center justify-between gap-3 border-b border-stone-200/80 px-4 py-2.5">
       <PopupBrand host={currentHost} />
 
@@ -313,7 +313,7 @@ load();
         <button
           type="button"
           onclick={refresh}
-          class="inline-flex size-8.5 cursor-pointer items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600 transition-colors hover:border-stone-300 hover:text-stone-950 disabled:cursor-not-allowed disabled:opacity-50"
+          class="inline-flex size-8.5 cursor-pointer items-center justify-center rounded-lg border border-stone-200 bg-white text-stone-600 transition-colors hover:border-stone-300 hover:text-stone-950 disabled:cursor-not-allowed disabled:opacity-50"
           aria-label={t('refreshScan')}
           title={t('refreshScan')}
           disabled={loading || refreshing}
@@ -325,7 +325,7 @@ load();
         <button
           type="button"
           onclick={() => browser.runtime.openOptionsPage()}
-          class="inline-flex size-8.5 cursor-pointer items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600 transition-colors hover:border-stone-300 hover:text-stone-950"
+          class="inline-flex size-8.5 cursor-pointer items-center justify-center rounded-lg border border-stone-200 bg-white text-stone-600 transition-colors hover:border-stone-300 hover:text-stone-950"
           aria-label={t('settings')}
           title={t('settings')}
         >
@@ -338,7 +338,7 @@ load();
 
     {#if loading}
       <div class="flex min-h-56 flex-col items-center justify-center gap-3 px-6 text-center" role="status" aria-live="polite">
-        <div class="size-9 animate-pulse rounded-full bg-stone-200"></div>
+        <div class="size-9 animate-pulse rounded-lg bg-stone-200"></div>
         <div>
           <p class="text-sm font-medium text-stone-800">{t('searching')}</p>
           <p class="mt-1 text-sm text-stone-500">{t('searchingHint')}</p>
@@ -346,13 +346,13 @@ load();
       </div>
     {:else if loadError}
       <section class="px-4 py-6">
-        <div class="rounded-[1.5rem] border border-dashed border-stone-300 bg-stone-50 px-4 py-5" role="status" aria-live="polite">
+        <div class="rounded-xl border border-dashed border-stone-300 bg-stone-50 px-4 py-5" role="status" aria-live="polite">
           <p class="text-sm leading-6 text-stone-700">{t('loadFailed')}</p>
           <div class="mt-4 flex flex-wrap gap-2">
             <button
               type="button"
               onclick={load}
-              class="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-full bg-stone-900 px-4 text-sm font-medium text-white transition-colors hover:bg-stone-800"
+              class="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-lg bg-stone-900 px-4 text-sm font-medium text-white transition-colors hover:bg-stone-800"
             >
               {t('scanAgain')}
             </button>
@@ -361,7 +361,7 @@ load();
       </section>
     {:else if blocked}
       <section class="px-4 py-6">
-        <div class="rounded-[1.5rem] border border-dashed border-stone-300 bg-stone-50 px-4 py-5">
+        <div class="rounded-xl border border-dashed border-stone-300 bg-stone-50 px-4 py-5">
           <p class="text-base font-semibold tracking-tight text-stone-950">{t('domainFiltered')}</p>
           <p class="mt-2 text-sm leading-6 text-stone-600">
             {userSettings?.blacklistMode === 'whitelist'
@@ -372,7 +372,7 @@ load();
             <button
               type="button"
               onclick={toggleBlock}
-              class="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-full bg-stone-900 px-4 text-sm font-medium text-white transition-colors hover:bg-stone-800"
+              class="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-lg bg-stone-900 px-4 text-sm font-medium text-white transition-colors hover:bg-stone-800"
             >
               {t('unblockDomain', currentHost)}
             </button>
@@ -381,7 +381,7 @@ load();
       </section>
     {:else if discussions.length === 0}
       <section class="px-4 py-6">
-        <div class="rounded-[1.5rem] border border-dashed border-stone-300 bg-stone-50 px-4 py-5">
+        <div class="rounded-xl border border-dashed border-stone-300 bg-stone-50 px-4 py-5">
           {#if unavailable.length > 0}
             <p class="text-base font-semibold tracking-tight text-stone-950">{t('sourceUnavailable', unavailableLabel)}</p>
             <p class="mt-2 text-sm leading-6 text-stone-600">
@@ -397,7 +397,7 @@ load();
             <button
               type="button"
               onclick={refresh}
-              class="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-full bg-stone-900 px-4 text-sm font-medium text-white transition-colors hover:bg-stone-800"
+              class="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-lg bg-stone-900 px-4 text-sm font-medium text-white transition-colors hover:bg-stone-800"
             >
               {t('scanAgain')}
             </button>
@@ -454,7 +454,7 @@ load();
       <div class="shrink-0 border-t border-stone-200 bg-stone-50/80 px-4 py-2">
 
         {#if summaryError}
-          <p class="mb-3 rounded-2xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700" role="status" aria-live="polite">
+          <p class="mb-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700" role="status" aria-live="polite">
             {summaryError}
           </p>
         {/if}
@@ -463,7 +463,7 @@ load();
           <button
             type="button"
             onclick={() => { view = 'summary'; }}
-            class="inline-flex min-h-9 w-full cursor-pointer items-center justify-center rounded-full bg-stone-900 px-4 text-sm font-medium text-white transition-colors hover:bg-stone-800"
+            class="inline-flex min-h-9 w-full cursor-pointer items-center justify-center rounded-lg bg-stone-900 px-4 text-sm font-medium text-white transition-colors hover:bg-stone-800"
           >
             {t('viewSummary')}
           </button>
@@ -472,7 +472,7 @@ load();
             type="button"
             onclick={hasApiKey ? () => doSummarize() : () => browser.runtime.openOptionsPage()}
             disabled={summarizing}
-            class="inline-flex min-h-9 w-full cursor-pointer items-center justify-center rounded-full px-4 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60
+            class="inline-flex min-h-9 w-full cursor-pointer items-center justify-center rounded-lg px-4 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60
               {hasApiKey ? 'bg-stone-900 text-white hover:bg-stone-800' : 'bg-stone-200 text-stone-500'}"
           >
             {summarizing ? t('summarizing') : hasApiKey ? t('summarizeAll') : t('openAiSettings')}

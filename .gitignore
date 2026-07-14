@@ -44,3 +44,4 @@ logos/preview.html
 *.njsproj
 *.sln
 *.sw?
+.playwright-mcp/

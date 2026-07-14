@@ -8,8 +8,7 @@
 html,
 body {
 	margin: 0;
-	background: radial-gradient(circle at top, rgba(218, 228, 247, 0.9), transparent 48%),
-		linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+	background: #f4f5f7;
 	font-family: inherit;
 	font-kerning: normal;
 	text-rendering: optimizeLegibility;

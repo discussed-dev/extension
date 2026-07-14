@@ -5,6 +5,8 @@ import { PROVIDERS, type Settings, settings } from '@/lib/settings';
 
 type StatusTone = 'neutral' | 'success' | 'error';
 
+const version = browser.runtime.getManifest().version;
+
 const LANGUAGE_OPTIONS = [
 	{ value: 'en', label: 'English' },
 	{ value: 'Chinese', label: 'Chinese (中文)' },
@@ -173,10 +175,10 @@ load();
 </script>
 
 {#if current}
-<div class="min-h-screen px-2 py-3 text-stone-900 sm:px-4">
+<div class="mx-auto min-h-screen max-w-3xl px-2 py-3 text-stone-900 sm:px-4">
   <div class="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
     <header class="min-w-0">
-      <p class="text-xs font-semibold uppercase tracking-[0.24em] text-stone-500">Discussed</p>
+      <p class="text-xs font-semibold uppercase tracking-[0.24em] text-stone-500">Discussed <span class="font-normal normal-case tracking-normal text-stone-400">v{version}</span></p>
       <h1 class="mt-1 text-xl font-semibold tracking-tight text-stone-950">{t('settings')}</h1>
     </header>
 
@@ -289,12 +291,14 @@ load();
 
           <div>
             <div class="block">
-              <span class="block text-sm font-medium text-stone-900">{t('apiKey')}</span>
-              <span class="mt-0.5 block text-xs leading-5 text-stone-600">{t('apiKeyHint')}</span>
+              <label for="api-key-input" class="block text-sm font-medium text-stone-900">{t('apiKey')}</label>
+              <span id="api-key-hint" class="mt-0.5 block text-xs leading-5 text-stone-600">{t('apiKeyHint')}</span>
             </div>
             <div class="mt-2 flex flex-col gap-2.5 sm:flex-row">
               <input
+                id="api-key-input"
                 type="password"
+                aria-describedby="api-key-hint"
                 bind:value={current.apiKey}
                 placeholder={providerConfig?.keyPlaceholder ?? 'your-api-key'}
                 class="min-h-10 flex-1 rounded-2xl border border-stone-300 bg-white px-4 text-sm text-stone-900"
@@ -312,16 +316,18 @@ load();
         </section>
 
         <section class="space-y-3">
-          <label class="block">
-            <span class="block text-sm font-medium text-stone-900">{t('model')}</span>
+          <div class="block">
+            <label for="model-input" class="block text-sm font-medium text-stone-900">{t('model')}</label>
             <div class="mt-2 flex flex-col gap-2.5 sm:flex-row">
               <input
+                id="model-input"
                 type="text"
                 bind:value={current.model}
                 class="min-h-10 flex-1 rounded-2xl border border-stone-300 bg-white px-4 text-sm text-stone-900"
               />
               {#if modelOptions.length > 0}
                 <select
+                  aria-label={t('presets')}
                   onchange={(e) => { if (current) current.model = (e.target as HTMLSelectElement).value; }}
                   class="min-h-10 rounded-2xl border border-stone-300 bg-white px-4 text-sm text-stone-700"
                 >
@@ -333,7 +339,7 @@ load();
               {/if}
             </div>
             <p class="mt-1 text-xs text-stone-500">{t('modelHint')}</p>
-          </label>
+          </div>
 
           <label class="block">
             <span class="block text-sm font-medium text-stone-900">{t('maxCommentsPerSummary')}</span>
@@ -389,6 +395,7 @@ load();
           onclick={() => { showAdvanced = !showAdvanced; }}
           class="inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-stone-300 bg-white px-4 text-sm font-medium text-stone-700 transition-colors hover:border-stone-400 hover:text-stone-950"
           aria-expanded={showAdvanced}
+          aria-controls="advanced-settings"
         >
           <span>{showAdvanced ? t('hideAdvancedSettings') : t('showAdvancedSettings')}</span>
           <svg
@@ -403,7 +410,7 @@ load();
       </div>
 
       {#if showAdvanced}
-        <div class="mt-3 grid gap-3 md:grid-cols-2">
+        <div id="advanced-settings" class="mt-3 grid gap-3 md:grid-cols-2">
           <section class="rounded-[0.95rem] border border-stone-200 bg-stone-50 p-3">
             <h3 class="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-stone-500">{t('matching')}</h3>
             <div class="mt-2.5 space-y-2">

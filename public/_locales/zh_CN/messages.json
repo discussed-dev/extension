@@ -453,5 +453,6 @@
 	},
 	"thisPage": {
 		"message": "此页面"
-	}
+	},
+	"loadFailed": { "message": "无法加载讨论，请重试。" }
 }

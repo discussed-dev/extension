@@ -453,5 +453,6 @@
 	},
 	"thisPage": {
 		"message": "esta página"
-	}
+	},
+	"loadFailed": { "message": "No se pudieron cargar las discusiones. Inténtalo de nuevo." }
 }

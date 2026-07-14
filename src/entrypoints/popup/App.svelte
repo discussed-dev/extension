@@ -26,6 +26,8 @@ const PLATFORM_LABELS: Record<Platform, string> = {
 
 let discussions = $state<Discussion[]>([]);
 let loading = $state(true);
+let refreshing = $state(false);
+let loadError = $state(false);
 let blocked = $state(false);
 let currentUrl = $state('');
 let currentTitle = $state('');
@@ -41,6 +43,7 @@ let resolved = $state<ResolvedDiscussion | null>(null);
 
 async function load() {
 	loading = true;
+	loadError = false;
 	try {
 		const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
 		if (!tab?.url) return;
@@ -90,6 +93,7 @@ async function load() {
 		if (cached) summaryResult = cached;
 	} catch (e) {
 		console.error('[discussed] popup load error:', e);
+		loadError = true;
 	} finally {
 		loading = false;
 	}
@@ -97,7 +101,8 @@ async function load() {
 
 async function refresh() {
 	if (!currentUrl || currentTabId == null) return;
-	loading = true;
+	refreshing = true;
+	loadError = false;
 	try {
 		const currentSettings = userSettings ?? (await settings.getValue());
 		userSettings = currentSettings;
@@ -132,8 +137,10 @@ async function refresh() {
 			discussions,
 			currentSettings.badgeDisplay,
 		);
+	} catch (e) {
+		console.error('[discussed] popup refresh error:', e);
 	} finally {
-		loading = false;
+		refreshing = false;
 	}
 }
 
@@ -296,9 +303,9 @@ load();
           class="inline-flex size-8.5 cursor-pointer items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600 transition-colors hover:border-stone-300 hover:text-stone-950 disabled:cursor-not-allowed disabled:opacity-50"
           aria-label={t('refreshScan')}
           title={t('refreshScan')}
-          disabled={loading}
+          disabled={loading || refreshing}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-3.5">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-3.5 {refreshing ? 'animate-spin' : ''}">
             <path fill-rule="evenodd" d="M13.836 2.477a.75.75 0 0 1 .75.75v3.182a.75.75 0 0 1-.75.75h-3.182a.75.75 0 0 1 0-1.5h1.37l-.84-.841a4.5 4.5 0 0 0-7.08.681.75.75 0 0 1-1.3-.75 6 6 0 0 1 9.44-.908l.84.84V3.227a.75.75 0 0 1 .75-.75Zm-.911 7.5A.75.75 0 0 1 13.199 11a6 6 0 0 1-9.44.908l-.84-.84v1.546a.75.75 0 0 1-1.5 0V9.432a.75.75 0 0 1 .75-.75h3.182a.75.75 0 0 1 0 1.5H3.98l.841.841a4.5 4.5 0 0 0 7.08-.681.75.75 0 0 1 1.025-.274Z" clip-rule="evenodd" />
           </svg>
         </button>
@@ -324,6 +331,21 @@ load();
           <p class="mt-1 text-sm text-stone-500">{t('searchingHint')}</p>
         </div>
       </div>
+    {:else if loadError}
+      <section class="px-4 py-6">
+        <div class="rounded-[1.5rem] border border-dashed border-stone-300 bg-stone-50 px-4 py-5" role="status" aria-live="polite">
+          <p class="text-sm leading-6 text-stone-700">{t('loadFailed')}</p>
+          <div class="mt-4 flex flex-wrap gap-2">
+            <button
+              type="button"
+              onclick={load}
+              class="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-full bg-stone-900 px-4 text-sm font-medium text-white transition-colors hover:bg-stone-800"
+            >
+              {t('scanAgain')}
+            </button>
+          </div>
+        </div>
+      </section>
     {:else if blocked}
       <section class="px-4 py-6">
         <div class="rounded-[1.5rem] border border-dashed border-stone-300 bg-stone-50 px-4 py-5">

@@ -1,5 +1,6 @@
 <script lang="ts">
 import { t } from '@/lib/i18n';
+import { shouldNavigateCurrentTab } from '@/lib/link';
 import type { Discussion } from '@/lib/types';
 import PlatformMark from './PlatformMark.svelte';
 
@@ -10,6 +11,14 @@ interface Props {
 }
 
 let { discussion, useOldReddit = false, openInNewTab = true }: Props = $props();
+
+function handleClick(event: MouseEvent) {
+	if (!shouldNavigateCurrentTab(openInNewTab, event)) return;
+	// A popup _self link would replace the popup UI; navigate the real tab instead.
+	event.preventDefault();
+	browser.tabs.update({ url: href });
+	window.close();
+}
 
 function timeAgo(iso: string): string {
 	const seconds = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
@@ -30,8 +39,9 @@ const href = $derived(
 
 <a
   {href}
-  target={openInNewTab ? '_blank' : '_self'}
+  target="_blank"
   rel="noopener noreferrer"
+  onclick={handleClick}
   class="group flex min-w-0 items-start gap-2 rounded-[0.95rem] border border-stone-200 bg-white px-2.5 py-1.5 transition-colors hover:border-stone-300 hover:bg-stone-50"
 >
   <div class="flex w-9 shrink-0 self-center flex-col items-center justify-center gap-1.5 text-center">

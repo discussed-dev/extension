@@ -48,6 +48,21 @@ let {
 
 let copied = $state(false);
 let showExportMenu = $state(false);
+let exportToggle = $state<HTMLButtonElement | null>(null);
+let firstExportItem = $state<HTMLButtonElement | null>(null);
+
+function closeExportMenu() {
+	showExportMenu = false;
+	exportToggle?.focus();
+}
+
+function handleWindowKeydown(event: KeyboardEvent) {
+	if (showExportMenu && event.key === 'Escape') closeExportMenu();
+}
+
+$effect(() => {
+	if (showExportMenu) firstExportItem?.focus();
+});
 
 const tokenInfo = $derived(
 	usage ? t('tokensUsed', (usage.inputTokens + usage.outputTokens).toLocaleString()) : '',
@@ -117,6 +132,8 @@ function renderMarkdown(text: string): string {
 }
 </script>
 
+<svelte:window onkeydown={handleWindowKeydown} />
+
 <div class="w-[28rem] overflow-hidden border border-stone-200/80 bg-white/95 text-stone-900 shadow-[0_18px_45px_rgba(15,23,42,0.08)] backdrop-blur-sm">
   <div class="flex items-center justify-between gap-4 border-b border-stone-200/80 px-4 py-3">
     <div class="flex min-w-0 items-center gap-2">
@@ -149,10 +166,12 @@ function renderMarkdown(text: string): string {
         </button>
         <button
           type="button"
+          bind:this={exportToggle}
           onclick={() => { showExportMenu = !showExportMenu; }}
           class="inline-flex min-h-9 cursor-pointer items-center justify-center rounded-r-full border border-stone-200 bg-white px-2 text-stone-500 transition-colors hover:border-stone-300 hover:text-stone-900"
           title={t('moreExportOptions')}
           aria-label={t('moreExportOptions')}
+          aria-haspopup="true"
           aria-expanded={showExportMenu}
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-3.5">
@@ -161,16 +180,18 @@ function renderMarkdown(text: string): string {
         </button>
 
         {#if showExportMenu}
-          <!-- Backdrop to close menu on outside click -->
+          <!-- Backdrop to close menu on outside click; kept out of the tab order. -->
           <button
             type="button"
+            tabindex="-1"
             class="fixed inset-0 z-10 cursor-default"
             aria-label={t('closeMenu')}
-            onclick={() => { showExportMenu = false; }}
+            onclick={closeExportMenu}
           ></button>
           <div class="absolute right-0 top-full z-20 mt-1 min-w-44 overflow-hidden rounded-[0.85rem] border border-stone-200 bg-white shadow-lg">
             <button
               type="button"
+              bind:this={firstExportItem}
               onclick={copyAsMarkdown}
               class="flex w-full cursor-pointer items-center px-3.5 py-2 text-left text-sm text-stone-700 transition-colors hover:bg-stone-50 hover:text-stone-950"
             >

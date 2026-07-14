@@ -18,7 +18,7 @@ import type { Discussion, Platform } from './types';
 
 const SUMMARY_CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 const ARTICLE_TOKEN_BUDGET = 2000;
-const MAX_THREADS_FOR_COMMENTS = 5;
+const MAX_THREADS_FOR_COMMENTS = 8;
 const MAX_HN_COMMENTS_PER_THREAD = 200;
 
 export interface SummaryResult {
@@ -44,7 +44,7 @@ function extractPermalink(redditUrl: string): string {
 	}
 }
 
-function selectTopThreads(discussions: Discussion[]): Discussion[] {
+export function selectTopThreads(discussions: Discussion[]): Discussion[] {
 	return [...discussions]
 		.sort((a, b) => b.commentCount - a.commentCount)
 		.slice(0, MAX_THREADS_FOR_COMMENTS);

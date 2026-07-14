@@ -62,8 +62,8 @@ const DEFAULTS: Settings = {
 	selectedProvider: 'anthropic',
 	llmProvider: 'anthropic',
 	apiKey: '',
-	model: 'claude-sonnet-4-6',
-	maxCommentsForSummary: 25,
+	model: 'claude-sonnet-5',
+	maxCommentsForSummary: 75,
 	summaryLanguage: 'en',
 	openaiBaseUrl: 'https://api.openai.com/v1',
 
@@ -87,9 +87,9 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 		apiFormat: 'anthropic',
 		keyPlaceholder: 'sk-ant-...',
 		models: [
-			{ id: 'claude-sonnet-4-6', label: 'Claude Sonnet 4.6', cost: '$$' },
+			{ id: 'claude-sonnet-5', label: 'Claude Sonnet 5', cost: '$$' },
 			{ id: 'claude-haiku-4-5', label: 'Claude Haiku 4.5', cost: '$' },
-			{ id: 'claude-opus-4-7', label: 'Claude Opus 4.7', cost: '$$$' },
+			{ id: 'claude-opus-4-8', label: 'Claude Opus 4.8', cost: '$$$' },
 		],
 	},
 	openai: {

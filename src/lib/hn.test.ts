@@ -66,17 +66,15 @@ describe('searchHn', () => {
 		expect(results).toEqual([]);
 	});
 
-	it('returns empty array on fetch failure', async () => {
+	it('throws on fetch failure so the source is marked unavailable', async () => {
 		mockFetch.mockResolvedValueOnce({ ok: false, status: 500 });
 
-		const results = await searchHn('https://example.com');
-		expect(results).toEqual([]);
+		await expect(searchHn('https://example.com')).rejects.toThrow();
 	});
 
-	it('returns empty array on network error', async () => {
+	it('throws on network error so the source is marked unavailable', async () => {
 		mockFetch.mockRejectedValueOnce(new Error('Network error'));
 
-		const results = await searchHn('https://example.com');
-		expect(results).toEqual([]);
+		await expect(searchHn('https://example.com')).rejects.toThrow();
 	});
 });

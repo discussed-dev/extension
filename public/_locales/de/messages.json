@@ -454,5 +454,10 @@
 	"thisPage": {
 		"message": "diese Seite"
 	},
-	"loadFailed": { "message": "Diskussionen konnten nicht geladen werden. Bitte erneut versuchen." }
+	"loadFailed": { "message": "Diskussionen konnten nicht geladen werden. Bitte erneut versuchen." },
+	"sourceUnavailable": {
+		"message": "$SOURCE$ konnte nicht erreicht werden",
+		"placeholders": { "SOURCE": { "content": "$1" } }
+	},
+	"sourceUnavailableHint": { "message": "Überprüfe deine Verbindung und scanne erneut." }
 }

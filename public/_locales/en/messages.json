@@ -454,5 +454,10 @@
 	"thisPage": {
 		"message": "this page"
 	},
-	"loadFailed": { "message": "Couldn't load discussions. Try again." }
+	"loadFailed": { "message": "Couldn't load discussions. Try again." },
+	"sourceUnavailable": {
+		"message": "$SOURCE$ couldn't be reached",
+		"placeholders": { "SOURCE": { "content": "$1" } }
+	},
+	"sourceUnavailableHint": { "message": "Check your connection and scan again." }
 }

@@ -454,5 +454,10 @@
 	"thisPage": {
 		"message": "此页面"
 	},
-	"loadFailed": { "message": "无法加载讨论，请重试。" }
+	"loadFailed": { "message": "无法加载讨论，请重试。" },
+	"sourceUnavailable": {
+		"message": "无法连接 $SOURCE$",
+		"placeholders": { "SOURCE": { "content": "$1" } }
+	},
+	"sourceUnavailableHint": { "message": "请检查网络连接后重新扫描。" }
 }

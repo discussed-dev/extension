@@ -13,32 +13,30 @@ interface LobstersStory {
 }
 
 export async function searchLobsters(url: string): Promise<Discussion[]> {
-	try {
-		const { hostname } = new URL(url);
-		const response = await fetch(`https://lobste.rs/domains/${hostname}.json`);
-		if (!response.ok) return [];
+	const { hostname } = new URL(url);
+	const response = await fetch(`https://lobste.rs/domains/${hostname}.json`);
+	// 404 means the domain simply has no submissions — checked, nothing found.
+	if (response.status === 404) return [];
+	if (!response.ok) throw new Error(`Lobsters search failed: ${response.status}`);
 
-		const stories: LobstersStory[] = await response.json();
-		const normalizedTarget = normalizeUrl(url);
+	const stories: LobstersStory[] = await response.json();
+	const normalizedTarget = normalizeUrl(url);
 
-		return stories
-			.filter((story) => {
-				try {
-					return normalizeUrl(story.url) === normalizedTarget;
-				} catch {
-					return false;
-				}
-			})
-			.map((story) => ({
-				platform: 'lobsters' as const,
-				title: story.title,
-				url: story.comments_url,
-				points: story.score,
-				commentCount: story.comment_count,
-				createdAt: new Date(story.created_at).toISOString(),
-				externalId: story.short_id,
-			}));
-	} catch {
-		return [];
-	}
+	return stories
+		.filter((story) => {
+			try {
+				return normalizeUrl(story.url) === normalizedTarget;
+			} catch {
+				return false;
+			}
+		})
+		.map((story) => ({
+			platform: 'lobsters' as const,
+			title: story.title,
+			url: story.comments_url,
+			points: story.score,
+			commentCount: story.comment_count,
+			createdAt: new Date(story.created_at).toISOString(),
+			externalId: story.short_id,
+		}));
 }

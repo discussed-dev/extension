@@ -60,18 +60,23 @@ describe('searchLobsters', () => {
 		expect(results).toEqual([]);
 	});
 
-	it('returns empty array on fetch failure', async () => {
+	it('returns empty array when the domain has no submissions (404)', async () => {
 		mockFetch.mockResolvedValueOnce({ ok: false, status: 404 });
 
 		const results = await searchLobsters('https://example.com');
 		expect(results).toEqual([]);
 	});
 
-	it('returns empty array on network error', async () => {
+	it('throws on server error so the source is marked unavailable', async () => {
+		mockFetch.mockResolvedValueOnce({ ok: false, status: 503 });
+
+		await expect(searchLobsters('https://example.com')).rejects.toThrow();
+	});
+
+	it('throws on network error so the source is marked unavailable', async () => {
 		mockFetch.mockRejectedValueOnce(new Error('Network error'));
 
-		const results = await searchLobsters('https://example.com');
-		expect(results).toEqual([]);
+		await expect(searchLobsters('https://example.com')).rejects.toThrow();
 	});
 
 	it('filters out stories with non-matching URLs', async () => {

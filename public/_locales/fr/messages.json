@@ -454,5 +454,10 @@
 	"thisPage": {
 		"message": "cette page"
 	},
-	"loadFailed": { "message": "Impossible de charger les discussions. Réessayez." }
+	"loadFailed": { "message": "Impossible de charger les discussions. Réessayez." },
+	"sourceUnavailable": {
+		"message": "Impossible de joindre $SOURCE$",
+		"placeholders": { "SOURCE": { "content": "$1" } }
+	},
+	"sourceUnavailableHint": { "message": "Vérifiez votre connexion et relancez l'analyse." }
 }

@@ -454,5 +454,10 @@
 	"thisPage": {
 		"message": "このページ"
 	},
-	"loadFailed": { "message": "ディスカッションを読み込めませんでした。もう一度お試しください。" }
+	"loadFailed": { "message": "ディスカッションを読み込めませんでした。もう一度お試しください。" },
+	"sourceUnavailable": {
+		"message": "$SOURCE$ に接続できませんでした",
+		"placeholders": { "SOURCE": { "content": "$1" } }
+	},
+	"sourceUnavailableHint": { "message": "接続を確認して再スキャンしてください。" }
 }

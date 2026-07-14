@@ -454,5 +454,10 @@
 	"thisPage": {
 		"message": "esta página"
 	},
-	"loadFailed": { "message": "No se pudieron cargar las discusiones. Inténtalo de nuevo." }
+	"loadFailed": { "message": "No se pudieron cargar las discusiones. Inténtalo de nuevo." },
+	"sourceUnavailable": {
+		"message": "No se pudo conectar con $SOURCE$",
+		"placeholders": { "SOURCE": { "content": "$1" } }
+	},
+	"sourceUnavailableHint": { "message": "Comprueba tu conexión y vuelve a escanear." }
 }

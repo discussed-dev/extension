@@ -15,8 +15,8 @@ let { platform, sizeClass = 'size-4' }: Props = $props();
     Y
   </span>
 {:else if platform === 'reddit'}
-  <span class="inline-flex items-center justify-center overflow-hidden rounded-lg bg-[#ff4500] {sizeClass}">
-    <img src={redditFavicon} alt="" class="block h-full w-full rounded-lg object-cover" loading="eager" decoding="async" />
+  <span class="inline-flex items-center justify-center overflow-hidden rounded-md bg-[#ff4500] {sizeClass}">
+    <img src={redditFavicon} alt="" class="block h-full w-full rounded-md object-cover" loading="eager" decoding="async" />
   </span>
 {:else}
   <span class="inline-flex items-center justify-center rounded-sm bg-[#d94b43]/12 text-[0.6rem] font-bold leading-none text-[#d94b43] {sizeClass}">

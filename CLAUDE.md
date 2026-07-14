@@ -91,14 +91,15 @@ The `PROVIDERS` map in `src/lib/settings.ts` ships hard-coded model IDs per prov
 
 When asked to release or bump version:
 
-1. `bun run test` — all tests must pass
-2. `bun run lint` — must be clean
-3. For minor/major bumps: run the LLM Model Lineup Freshness check above
-4. Bump `version` in `package.json` (patch/minor/major as specified)
-5. `bun run build` — production build must succeed
-6. Commit: `Bump version to X.Y.Z`
-7. `git tag vX.Y.Z`
-8. `git push && git push --tags`
+1. **`git fetch origin` and confirm local `main` is not behind/diverged** (`git log --oneline HEAD..origin/main` must be empty). The session's working copy can be a stale snapshot; bumping on a stale base and pushing the tag creates a diverged release. If diverged, reconcile with `origin/main` first — never bump on a stale base.
+2. `bun run test` — all tests must pass
+3. `bun run lint` — must be clean
+4. For minor/major bumps: run the LLM Model Lineup Freshness check above
+5. Bump `version` in `package.json` (patch/minor/major as specified)
+6. `bun run build` — production build must succeed
+7. Commit: `Bump version to X.Y.Z`
+8. `git tag vX.Y.Z`
+9. `git push && git push --tags`
 
 The tag push triggers `.github/workflows/release.yml`, which auto-creates the GitHub Release and submits to stores (see below). No manual `gh release create` needed.
 

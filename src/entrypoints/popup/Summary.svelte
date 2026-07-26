@@ -1,9 +1,11 @@
 <script lang="ts">
 import { buildObsidianUri, formatMarkdownExport, formatPlainTextExport } from '@/lib/export';
+import { type Citation, citationIndices, segmentSummary } from '@/lib/grounding';
 import { t } from '@/lib/i18n';
 import type { TokenUsage } from '@/lib/llm';
 import { renderMarkdown } from '@/lib/markdown';
 import type { Platform } from '@/lib/types';
+import CiteChip from './CiteChip.svelte';
 
 interface DiscussionExport {
 	platform: Platform;
@@ -18,6 +20,8 @@ interface Props {
 	model: string;
 	createdAt: string;
 	usage?: TokenUsage;
+	/** Absent on summaries cached before v0.5 — every ref is then stripped. */
+	citations?: Citation[];
 	pageTitle: string;
 	pageUrl: string;
 	discussions: DiscussionExport[];
@@ -35,6 +39,7 @@ let {
 	model,
 	createdAt,
 	usage,
+	citations,
 	pageTitle,
 	pageUrl,
 	discussions,
@@ -111,8 +116,16 @@ const blocks = $derived(
 		.filter(Boolean),
 );
 
-const verdict = $derived(blocks[0] ?? summary.trim());
-const supportingBlocks = $derived(blocks.slice(1));
+// Refs are tokenized before markdown on both render paths. This is a spec
+// requirement, not an implementation detail: the link regex happens not to
+// swallow a ref token, but that is luck, not design.
+// One numbering across the whole summary, so a chip in the second paragraph
+// doesn't restart at 1 and so export footnotes carry the same numbers.
+const indices = $derived(citationIndices(summary, citations));
+const verdict = $derived(segmentSummary(blocks[0] ?? summary.trim(), citations, indices));
+const supportingBlocks = $derived(
+	blocks.slice(1).map((block) => segmentSummary(block, citations, indices)),
+);
 </script>
 
 <svelte:window onkeydown={handleWindowKeydown} />
@@ -216,7 +229,9 @@ const supportingBlocks = $derived(blocks.slice(1));
     <section class="rounded-md border border-stone-200 bg-stone-50 px-4 py-3">
       <p class="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-stone-500">{t('verdict')}</p>
       <div class="mt-2 text-[0.95rem] font-medium leading-6 text-stone-900">
-        {@html renderMarkdown(verdict)}
+        {#each verdict as seg}
+          {#if seg.kind === 'text'}{@html renderMarkdown(seg.text)}{:else}<CiteChip citation={seg.citation} index={seg.index} />{/if}
+        {/each}
       </div>
     </section>
 
@@ -224,7 +239,9 @@ const supportingBlocks = $derived(blocks.slice(1));
       <section class="space-y-3">
         {#each supportingBlocks as block}
           <p class="text-sm leading-6 text-stone-700">
-            {@html renderMarkdown(block)}
+            {#each block as seg}
+              {#if seg.kind === 'text'}{@html renderMarkdown(seg.text)}{:else}<CiteChip citation={seg.citation} index={seg.index} />{/if}
+            {/each}
           </p>
         {/each}
       </section>

@@ -125,13 +125,23 @@ export function stripRefs(text: string): string {
  *
  * `citations` is optional because pre-v0.5 cache entries carry none — that case
  * strips every ref, which is the same degradation path as a non-compliant model.
+ *
+ * Pass `indices` from `citationIndices` when rendering a summary block by block,
+ * so numbering runs across the whole summary instead of restarting per block.
+ * This function is the only place display numbers are assigned; export renders
+ * these same segments as footnotes rather than running its own pass, or chip and
+ * footnote numbering would drift apart.
  */
-export function segmentSummary(text: string, citations: Citation[] = []): SummarySegment[] {
+export function segmentSummary(
+	text: string,
+	citations: Citation[] = [],
+	indices?: Map<string, number>,
+): SummarySegment[] {
 	const byRef = new Map(citations.map((c) => [c.ref, c]));
 	const cleaned = removeRefsWhere(text, (ref) => byRef.has(ref));
 
 	const segments: SummarySegment[] = [];
-	const indices = new Map<string, number>();
+	const numbering = indices ?? new Map<string, number>();
 	let cursor = 0;
 	let buffer = '';
 
@@ -152,10 +162,10 @@ export function segmentSummary(text: string, citations: Citation[] = []): Summar
 		cursor = start + full.length;
 		flush();
 
-		let index = indices.get(citation.ref);
+		let index = numbering.get(citation.ref);
 		if (index === undefined) {
-			index = indices.size + 1;
-			indices.set(citation.ref, index);
+			index = numbering.size + 1;
+			numbering.set(citation.ref, index);
 		}
 		segments.push({ kind: 'cite', citation, index });
 	}
@@ -172,6 +182,19 @@ export function segmentSummary(text: string, citations: Citation[] = []): Summar
  * is never looked up when rendering, so storing the full sampled set would inflate
  * every cache entry roughly 20x for no visible difference.
  */
+/**
+ * Display number for each referenced ref, numbered across the whole summary.
+ * Callers that render a summary in pieces — the popup splits it into blocks,
+ * export splices it into a document — share one map so the numbers agree.
+ */
+export function citationIndices(text: string, citations: Citation[] = []): Map<string, number> {
+	const indices = new Map<string, number>();
+	for (const citation of usedCitations(text, citations)) {
+		indices.set(citation.ref, indices.size + 1);
+	}
+	return indices;
+}
+
 export function usedCitations(text: string, citations: Citation[]): Citation[] {
 	const used = new Map<string, Citation>();
 	for (const segment of segmentSummary(text, citations)) {

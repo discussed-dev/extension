@@ -459,5 +459,11 @@
 		"message": "Impossible de joindre $SOURCE$",
 		"placeholders": { "SOURCE": { "content": "$1" } }
 	},
-	"sourceUnavailableHint": { "message": "Vérifiez votre connexion et relancez l'analyse." }
+	"sourceUnavailableHint": { "message": "Vérifiez votre connexion et relancez l'analyse." },
+	"citationSource": {
+		"message": "Source $INDEX$",
+		"placeholders": { "INDEX": { "content": "$1" } }
+	},
+	"openComment": { "message": "Ouvrir le commentaire" },
+	"citationPageComment": { "message": "Commentaire de la page" }
 }

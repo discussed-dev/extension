@@ -459,5 +459,11 @@
 		"message": "$SOURCE$에 연결할 수 없습니다",
 		"placeholders": { "SOURCE": { "content": "$1" } }
 	},
-	"sourceUnavailableHint": { "message": "연결을 확인한 후 다시 검색하세요." }
+	"sourceUnavailableHint": { "message": "연결을 확인한 후 다시 검색하세요." },
+	"citationSource": {
+		"message": "출처 $INDEX$",
+		"placeholders": { "INDEX": { "content": "$1" } }
+	},
+	"openComment": { "message": "댓글 열기" },
+	"citationPageComment": { "message": "페이지 댓글" }
 }

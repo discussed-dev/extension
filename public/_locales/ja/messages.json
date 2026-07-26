@@ -459,5 +459,11 @@
 		"message": "$SOURCE$ に接続できませんでした",
 		"placeholders": { "SOURCE": { "content": "$1" } }
 	},
-	"sourceUnavailableHint": { "message": "接続を確認して再スキャンしてください。" }
+	"sourceUnavailableHint": { "message": "接続を確認して再スキャンしてください。" },
+	"citationSource": {
+		"message": "出典 $INDEX$",
+		"placeholders": { "INDEX": { "content": "$1" } }
+	},
+	"openComment": { "message": "コメントを開く" },
+	"citationPageComment": { "message": "ページのコメント" }
 }

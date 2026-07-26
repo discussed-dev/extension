@@ -4,6 +4,7 @@ import {
 	type Citation,
 	type PageCommentEntry,
 	buildRef,
+	citationIndices,
 	collectCitations,
 	segmentSummary,
 	stripRefs,
@@ -173,6 +174,32 @@ describe('segmentSummary', () => {
 		expect(segmentSummary('Just prose.', [makeCitation()])).toEqual([
 			{ kind: 'text', text: 'Just prose.' },
 		]);
+	});
+});
+
+describe('citationIndices', () => {
+	const a = makeCitation({ ref: 'hn:1' });
+	const b = makeCitation({ ref: 'rd:x', platform: 'reddit' });
+
+	it('numbers referenced citations across the whole summary', () => {
+		const summary = 'Verdict [rd:x].\n\nSupport [hn:1] and again [rd:x].';
+		expect([...citationIndices(summary, [a, b])]).toEqual([
+			['rd:x', 1],
+			['hn:1', 2],
+		]);
+	});
+
+	it('keeps numbering continuous when a summary is rendered block by block', () => {
+		const summary = 'Verdict [rd:x].\n\nSupport [hn:1].';
+		const indices = citationIndices(summary, [a, b]);
+		const blocks = summary.split('\n\n').map((block) => segmentSummary(block, [a, b], indices));
+		const numbers = blocks.flat().flatMap((s) => (s.kind === 'cite' ? [s.index] : []));
+		// Without the shared map the second block would restart at 1.
+		expect(numbers).toEqual([1, 2]);
+	});
+
+	it('ignores citations the summary never references', () => {
+		expect([...citationIndices('No markers here.', [a, b])]).toEqual([]);
 	});
 });
 

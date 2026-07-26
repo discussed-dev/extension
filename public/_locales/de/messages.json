@@ -459,5 +459,11 @@
 		"message": "$SOURCE$ konnte nicht erreicht werden",
 		"placeholders": { "SOURCE": { "content": "$1" } }
 	},
-	"sourceUnavailableHint": { "message": "Überprüfe deine Verbindung und scanne erneut." }
+	"sourceUnavailableHint": { "message": "Überprüfe deine Verbindung und scanne erneut." },
+	"citationSource": {
+		"message": "Quelle $INDEX$",
+		"placeholders": { "INDEX": { "content": "$1" } }
+	},
+	"openComment": { "message": "Kommentar öffnen" },
+	"citationPageComment": { "message": "Seitenkommentar" }
 }

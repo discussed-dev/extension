@@ -459,5 +459,11 @@
 		"message": "无法连接 $SOURCE$",
 		"placeholders": { "SOURCE": { "content": "$1" } }
 	},
-	"sourceUnavailableHint": { "message": "请检查网络连接后重新扫描。" }
+	"sourceUnavailableHint": { "message": "请检查网络连接后重新扫描。" },
+	"citationSource": {
+		"message": "来源 $INDEX$",
+		"placeholders": { "INDEX": { "content": "$1" } }
+	},
+	"openComment": { "message": "打开评论" },
+	"citationPageComment": { "message": "页面评论" }
 }

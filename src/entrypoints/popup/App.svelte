@@ -287,6 +287,7 @@ load();
     model={summaryResult.model}
     createdAt={summaryResult.createdAt}
     usage={summaryResult.usage}
+    citations={summaryResult.citations}
     pageTitle={currentTitle}
     pageUrl={currentUrl}
     discussions={discussions.map((d) => ({

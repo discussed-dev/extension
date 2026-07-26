@@ -89,7 +89,7 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 		models: [
 			{ id: 'claude-sonnet-5', label: 'Claude Sonnet 5', cost: '$$' },
 			{ id: 'claude-haiku-4-5', label: 'Claude Haiku 4.5', cost: '$' },
-			{ id: 'claude-opus-4-8', label: 'Claude Opus 4.8', cost: '$$$' },
+			{ id: 'claude-opus-5', label: 'Claude Opus 5', cost: '$$$' },
 		],
 	},
 	openai: {
@@ -113,9 +113,11 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 		apiFormat: 'google',
 		keyPlaceholder: 'AIza...',
 		models: [
-			{ id: 'gemini-2.5-flash-lite', label: 'Gemini 2.5 Flash Lite', cost: '$' },
+			// gemini-2.5-flash / -flash-lite are scheduled for shutdown (Oct 2026);
+			// these are the GA replacements Google names in its own docs.
+			{ id: 'gemini-3.5-flash-lite', label: 'Gemini 3.5 Flash Lite', cost: '$' },
 			{ id: 'gemini-3-flash-preview', label: 'Gemini 3 Flash (preview)', cost: '$' },
-			{ id: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash', cost: '$$' },
+			{ id: 'gemini-3.6-flash', label: 'Gemini 3.6 Flash', cost: '$$' },
 			{ id: 'gemini-3.1-pro-preview', label: 'Gemini 3.1 Pro (preview)', cost: '$$' },
 		],
 	},

@@ -2,6 +2,7 @@
 import { buildObsidianUri, formatMarkdownExport, formatPlainTextExport } from '@/lib/export';
 import { t } from '@/lib/i18n';
 import type { TokenUsage } from '@/lib/llm';
+import { renderMarkdown } from '@/lib/markdown';
 import type { Platform } from '@/lib/types';
 
 interface DiscussionExport {
@@ -112,24 +113,6 @@ const blocks = $derived(
 
 const verdict = $derived(blocks[0] ?? summary.trim());
 const supportingBlocks = $derived(blocks.slice(1));
-
-function escapeHtml(text: string): string {
-	return text
-		.replaceAll('&', '&amp;')
-		.replaceAll('<', '&lt;')
-		.replaceAll('>', '&gt;')
-		.replaceAll('"', '&quot;')
-		.replaceAll("'", '&#39;');
-}
-
-function renderMarkdown(text: string): string {
-	return escapeHtml(text)
-		.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-		.replace(
-			/\[([^\]]+)\]\(([^)]+)\)/g,
-			'<a href="$2" target="_blank" rel="noopener noreferrer" class="text-sky-700 underline decoration-sky-300 underline-offset-4 hover:text-sky-900">$1</a>',
-		);
-}
 </script>
 
 <svelte:window onkeydown={handleWindowKeydown} />

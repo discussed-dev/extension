@@ -159,6 +159,13 @@ describe('selectPageCommentsForBudget', () => {
 		expect(selectPageCommentsForBudget(comments).map((e) => e.index)).toEqual([0, 1, 2]);
 	});
 
+	it('truncates a long page comment to the platform comment length', () => {
+		// Extractors cap how many comments they return, not how long each one is.
+		const [entry] = selectPageCommentsForBudget([{ text: 'x'.repeat(5000) }]);
+		expect(entry.comment.text).toHaveLength(303); // 300 + the "..." marker
+		expect(entry.comment.text.endsWith('...')).toBe(true);
+	});
+
 	it('returns nothing when the budget cannot fit a single comment', () => {
 		expect(selectPageCommentsForBudget([{ text: 'x'.repeat(100) }], 1)).toEqual([]);
 	});

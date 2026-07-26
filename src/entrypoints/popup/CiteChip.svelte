@@ -10,21 +10,31 @@ interface Props {
 let { citation, index }: Props = $props();
 
 const POPOVER_WIDTH = 256; // w-64
+// Quotes are capped at 300 characters upstream, which bounds the popover to
+// roughly this height. Used to decide which way to open, not to size anything.
+const POPOVER_MAX_HEIGHT = 260;
 
 let open = $state(false);
 let alignRight = $state(false);
+let alignAbove = $state(false);
 let toggle = $state<HTMLButtonElement | null>(null);
 
 /**
- * The popup is only 28rem wide, so a popover left-aligned to a chip near the
- * right edge would run off and make the summary scroll sideways. Flip to
- * right-alignment in that case; a chip far enough right to need the flip is
- * always far enough right for the popover to fit going leftwards.
+ * The popup is a small fixed window, so a popover always anchored below-left of
+ * its chip runs off the edge: sideways for a chip near the right edge, and out
+ * of view entirely for a chip on the last line. Pick the side that fits.
+ *
+ * A chip far enough right to need the horizontal flip is always far enough right
+ * for the popover to fit going leftwards. Vertically there may be room on
+ * neither side, in which case below wins — the summary scrolls, so it is
+ * reachable, whereas above would be clipped by the popup itself.
  */
 function toggleOpen() {
 	if (!open && toggle) {
-		const { left } = toggle.getBoundingClientRect();
-		alignRight = left + POPOVER_WIDTH > document.documentElement.clientWidth;
+		const { left, top, bottom } = toggle.getBoundingClientRect();
+		const root = document.documentElement;
+		alignRight = left + POPOVER_WIDTH > root.clientWidth;
+		alignAbove = bottom + POPOVER_MAX_HEIGHT > root.clientHeight && top > POPOVER_MAX_HEIGHT;
 	}
 	open = !open;
 }
@@ -73,9 +83,9 @@ function handleWindowKeydown(event: KeyboardEvent) {
     ></button><span
       role="dialog"
       aria-label={t('citationSource', String(index))}
-      class="absolute top-full z-20 mt-1 block w-64 rounded-md border border-stone-200 bg-white px-3 py-2 text-left {alignRight
+      class="absolute z-20 block w-64 rounded-md border border-stone-200 bg-white px-3 py-2 text-left {alignRight
         ? 'right-0'
-        : 'left-0'}"
+        : 'left-0'} {alignAbove ? 'bottom-full mb-1' : 'top-full mt-1'}"
     >
       <span class="block text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-stone-500">
         {sourceLabel}

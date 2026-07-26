@@ -82,10 +82,11 @@ export function preprocessComments(
 	}
 
 	// Truncate long comments
-	return sampled.map((c) => ({
-		...c,
-		text: c.text.length > MAX_COMMENT_LENGTH ? `${c.text.slice(0, MAX_COMMENT_LENGTH)}...` : c.text,
-	}));
+	return sampled.map((c) => ({ ...c, text: truncateComment(c.text) }));
+}
+
+function truncateComment(text: string): string {
+	return text.length > MAX_COMMENT_LENGTH ? `${text.slice(0, MAX_COMMENT_LENGTH)}...` : text;
 }
 
 export function formatCommentsForPrompt(comments: Comment[]): string {
@@ -133,6 +134,11 @@ function formatPageCommentLine(entry: PageCommentEntry): string {
  *
  * Each entry keeps its position in the original extracted array — that index is
  * the ref, so it must not be renumbered when comments are dropped.
+ *
+ * Text is truncated to the same length as platform comments. The extractors cap
+ * how many comments they return but not how long each one is, and an uncapped
+ * page comment would both dominate the budget and land verbatim in a citation
+ * quote — which is rendered in a chip popover and persisted in the cache.
  */
 export function selectPageCommentsForBudget(
 	comments: ExtractedComment[],
@@ -143,7 +149,10 @@ export function selectPageCommentsForBudget(
 	let used = 0;
 
 	for (const [index, comment] of comments.entries()) {
-		const entry: PageCommentEntry = { index, comment };
+		const entry: PageCommentEntry = {
+			index,
+			comment: { ...comment, text: truncateComment(comment.text) },
+		};
 		const cost =
 			formatPageCommentLine(entry).length +
 			(selected.length === 0 ? 0 : PAGE_COMMENT_SEPARATOR.length);

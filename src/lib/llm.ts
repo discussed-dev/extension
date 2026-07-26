@@ -49,8 +49,11 @@ Rules:
 - Don't balance pros and cons artificially. If the discussion leaned one way, reflect that.
 - Link to threads with markdown: [HN](url) or [r/sub](url).
 - Plain paragraphs only. No headings, no bullets, no "Overall," or "It's worth noting."
+- End every claim about what commenters said with its source marker, copied exactly: [hn:44239571].
+- Markers are ASCII literals. Never translate, renumber, reformat, or invent them.
+- If a claim cannot be attributed to a marker in the input, drop the claim.
 
-Structure: one sentence verdict (max 20 words), then 2 short paragraphs with quotes and specifics. Spread the substance across paragraphs, don't front-load. Under 150 words total.`;
+Structure: one sentence verdict (max 20 words), then 2 short paragraphs with quotes and specifics. Spread the substance across paragraphs, don't front-load. Under 150 words, not counting source markers.`;
 
 	let extra = '';
 	if (hasArticle || hasPageComments) {

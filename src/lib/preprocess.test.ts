@@ -6,6 +6,7 @@ import {
 	formatCommentsForPrompt,
 	formatPageCommentsForPrompt,
 	preprocessComments,
+	selectPageCommentsForBudget,
 } from './preprocess';
 
 function makeComment(overrides: Partial<Comment> = {}): Comment {
@@ -95,6 +96,16 @@ describe('formatCommentsForPrompt', () => {
 		const text = formatCommentsForPrompt(comments);
 		expect(text).toContain('--- Lobsters');
 	});
+
+	it('prefixes each line with the comment ref the model must copy back', () => {
+		const comments = [
+			makeComment({ id: '44239571', platform: 'hn', author: 'alice', score: 42, text: 'Great!' }),
+			makeComment({ id: '1nooby', platform: 'lobsters', author: 'mxey', score: 15, text: 'Hmm' }),
+		];
+		const text = formatCommentsForPrompt(comments);
+		expect(text).toContain('[hn:44239571] [42 pts] alice: Great!');
+		expect(text).toContain('[lo:1nooby] [15 pts] mxey: Hmm');
+	});
 });
 
 describe('formatPageCommentsForPrompt', () => {
@@ -115,5 +126,50 @@ describe('formatPageCommentsForPrompt', () => {
 		}));
 		const result = formatPageCommentsForPrompt(comments, 100); // 100 tokens = 400 chars
 		expect(result.length).toBeLessThanOrEqual(400);
+	});
+
+	it('prefixes each comment with its pg ref', () => {
+		const comments: ExtractedComment[] = [
+			{ author: 'alice', text: 'Great article', score: 5 },
+			{ text: 'Anonymous comment' },
+		];
+		const result = formatPageCommentsForPrompt(comments);
+		expect(result).toContain('[pg:0] [5 pts] alice: Great article');
+		expect(result).toContain('[pg:1] Anonymous comment');
+	});
+
+	// Matrix 10 — budget truncation must never split a [pg:N] marker.
+	it('drops whole comments rather than cutting inside a marker', () => {
+		const comments: ExtractedComment[] = Array.from({ length: 100 }, (_, i) => ({
+			text: `This is comment number ${i} with some substantial text to fill the budget`,
+			author: `user${i}`,
+		}));
+		const result = formatPageCommentsForPrompt(comments, 100);
+
+		expect(result.length).toBeLessThanOrEqual(400);
+		for (const line of result.split('\n').filter(Boolean)) {
+			expect(line).toMatch(/^\[pg:\d+\] /);
+		}
+	});
+});
+
+describe('selectPageCommentsForBudget', () => {
+	it('keeps the original array position as the ref index', () => {
+		const comments: ExtractedComment[] = [{ text: 'a' }, { text: 'b' }, { text: 'c' }];
+		expect(selectPageCommentsForBudget(comments).map((e) => e.index)).toEqual([0, 1, 2]);
+	});
+
+	it('returns nothing when the budget cannot fit a single comment', () => {
+		expect(selectPageCommentsForBudget([{ text: 'x'.repeat(100) }], 1)).toEqual([]);
+	});
+
+	it('returns entries whose formatted length stays inside the budget', () => {
+		const comments: ExtractedComment[] = Array.from({ length: 50 }, (_, i) => ({
+			text: `comment ${i} with a reasonable amount of text in it`,
+		}));
+		const selected = selectPageCommentsForBudget(comments, 50); // 200 chars
+		expect(selected.length).toBeGreaterThan(0);
+		expect(selected.length).toBeLessThan(comments.length);
+		expect(formatPageCommentsForPrompt(comments, 50).length).toBeLessThanOrEqual(200);
 	});
 });

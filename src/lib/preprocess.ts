@@ -1,6 +1,6 @@
 import type { Comment } from './comments';
+import { type PageCommentEntry, buildRef } from './grounding';
 import type { ExtractedComment } from './page-content';
-import { truncateToTokenBudget } from './token-budget';
 import type { Platform } from './types';
 
 const MAX_COMMENT_LENGTH = 300;
@@ -106,7 +106,10 @@ export function formatCommentsForPrompt(comments: Comment[]): string {
 	const sections: string[] = [];
 	for (const [platform, group] of byPlatform) {
 		const label = PLATFORM_LABELS[platform] ?? platform;
-		const lines = group.map((c) => `[${c.score} pts] ${c.author}: ${c.text}`).join('\n\n');
+		// The ref prefix is what the model copies back as a citation marker.
+		const lines = group
+			.map((c) => `[${c.ref}] [${c.score} pts] ${c.author}: ${c.text}`)
+			.join('\n\n');
 		sections.push(`--- ${label} (${group.length} comments) ---\n\n${lines}`);
 	}
 
@@ -114,18 +117,49 @@ export function formatCommentsForPrompt(comments: Comment[]): string {
 }
 
 const PAGE_COMMENT_TOKEN_BUDGET = 2000;
+const PAGE_COMMENT_SEPARATOR = '\n\n';
+
+function formatPageCommentLine(entry: PageCommentEntry): string {
+	const { index, comment } = entry;
+	const author = comment.author ? `${comment.author}: ` : '';
+	const score = comment.score != null ? `[${comment.score} pts] ` : '';
+	return `[${buildRef('page', String(index))}] ${score}${author}${comment.text}`;
+}
+
+/**
+ * Fit page comments into a token budget by dropping whole comments from the
+ * bottom, never by cutting mid-line. Truncating the joined text instead could
+ * land inside a `[pg:N]` marker and feed `[pg:1` to the model.
+ *
+ * Each entry keeps its position in the original extracted array — that index is
+ * the ref, so it must not be renumbered when comments are dropped.
+ */
+export function selectPageCommentsForBudget(
+	comments: ExtractedComment[],
+	tokenBudget: number = PAGE_COMMENT_TOKEN_BUDGET,
+): PageCommentEntry[] {
+	const maxChars = Math.max(0, tokenBudget) * 4;
+	const selected: PageCommentEntry[] = [];
+	let used = 0;
+
+	for (const [index, comment] of comments.entries()) {
+		const entry: PageCommentEntry = { index, comment };
+		const cost =
+			formatPageCommentLine(entry).length +
+			(selected.length === 0 ? 0 : PAGE_COMMENT_SEPARATOR.length);
+		if (used + cost > maxChars) break;
+		used += cost;
+		selected.push(entry);
+	}
+
+	return selected;
+}
 
 export function formatPageCommentsForPrompt(
 	comments: ExtractedComment[],
 	tokenBudget: number = PAGE_COMMENT_TOKEN_BUDGET,
 ): string {
-	const lines = comments
-		.map((c) => {
-			const prefix = c.author ? `${c.author}: ` : '';
-			const score = c.score != null ? `[${c.score} pts] ` : '';
-			return `${score}${prefix}${c.text}`;
-		})
-		.join('\n\n');
-
-	return truncateToTokenBudget(lines, tokenBudget);
+	return selectPageCommentsForBudget(comments, tokenBudget)
+		.map(formatPageCommentLine)
+		.join(PAGE_COMMENT_SEPARATOR);
 }

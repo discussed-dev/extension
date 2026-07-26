@@ -39,6 +39,21 @@ describe('fetchHnComments', () => {
 		expect(comments[1]).toMatchObject({ author: 'bob', depth: 2 });
 	});
 
+	it('carries a ref and an item permalink', async () => {
+		mockFetch.mockResolvedValueOnce({
+			ok: true,
+			json: () =>
+				Promise.resolve({
+					id: 1,
+					children: [{ id: 44239571, author: 'alice', text: 'Great post!', points: 10 }],
+				}),
+		});
+
+		const [comment] = await fetchHnComments('1');
+		expect(comment.ref).toBe('hn:44239571');
+		expect(comment.permalink).toBe('https://news.ycombinator.com/item?id=44239571');
+	});
+
 	it('returns empty on failure', async () => {
 		mockFetch.mockResolvedValueOnce({ ok: false, status: 500 });
 		expect(await fetchHnComments('1')).toEqual([]);
@@ -114,6 +129,51 @@ describe('fetchRedditComments', () => {
 		mockFetch.mockResolvedValueOnce({ ok: false, status: 429 });
 		expect(await fetchRedditComments('/r/test/comments/abc/test/')).toEqual([]);
 	});
+
+	function mockRedditComment(data: Record<string, unknown>): void {
+		mockFetch.mockResolvedValueOnce({
+			ok: true,
+			json: () =>
+				Promise.resolve([
+					{ data: { children: [] } },
+					{ data: { children: [{ kind: 't1', data }] } },
+				]),
+		});
+	}
+
+	const baseComment = { id: 'm3n8q', author: 'alice', body: 'Nice article', score: 42, depth: 0 };
+
+	it('builds a ref and concatenates the thread permalink when the API omits one', async () => {
+		mockRedditComment(baseComment);
+		const [comment] = await fetchRedditComments('/r/prog/comments/abc/test/');
+		expect(comment.ref).toBe('rd:m3n8q');
+		expect(comment.permalink).toBe('https://www.reddit.com/r/prog/comments/abc/test/m3n8q/');
+	});
+
+	it('prefers the permalink the API returns', async () => {
+		mockRedditComment({ ...baseComment, permalink: '/r/prog/comments/abc/test/m3n8q/' });
+		const [comment] = await fetchRedditComments('/r/prog/comments/abc/test/');
+		expect(comment.permalink).toBe('https://www.reddit.com/r/prog/comments/abc/test/m3n8q/');
+	});
+
+	it('normalizes a thread permalink with no trailing slash', async () => {
+		mockRedditComment(baseComment);
+		const [comment] = await fetchRedditComments('/r/prog/comments/abc/test');
+		expect(comment.permalink).toBe('https://www.reddit.com/r/prog/comments/abc/test/m3n8q/');
+	});
+
+	it('yields no permalink rather than a malformed one when thread context is missing', async () => {
+		// extractPermalink returns '' when the discussion URL fails to parse.
+		mockRedditComment(baseComment);
+		const [comment] = await fetchRedditComments('');
+		expect(comment.ref).toBe('rd:m3n8q');
+		expect(comment.permalink).toBeUndefined();
+	});
+
+	it('drops comments with no id, which cannot be cited', async () => {
+		mockRedditComment({ author: 'alice', body: 'Nice article', score: 42, depth: 0 });
+		expect(await fetchRedditComments('/r/prog/comments/abc/test/')).toEqual([]);
+	});
 });
 
 describe('fetchLobstersComments', () => {
@@ -183,5 +243,40 @@ describe('fetchLobstersComments', () => {
 	it('returns empty on failure', async () => {
 		mockFetch.mockResolvedValueOnce({ ok: false, status: 404 });
 		expect(await fetchLobstersComments('xyz123')).toEqual([]);
+	});
+
+	function mockLobstersComment(overrides: Record<string, unknown> = {}): void {
+		mockFetch.mockResolvedValueOnce({
+			ok: true,
+			json: () =>
+				Promise.resolve({
+					comments: [
+						{
+							short_id: '1nooby',
+							short_id_url: 'https://lobste.rs/c/1nooby',
+							comment_plain: 'The reason Linux contains all the drivers is...',
+							score: 15,
+							depth: 0,
+							commenting_user: 'mxey',
+							is_deleted: false,
+							is_moderated: false,
+							...overrides,
+						},
+					],
+				}),
+		});
+	}
+
+	it('takes the permalink from short_id_url rather than constructing one', async () => {
+		mockLobstersComment();
+		const [comment] = await fetchLobstersComments('xyz123');
+		expect(comment.ref).toBe('lo:1nooby');
+		expect(comment.permalink).toBe('https://lobste.rs/c/1nooby');
+	});
+
+	it('yields no permalink when short_id_url is absent', async () => {
+		mockLobstersComment({ short_id_url: undefined });
+		const [comment] = await fetchLobstersComments('xyz123');
+		expect(comment.permalink).toBeUndefined();
 	});
 });

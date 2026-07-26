@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Comment } from './comments';
+import { buildRef } from './grounding';
 import type { ExtractedComment } from './page-content';
 import {
 	formatCommentsForPrompt,
@@ -8,15 +9,17 @@ import {
 } from './preprocess';
 
 function makeComment(overrides: Partial<Comment> = {}): Comment {
-	return {
+	const merged = {
 		id: '1',
 		author: 'user',
 		text: 'This is a test comment with enough text',
 		score: 10,
 		depth: 0,
-		platform: 'hn',
+		platform: 'hn' as const,
 		...overrides,
 	};
+	// Keep the ref consistent with id/platform so fixtures stay realistic.
+	return { ...merged, ref: overrides.ref ?? buildRef(merged.platform, merged.id) };
 }
 
 describe('preprocessComments', () => {

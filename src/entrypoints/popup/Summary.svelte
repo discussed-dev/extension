@@ -229,10 +229,11 @@ const supportingBlocks = $derived(
   <div class="max-h-[28rem] space-y-3 overflow-y-auto px-4 py-3">
     <section class="rounded-md border border-stone-200 bg-stone-50 px-4 py-3">
       <p class="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-stone-500">{t('verdict')}</p>
+      <!-- Kept on one line: whitespace between the each/if tags becomes a text
+           node, which would put a space between a chip and the punctuation
+           that follows it ("flawed¹ ," instead of "flawed¹,"). -->
       <div class="mt-2 text-[0.95rem] font-medium leading-6 text-stone-900">
-        {#each verdict as seg}
-          {#if seg.kind === 'text'}{@html renderMarkdown(seg.text)}{:else}<CiteChip citation={seg.citation} index={seg.index} />{/if}
-        {/each}
+        {#each verdict as seg}{#if seg.kind === 'text'}{@html renderMarkdown(seg.text)}{:else}<CiteChip citation={seg.citation} index={seg.index} />{/if}{/each}
       </div>
     </section>
 
@@ -240,9 +241,7 @@ const supportingBlocks = $derived(
       <section class="space-y-3">
         {#each supportingBlocks as block}
           <p class="text-sm leading-6 text-stone-700">
-            {#each block as seg}
-              {#if seg.kind === 'text'}{@html renderMarkdown(seg.text)}{:else}<CiteChip citation={seg.citation} index={seg.index} />{/if}
-            {/each}
+            {#each block as seg}{#if seg.kind === 'text'}{@html renderMarkdown(seg.text)}{:else}<CiteChip citation={seg.citation} index={seg.index} />{/if}{/each}
           </p>
         {/each}
       </section>

@@ -79,6 +79,7 @@ const exportInput = $derived({
 	pageUrl,
 	date: new Date(createdAt).toISOString().slice(0, 10),
 	summary,
+	citations,
 	discussions,
 });
 

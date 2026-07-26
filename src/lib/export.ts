@@ -1,3 +1,4 @@
+import { type Citation, citationIndices, segmentSummary, stripRefs } from './grounding';
 import type { Platform } from './types';
 
 export interface ExportInput {
@@ -5,6 +6,8 @@ export interface ExportInput {
 	pageUrl: string;
 	date: string;
 	summary: string;
+	/** Absent on summaries cached before v0.5 — every ref is then stripped. */
+	citations?: Citation[];
 	discussions: Array<{
 		platform: Platform;
 		title: string;
@@ -42,7 +45,55 @@ function formatDiscussionLink(d: ExportInput['discussions'][number]): string {
 	return `- [${label}: ${d.title}](${d.url}) — ${d.commentCount} comments`;
 }
 
+/** Full platform names for footnotes. Export headings stay English, like the rest of the template. */
+const CITATION_LABELS: Record<Citation['platform'], string> = {
+	hn: 'Hacker News',
+	reddit: 'Reddit',
+	lobsters: 'Lobsters',
+	page: 'Page comment',
+};
+
+function formatFootnote(citation: Citation, index: number): string {
+	const parts = [CITATION_LABELS[citation.platform]];
+
+	if (citation.author) {
+		const author = citation.platform === 'reddit' ? `u/${citation.author}` : citation.author;
+		parts.push(citation.score != null ? `${author} (${citation.score} pts)` : author);
+	} else if (citation.score != null) {
+		parts.push(`${citation.score} pts`);
+	}
+
+	// A footnote definition has to stay on one line.
+	const quote = citation.quote.replace(/\s+/g, ' ').trim();
+	const tail = citation.permalink ? ` — ${citation.permalink}` : '';
+	return `[^${index}]: ${parts.join(' — ')}: "${quote}"${tail}`;
+}
+
+/**
+ * Render the summary with refs turned into footnote markers, reusing
+ * segmentSummary's numbering so footnotes and popup chips never drift apart.
+ */
+function buildGroundedSummary(input: ExportInput): { body: string; footnotes: string[] } {
+	const citations = input.citations ?? [];
+	const indices = citationIndices(input.summary, citations);
+	const segments = segmentSummary(input.summary, citations, indices);
+
+	const body = segments.map((s) => (s.kind === 'text' ? s.text : `[^${s.index}]`)).join('');
+
+	const footnotes: string[] = [];
+	const seen = new Set<number>();
+	for (const segment of segments) {
+		if (segment.kind !== 'cite' || seen.has(segment.index)) continue;
+		seen.add(segment.index);
+		footnotes.push(formatFootnote(segment.citation, segment.index));
+	}
+
+	return { body, footnotes };
+}
+
 export function formatMarkdownExport(input: ExportInput): string {
+	const { body, footnotes } = buildGroundedSummary(input);
+
 	const parts = [
 		buildFrontmatter(input),
 		'',
@@ -50,8 +101,12 @@ export function formatMarkdownExport(input: ExportInput): string {
 		'',
 		'## Summary',
 		'',
-		input.summary,
+		body,
 	];
+
+	if (footnotes.length > 0) {
+		parts.push('', '## Sources', '', ...footnotes);
+	}
 
 	if (input.discussions.length > 0) {
 		parts.push('', '## Discussion Links', '');
@@ -71,7 +126,9 @@ export function formatPlainTextExport(input: ExportInput): string {
 		'',
 		'Summary',
 		'',
-		stripMarkdown(input.summary),
+		// Plain text is for pasting anywhere and carries no affordance for a
+		// citation, so refs are stripped rather than converted.
+		stripMarkdown(stripRefs(input.summary)),
 	];
 
 	if (input.discussions.length > 0) {

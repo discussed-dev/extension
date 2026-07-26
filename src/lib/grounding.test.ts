@@ -7,6 +7,7 @@ import {
 	collectCitations,
 	segmentSummary,
 	stripRefs,
+	usedCitations,
 } from './grounding';
 import { renderMarkdown } from './markdown';
 
@@ -172,6 +173,28 @@ describe('segmentSummary', () => {
 		expect(segmentSummary('Just prose.', [makeCitation()])).toEqual([
 			{ kind: 'text', text: 'Just prose.' },
 		]);
+	});
+});
+
+describe('usedCitations', () => {
+	const a = makeCitation({ ref: 'hn:1' });
+	const b = makeCitation({ ref: 'rd:x', platform: 'reddit' });
+	const c = makeCitation({ ref: 'lo:y', platform: 'lobsters' });
+
+	it('keeps only the citations the summary references, in display order', () => {
+		expect(usedCitations('First [lo:y] then [hn:1].', [a, b, c])).toEqual([c, a]);
+	});
+
+	it('deduplicates a repeated reference', () => {
+		expect(usedCitations('[hn:1] and again [hn:1]', [a, b])).toEqual([a]);
+	});
+
+	it('returns nothing when the model emitted no markers', () => {
+		expect(usedCitations('Plain prose with no markers.', [a, b, c])).toEqual([]);
+	});
+
+	it('drops phantom references rather than inventing citations', () => {
+		expect(usedCitations('Claim [hn:999].', [a])).toEqual([]);
 	});
 });
 

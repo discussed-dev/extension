@@ -5,13 +5,15 @@ import {
 	fetchLobstersComments,
 	fetchRedditComments,
 } from './comments';
+import { type Citation, collectCitations, usedCitations } from './grounding';
 import type { SummarizeOptions, TokenUsage } from './llm';
 import { summarize } from './llm';
 import { type PageContent, buildArticleContext } from './page-content';
 import {
 	formatCommentsForPrompt,
-	formatPageCommentsForPrompt,
+	formatPageCommentEntries,
 	preprocessComments,
+	selectPageCommentsForBudget,
 } from './preprocess';
 import { settings } from './settings';
 import type { Discussion, Platform } from './types';
@@ -21,11 +23,15 @@ const ARTICLE_TOKEN_BUDGET = 2000;
 const MAX_THREADS_FOR_COMMENTS = 8;
 const MAX_HN_COMMENTS_PER_THREAD = 200;
 
+export type { Citation } from './grounding';
+
 export interface SummaryResult {
 	summary: string;
 	model: string;
 	createdAt: string;
 	usage?: TokenUsage;
+	/** Undefined on entries cached before v0.5 — see the degradation note below. */
+	citations?: Citation[];
 }
 
 export interface CoverageMeta {
@@ -146,8 +152,14 @@ export async function summarizeDiscussions(
 		? buildArticleContext(options.pageContent, ARTICLE_TOKEN_BUDGET)
 		: undefined;
 
-	const pageComments = options.pageContent?.comments
-		? formatPageCommentsForPrompt(options.pageContent.comments)
+	// Select once, then both format and cite from the same list: the citation set
+	// must be exactly the prompt set, or a ref to a comment the model never saw
+	// would validate and phantom detection would be silently disabled.
+	const selectedPageComments = options.pageContent?.comments
+		? selectPageCommentsForBudget(options.pageContent.comments)
+		: [];
+	const pageComments = selectedPageComments.length
+		? formatPageCommentEntries(selectedPageComments)
 		: undefined;
 
 	const summarizeOptions: SummarizeOptions = {
@@ -171,14 +183,21 @@ export async function summarizeDiscussions(
 
 	const result = await summarize(commentsText, summarizeOptions);
 
+	// `processed` — not `allComments` — is what formatCommentsForPrompt rendered.
 	const summaryResult: SummaryResult = {
 		summary: result.summary,
 		model: result.model,
 		createdAt: new Date().toISOString(),
 		usage: result.usage,
+		citations: usedCitations(result.summary, collectCitations(processed, selectedPageComments)),
 	};
 
-	await cacheSet(cacheKey, summaryResult, SUMMARY_CACHE_TTL_MS);
+	try {
+		await cacheSet(cacheKey, summaryResult, SUMMARY_CACHE_TTL_MS);
+	} catch (e) {
+		// A storage failure must not discard a summary the user already paid for.
+		console.warn('[discussed] failed to cache summary:', e);
+	}
 
 	return summaryResult;
 }

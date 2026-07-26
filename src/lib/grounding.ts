@@ -164,3 +164,18 @@ export function segmentSummary(text: string, citations: Citation[] = []): Summar
 	flush();
 	return segments;
 }
+
+/**
+ * The subset of `citations` the summary actually references, in display order.
+ *
+ * Only these are worth persisting: a citation whose ref never appears in the text
+ * is never looked up when rendering, so storing the full sampled set would inflate
+ * every cache entry roughly 20x for no visible difference.
+ */
+export function usedCitations(text: string, citations: Citation[]): Citation[] {
+	const used = new Map<string, Citation>();
+	for (const segment of segmentSummary(text, citations)) {
+		if (segment.kind === 'cite') used.set(segment.citation.ref, segment.citation);
+	}
+	return [...used.values()];
+}

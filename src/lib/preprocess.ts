@@ -155,11 +155,14 @@ export function selectPageCommentsForBudget(
 	return selected;
 }
 
+/** Render entries already chosen by selectPageCommentsForBudget. */
+export function formatPageCommentEntries(entries: PageCommentEntry[]): string {
+	return entries.map(formatPageCommentLine).join(PAGE_COMMENT_SEPARATOR);
+}
+
 export function formatPageCommentsForPrompt(
 	comments: ExtractedComment[],
 	tokenBudget: number = PAGE_COMMENT_TOKEN_BUDGET,
 ): string {
-	return selectPageCommentsForBudget(comments, tokenBudget)
-		.map(formatPageCommentLine)
-		.join(PAGE_COMMENT_SEPARATOR);
+	return formatPageCommentEntries(selectPageCommentsForBudget(comments, tokenBudget));
 }

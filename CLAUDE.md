@@ -8,7 +8,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Governing Docs
 
-If `docs/prd-discussed.md` exists locally, it is the source of truth for product scope and requirements. Read it before any feature work.
+`docs/` is gitignored — these files exist only in local working copies. When present, they are the source of truth for product scope and requirements; read them before any feature work.
+
+| Doc | Scope |
+|-----|-------|
+| `docs/discussed-v0.3-prd.md` | Base PRD: article + discussion synthesis, export system, native page comment extraction |
+| `docs/discussed-v0.5-prd.md` | Supplement: Grounded Synthesis (citation-linked summaries) |
+
+Later supplements override the base PRD where they conflict. If neither file is present locally, treat `git log` and this file as the available context and say so rather than guessing at scope.
 
 ## Tech Stack
 

@@ -1,3 +1,4 @@
+import { SignInRequiredError } from './errors';
 import type { Discussion } from './types';
 import { normalizeUrl } from './url';
 
@@ -48,6 +49,8 @@ export async function searchReddit(
 	const response = await fetch(`${REDDIT_SEARCH}?${params}`, {
 		headers: { 'User-Agent': 'web:discussed:v0.1.0 (https://discussed.dev)' },
 	});
+	// Since 2026-05 Reddit answers logged-out JSON requests with 403; the user's session cookie passes.
+	if (response.status === 403) throw new SignInRequiredError('reddit');
 	if (!response.ok) throw new Error(`Reddit search failed: ${response.status}`);
 
 	const data: RedditListing = await response.json();

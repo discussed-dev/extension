@@ -1,4 +1,5 @@
 import { type Mock, beforeEach, describe, expect, it, vi } from 'vitest';
+import { SignInRequiredError } from './errors';
 import { searchReddit } from './reddit';
 
 const mockFetch = vi.fn() as Mock;
@@ -73,7 +74,15 @@ describe('searchReddit', () => {
 	it('throws on fetch failure so the source is marked unavailable', async () => {
 		mockFetch.mockResolvedValueOnce({ ok: false, status: 429 });
 
-		await expect(searchReddit('https://example.com')).rejects.toThrow();
+		const error = await searchReddit('https://example.com').catch((e: unknown) => e);
+		expect(error).toBeInstanceOf(Error);
+		expect(error).not.toBeInstanceOf(SignInRequiredError);
+	});
+
+	it('throws SignInRequiredError on 403 (Reddit blocks logged-out JSON access)', async () => {
+		mockFetch.mockResolvedValueOnce({ ok: false, status: 403 });
+
+		await expect(searchReddit('https://example.com')).rejects.toBeInstanceOf(SignInRequiredError);
 	});
 
 	it('throws on network error so the source is marked unavailable', async () => {

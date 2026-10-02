@@ -1,4 +1,5 @@
 import { cacheGet, cacheSet } from './cache';
+import { SignInRequiredError } from './errors';
 import { searchHn } from './hn';
 import { searchLobsters } from './lobsters';
 import { searchReddit } from './reddit';
@@ -14,6 +15,8 @@ export interface DiscoveryResult {
 	discussions: Discussion[];
 	/** Enabled sources that could not be reached (blocked, rate-limited, timed out). */
 	unavailable: Platform[];
+	/** Enabled sources that refused a logged-out request; signing in on the site restores them. */
+	signInRequired: Platform[];
 }
 
 const SOURCE_TIMEOUT_MS = 4000;
@@ -41,7 +44,7 @@ export async function discoverDiscussions(
 	rawUrl: string,
 	options: DiscoverOptions = {},
 ): Promise<DiscoveryResult> {
-	if (shouldSkipUrl(rawUrl)) return { discussions: [], unavailable: [] };
+	if (shouldSkipUrl(rawUrl)) return { discussions: [], unavailable: [], signInRequired: [] };
 
 	const userSettings = await settings.getValue();
 	const keepQuery = !userSettings.ignoreQueryString;
@@ -53,7 +56,7 @@ export async function discoverDiscussions(
 			const original = new URL(rawUrl);
 			const normalized = new URL(url);
 			if (original.search && normalized.pathname === '/') {
-				return { discussions: [], unavailable: [] };
+				return { discussions: [], unavailable: [], signInRequired: [] };
 			}
 		} catch {
 			// ignore parse errors
@@ -65,7 +68,7 @@ export async function discoverDiscussions(
 
 	if (!options.force) {
 		const cached = await cacheGet<Discussion[]>(cacheKey);
-		if (cached) return { discussions: cached, unavailable: [] };
+		if (cached) return { discussions: cached, unavailable: [], signInRequired: [] };
 	}
 
 	const searches: Array<{ platform: Platform; promise: Promise<Discussion[]> }> = [];
@@ -89,18 +92,21 @@ export async function discoverDiscussions(
 
 	const discussions: Discussion[] = [];
 	const unavailable: Platform[] = [];
+	const signInRequired: Platform[] = [];
 	results.forEach((result, index) => {
 		if (result.status === 'fulfilled') {
 			discussions.push(...result.value);
+		} else if (result.reason instanceof SignInRequiredError) {
+			signInRequired.push(searches[index].platform);
 		} else {
 			unavailable.push(searches[index].platform);
 		}
 	});
 
-	// Only cache a clean sweep; a transient failure must not freeze a source as empty.
-	if (unavailable.length === 0) {
+	// Only cache a clean sweep; a failure or missing sign-in must not freeze a source as empty.
+	if (unavailable.length === 0 && signInRequired.length === 0) {
 		await cacheSet(cacheKey, discussions, cacheTtlMs);
 	}
 
-	return { discussions, unavailable };
+	return { discussions, unavailable, signInRequired };
 }

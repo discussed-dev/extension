@@ -460,6 +460,9 @@
 		"placeholders": { "SOURCE": { "content": "$1" } }
 	},
 	"sourceUnavailableHint": { "message": "请检查网络连接后重新扫描。" },
+	"redditSignInRequired": { "message": "登录 Reddit 后可显示 Reddit 讨论。" },
+	"redditSignIn": { "message": "登录" },
+	"redditSearch": { "message": "在 Reddit 搜索" },
 	"citationSource": {
 		"message": "来源 $INDEX$",
 		"placeholders": { "INDEX": { "content": "$1" } }

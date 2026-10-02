@@ -460,6 +460,9 @@
 		"placeholders": { "SOURCE": { "content": "$1" } }
 	},
 	"sourceUnavailableHint": { "message": "연결을 확인한 후 다시 검색하세요." },
+	"redditSignInRequired": { "message": "Reddit 토론을 보려면 Reddit에 로그인하세요." },
+	"redditSignIn": { "message": "로그인" },
+	"redditSearch": { "message": "Reddit에서 검색" },
 	"citationSource": {
 		"message": "출처 $INDEX$",
 		"placeholders": { "INDEX": { "content": "$1" } }

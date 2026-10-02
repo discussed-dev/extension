@@ -8,6 +8,7 @@ vi.mock('./reddit', () => ({ searchReddit: vi.fn() }));
 vi.mock('./lobsters', () => ({ searchLobsters: vi.fn() }));
 
 import { discoverDiscussions } from './discovery';
+import { SignInRequiredError } from './errors';
 import { searchHn } from './hn';
 import { searchLobsters } from './lobsters';
 import { searchReddit } from './reddit';
@@ -121,6 +122,33 @@ describe('discoverDiscussions', () => {
 		expect(discussions).toHaveLength(2);
 		expect(discussions.map((d) => d.platform)).toEqual(expect.arrayContaining(['hn', 'lobsters']));
 		expect(unavailable).toEqual(['reddit']);
+	});
+
+	it('reports a sign-in-required source separately from unavailable ones', async () => {
+		hnMock.mockResolvedValueOnce([HN_RESULT]);
+		redditMock.mockRejectedValueOnce(new SignInRequiredError('reddit'));
+		lobstersMock.mockResolvedValueOnce([]);
+
+		const { discussions, unavailable, signInRequired } =
+			await discoverDiscussions('https://example.com');
+
+		expect(discussions.map((d) => d.platform)).toEqual(['hn']);
+		expect(unavailable).toEqual([]);
+		expect(signInRequired).toEqual(['reddit']);
+	});
+
+	it('does not cache when a source needs sign-in, so signing in takes effect on the next scan', async () => {
+		hnMock.mockResolvedValue([]);
+		redditMock.mockRejectedValueOnce(new SignInRequiredError('reddit'));
+		lobstersMock.mockResolvedValue([]);
+
+		await discoverDiscussions('https://example.com/article');
+		redditMock.mockResolvedValueOnce([REDDIT_RESULT]);
+		const second = await discoverDiscussions('https://example.com/article');
+
+		expect(redditMock).toHaveBeenCalledTimes(2);
+		expect(second.signInRequired).toEqual([]);
+		expect(second.discussions.map((d) => d.platform)).toEqual(['reddit']);
 	});
 
 	it('does not cache when any source failed, so the next scan retries it', async () => {

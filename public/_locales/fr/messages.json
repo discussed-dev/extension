@@ -460,6 +460,11 @@
 		"placeholders": { "SOURCE": { "content": "$1" } }
 	},
 	"sourceUnavailableHint": { "message": "Vérifiez votre connexion et relancez l'analyse." },
+	"redditSignInRequired": {
+		"message": "Connectez-vous à Reddit pour voir les discussions Reddit."
+	},
+	"redditSignIn": { "message": "Se connecter" },
+	"redditSearch": { "message": "Rechercher sur Reddit" },
 	"citationSource": {
 		"message": "Source $INDEX$",
 		"placeholders": { "INDEX": { "content": "$1" } }

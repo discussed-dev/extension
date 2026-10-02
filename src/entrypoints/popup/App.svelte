@@ -13,6 +13,7 @@ import { isBlacklisted } from '@/lib/url';
 import DiscussionRow from './DiscussionRow.svelte';
 import ExternalLinks from './ExternalLinks.svelte';
 import PopupBrand from './PopupBrand.svelte';
+import RedditSignInNotice from './RedditSignInNotice.svelte';
 import Summary from './Summary.svelte';
 
 type View = 'overview' | 'summary';
@@ -41,6 +42,7 @@ let userSettings = $state<Settings | null>(null);
 let lastPageContent = $state<PageContent | undefined>(undefined);
 let resolved = $state<ResolvedDiscussion | null>(null);
 let unavailable = $state<Platform[]>([]);
+let signInRequired = $state<Platform[]>([]);
 
 async function load() {
 	loading = true;
@@ -59,6 +61,7 @@ async function load() {
 			blocked = true;
 			discussions = [];
 			unavailable = [];
+			signInRequired = [];
 			if (currentTabId != null) {
 				await setToolbarBadge(browser, { tabId: currentTabId, text: '' });
 			}
@@ -71,12 +74,17 @@ async function load() {
 		if (!resolveResult && isPlatformUrl(tab.url)) {
 			discussions = [];
 			unavailable = [];
+			signInRequired = [];
 			return;
 		}
 		const targetUrl = resolveResult?.linkedUrl ?? tab.url;
-		const { discussions: allDiscussions, unavailable: sourcesDown } =
-			await discoverDiscussions(targetUrl);
+		const {
+			discussions: allDiscussions,
+			unavailable: sourcesDown,
+			signInRequired: sourcesNeedingSignIn,
+		} = await discoverDiscussions(targetUrl);
 		unavailable = sourcesDown;
+		signInRequired = sourcesNeedingSignIn;
 
 		discussions = resolveResult
 			? allDiscussions.filter(
@@ -116,6 +124,7 @@ async function refresh() {
 			blocked = true;
 			discussions = [];
 			unavailable = [];
+			signInRequired = [];
 			await setToolbarBadge(browser, { tabId: currentTabId, text: '' });
 			return;
 		}
@@ -126,14 +135,17 @@ async function refresh() {
 		if (!resolveResult && isPlatformUrl(currentUrl)) {
 			discussions = [];
 			unavailable = [];
+			signInRequired = [];
 			return;
 		}
 		const targetUrl = resolveResult?.linkedUrl ?? currentUrl;
-		const { discussions: allDiscussions, unavailable: sourcesDown } = await discoverDiscussions(
-			targetUrl,
-			{ force: true },
-		);
+		const {
+			discussions: allDiscussions,
+			unavailable: sourcesDown,
+			signInRequired: sourcesNeedingSignIn,
+		} = await discoverDiscussions(targetUrl, { force: true });
 		unavailable = sourcesDown;
+		signInRequired = sourcesNeedingSignIn;
 
 		discussions = resolveResult
 			? allDiscussions.filter(
@@ -381,6 +393,9 @@ load();
         </div>
       </section>
     {:else if discussions.length === 0}
+      {#if signInRequired.includes('reddit')}
+        <RedditSignInNotice url={resolved?.linkedUrl ?? currentUrl} />
+      {/if}
       <section class="px-4 py-6">
         <div class="rounded-md border border-dashed border-stone-300 bg-stone-50 px-4 py-5">
           {#if unavailable.length > 0}
@@ -429,6 +444,9 @@ load();
           </svg>
           <span>{t('sourceUnavailable', unavailableLabel)}</span>
         </div>
+      {/if}
+      {#if signInRequired.includes('reddit')}
+        <RedditSignInNotice url={resolved?.linkedUrl ?? currentUrl} />
       {/if}
       <div class="max-h-[19rem] min-h-0 flex-1 space-y-2.5 overflow-y-auto px-4 py-3">
         {#each groupedDiscussions as group (group.platform)}

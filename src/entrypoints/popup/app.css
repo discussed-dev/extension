@@ -29,6 +29,12 @@ body {
 		--color-stone-800: #e4e5ea;
 		--color-stone-900: #f2f3f5;
 		--color-stone-950: #fafafa;
+		/* Warning notices: dim amber surface, light amber text. */
+		--color-amber-50: #2a2414;
+		--color-amber-200: #4a3d1c;
+		--color-amber-300: #6b5520;
+		--color-amber-600: #d9a441;
+		--color-amber-800: #f0c674;
 	}
 
 	html,

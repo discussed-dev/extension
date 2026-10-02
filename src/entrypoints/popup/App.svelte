@@ -9,7 +9,7 @@ import { type Settings, settings } from '@/lib/settings';
 import { type SummaryResult, summarizeDiscussions } from '@/lib/summarize';
 import { setToolbarBadge } from '@/lib/toolbar-action';
 import type { Discussion, Platform } from '@/lib/types';
-import { isBlacklisted } from '@/lib/url';
+import { isBlacklisted, normalizeUrl } from '@/lib/url';
 import DiscussionRow from './DiscussionRow.svelte';
 import ExternalLinks from './ExternalLinks.svelte';
 import PopupBrand from './PopupBrand.svelte';
@@ -246,6 +246,17 @@ async function doSummarize(force = false) {
 
 const unavailableLabel = $derived(unavailable.map((p) => PLATFORM_LABELS[p]).join(', '));
 
+// Match what discovery searched: the same normalization, so the Reddit search link finds the same threads.
+const redditSearchUrl = $derived.by(() => {
+	const target = resolved?.linkedUrl ?? currentUrl;
+	if (!target) return '';
+	try {
+		return normalizeUrl(target, { keepQueryString: !(userSettings?.ignoreQueryString ?? true) });
+	} catch {
+		return target;
+	}
+});
+
 const sorted = $derived([...discussions].sort((a, b) => b.commentCount - a.commentCount));
 
 const groupedDiscussions = $derived.by(() =>
@@ -394,7 +405,7 @@ load();
       </section>
     {:else if discussions.length === 0}
       {#if signInRequired.includes('reddit')}
-        <RedditSignInNotice url={resolved?.linkedUrl ?? currentUrl} />
+        <RedditSignInNotice url={redditSearchUrl} />
       {/if}
       <section class="px-4 py-6">
         <div class="rounded-md border border-dashed border-stone-300 bg-stone-50 px-4 py-5">
@@ -446,7 +457,7 @@ load();
         </div>
       {/if}
       {#if signInRequired.includes('reddit')}
-        <RedditSignInNotice url={resolved?.linkedUrl ?? currentUrl} />
+        <RedditSignInNotice url={redditSearchUrl} />
       {/if}
       <div class="max-h-[19rem] min-h-0 flex-1 space-y-2.5 overflow-y-auto px-4 py-3">
         {#each groupedDiscussions as group (group.platform)}

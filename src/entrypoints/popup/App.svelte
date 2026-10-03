@@ -361,12 +361,24 @@ load();
     </header>
 
     {#if loading}
-      <div class="flex min-h-56 flex-col items-center justify-center gap-3 px-6 text-center" role="status" aria-live="polite">
-        <div class="size-9 animate-pulse rounded-md bg-stone-200"></div>
-        <div>
-          <p class="text-sm font-medium text-stone-800">{t('searching')}</p>
-          <p class="mt-1 text-sm text-stone-500">{t('searchingHint')}</p>
+      <!-- Skeleton shaped like the list it precedes: a group label and two rows. -->
+      <div class="px-4 py-3" role="status" aria-live="polite">
+        <div class="animate-pulse space-y-3" aria-hidden="true">
+          <div class="h-2.5 w-24 rounded-sm bg-stone-200"></div>
+          {#each [0, 1] as _ (_)}
+            <div class="flex items-start gap-2 py-1">
+              <div class="flex w-9 shrink-0 flex-col items-center gap-1.5">
+                <div class="size-4 rounded-sm bg-stone-200"></div>
+                <div class="h-2 w-5 rounded-sm bg-stone-200"></div>
+              </div>
+              <div class="min-w-0 flex-1 space-y-2">
+                <div class="h-3.5 w-11/12 rounded-sm bg-stone-200"></div>
+                <div class="h-2.5 w-2/5 rounded-sm bg-stone-200"></div>
+              </div>
+            </div>
+          {/each}
         </div>
+        <p class="mt-4 text-xs text-stone-500">{t('searching')} {t('searchingHint')}</p>
       </div>
     {:else if loadError}
       <section class="px-4 py-6">

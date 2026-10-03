@@ -56,6 +56,20 @@ body {
 	background: rgba(54, 87, 199, 0.18);
 }
 
+/* Two citation chips on one claim read as a single number ("them12"); separate
+   them the way footnotes do, with a superscript comma. Lives here rather than in
+   CiteChip.svelte because the siblings are separate component instances, which
+   Svelte's scoped CSS cannot see across. */
+.cite + .cite::before {
+	content: ",";
+	position: relative;
+	top: -0.45em;
+	margin-right: 0.08em;
+	font-size: 0.65rem;
+	line-height: 1;
+	color: var(--color-stone-400);
+}
+
 .line-clamp-2 {
 	display: -webkit-box;
 	-webkit-line-clamp: 2;

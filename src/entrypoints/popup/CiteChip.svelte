@@ -65,12 +65,12 @@ function handleWindowKeydown(event: KeyboardEvent) {
 
 <!-- No whitespace between these tags: a newline here becomes a text node, which
      would put a space between the chip and the punctuation after it. --><span
-  class="relative inline-block"
+  class="cite relative inline-block"
 ><button
     type="button"
     bind:this={toggle}
     onclick={toggleOpen}
-    class="cursor-pointer align-super text-[0.65rem] font-semibold text-stone-500 underline decoration-dotted decoration-stone-400 underline-offset-2 transition-colors hover:text-stone-900"
+    class="relative -top-[0.45em] cursor-pointer text-[0.65rem] font-semibold leading-none text-stone-500 underline decoration-dotted decoration-stone-400 underline-offset-2 transition-colors hover:text-stone-900"
     aria-label={t('citationSource', String(index))}
     aria-haspopup="dialog"
     aria-expanded={open}
@@ -106,3 +106,4 @@ function handleWindowKeydown(event: KeyboardEvent) {
         </a>
       {/if}
     </span>{/if}</span>
+

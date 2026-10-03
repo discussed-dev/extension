@@ -129,9 +129,6 @@
 	"addApiKey": {
 		"message": "API 키 추가"
 	},
-	"cachedSummaryReady": {
-		"message": "캐시된 요약이 준비되었습니다."
-	},
 	"discussionReadyOne": {
 		"message": "요약할 수 있는 토론 1개."
 	},

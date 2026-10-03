@@ -129,9 +129,6 @@
 	"addApiKey": {
 		"message": "APIキーを追加"
 	},
-	"cachedSummaryReady": {
-		"message": "キャッシュ済みの要約があります。"
-	},
 	"discussionReadyOne": {
 		"message": "1 件の議論を要約できます。"
 	},

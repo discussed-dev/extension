@@ -129,9 +129,6 @@
 	"addApiKey": {
 		"message": "Ajouter une clé API"
 	},
-	"cachedSummaryReady": {
-		"message": "Résumé en cache prêt."
-	},
 	"discussionReadyOne": {
 		"message": "1 discussion prête à résumer."
 	},

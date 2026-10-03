@@ -129,9 +129,6 @@
 	"addApiKey": {
 		"message": "Add API key"
 	},
-	"cachedSummaryReady": {
-		"message": "Cached summary ready."
-	},
 	"discussionReadyOne": {
 		"message": "1 discussion ready to summarize."
 	},

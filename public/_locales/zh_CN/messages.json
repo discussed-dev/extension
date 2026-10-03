@@ -129,9 +129,6 @@
 	"addApiKey": {
 		"message": "添加 API 密钥"
 	},
-	"cachedSummaryReady": {
-		"message": "缓存摘要已就绪。"
-	},
 	"discussionReadyOne": {
 		"message": "1 条讨论可生成摘要。"
 	},

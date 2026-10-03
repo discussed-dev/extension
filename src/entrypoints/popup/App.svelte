@@ -289,9 +289,10 @@ const resolvedHost = $derived.by(() => {
 	}
 });
 
+// Nothing to add when the button already says "View summary".
 const ctaDescription = $derived.by(() => {
 	if (summaryResult) {
-		return t('cachedSummaryReady');
+		return '';
 	}
 	if (!hasApiKey) {
 		return t('configureApiKey');
@@ -537,7 +538,9 @@ load();
           </button>
         {/if}
 
-        <p class="mt-1 text-xs leading-4 text-stone-500">{ctaDescription}</p>
+        {#if ctaDescription}
+          <p class="mt-1 text-xs leading-4 text-stone-500">{ctaDescription}</p>
+        {/if}
 
         <ExternalLinks url={currentUrl} />
       </div>

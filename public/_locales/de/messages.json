@@ -129,9 +129,6 @@
 	"addApiKey": {
 		"message": "API-Schlüssel hinzufügen"
 	},
-	"cachedSummaryReady": {
-		"message": "Zwischengespeicherte Zusammenfassung bereit."
-	},
 	"discussionReadyOne": {
 		"message": "1 Diskussion bereit zum Zusammenfassen."
 	},

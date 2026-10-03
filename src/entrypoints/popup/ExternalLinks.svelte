@@ -1,15 +1,18 @@
 <script lang="ts">
 import { t } from '@/lib/i18n';
 import type { Platform } from '@/lib/types';
+import type { Snippet } from 'svelte';
 import PlatformMark from './PlatformMark.svelte';
 
 interface Props {
 	url: string;
 	title?: string;
 	showSubmit?: boolean;
+	/** Rendered at the trailing edge of the search row, so a caller can share the line. */
+	children?: Snippet;
 }
 
-let { url, title = '', showSubmit = false }: Props = $props();
+let { url, title = '', showSubmit = false, children }: Props = $props();
 
 const searchLinks = $derived([
 	{
@@ -83,4 +86,7 @@ const submitLinks = $derived([
       {link.label}
     </a>
   {/each}
+  {#if children}
+    <span class="ml-auto">{@render children()}</span>
+  {/if}
 </div>

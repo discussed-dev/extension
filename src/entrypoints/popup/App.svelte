@@ -511,15 +511,15 @@ load();
 
         <p class="mt-1 text-xs leading-4 text-stone-500">{ctaDescription}</p>
 
-        <ExternalLinks url={currentUrl} />
-
-        <button
-          type="button"
-          onclick={blockSite}
-          class="mt-1 cursor-pointer text-2xs text-stone-400 transition-colors hover:text-stone-600"
-        >
-          {t('blockDomain', currentHost)}
-        </button>
+        <ExternalLinks url={currentUrl}>
+          <button
+            type="button"
+            onclick={blockSite}
+            class="cursor-pointer text-2xs text-stone-400 transition-colors hover:text-stone-600"
+          >
+            {t('blockDomain', currentHost)}
+          </button>
+        </ExternalLinks>
       </div>
     {/if}
   </main>

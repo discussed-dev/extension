@@ -318,7 +318,7 @@ load();
 {#if view === 'summary' && summarizing && !summaryResult}
   <!-- First-run skeleton. A regenerate keeps the existing summary on screen and
        spins its own button instead. -->
-  <div class="w-[28rem] overflow-hidden border border-stone-200/80 bg-white text-stone-900">
+  <div class="w-[28rem] overflow-hidden bg-white text-stone-900">
     <div class="flex items-center gap-2 border-b border-stone-200/80 px-4 py-2">
       <button
         type="button"
@@ -382,7 +382,7 @@ load();
     platforms={[...new Set(discussions.map(d => d.platform))]}
   />
 {:else}
-  <main class="flex max-h-[42rem] w-[28rem] min-h-48 flex-col overflow-hidden border border-stone-200/80 bg-white text-stone-900">
+  <main class="flex max-h-[42rem] w-[28rem] min-h-48 flex-col overflow-hidden bg-white text-stone-900">
     <header class="flex items-center justify-between gap-3 border-b border-stone-200/80 px-4 py-2.5">
       <PopupBrand host={currentHost} />
 

@@ -148,7 +148,7 @@ const supportingBlocks = $derived(
 
 <svelte:window onkeydown={handleWindowKeydown} />
 
-<div class="w-[28rem] overflow-hidden border border-stone-200/80 bg-white text-stone-900">
+<div class="w-[28rem] overflow-hidden bg-white text-stone-900">
   <div class="flex items-center justify-between gap-3 border-b border-stone-200/80 px-4 py-2">
     <div class="flex min-w-0 items-center gap-2">
       <button

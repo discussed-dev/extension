@@ -129,8 +129,8 @@
 			}
 		}
 	},
-	"openAiSettings": {
-		"message": "KI-Einstellungen öffnen"
+	"addApiKey": {
+		"message": "API-Schlüssel hinzufügen"
 	},
 	"cachedSummaryReady": {
 		"message": "Zwischengespeicherte Zusammenfassung bereit."

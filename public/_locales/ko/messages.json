@@ -129,8 +129,8 @@
 			}
 		}
 	},
-	"openAiSettings": {
-		"message": "AI 설정 열기"
+	"addApiKey": {
+		"message": "API 키 추가"
 	},
 	"cachedSummaryReady": {
 		"message": "캐시된 요약이 준비되었습니다."

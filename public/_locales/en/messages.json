@@ -129,8 +129,8 @@
 			}
 		}
 	},
-	"openAiSettings": {
-		"message": "Open AI Settings"
+	"addApiKey": {
+		"message": "Add API key"
 	},
 	"cachedSummaryReady": {
 		"message": "Cached summary ready."

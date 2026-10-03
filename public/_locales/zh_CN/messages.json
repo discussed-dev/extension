@@ -129,8 +129,8 @@
 			}
 		}
 	},
-	"openAiSettings": {
-		"message": "打开 AI 设置"
+	"addApiKey": {
+		"message": "添加 API 密钥"
 	},
 	"cachedSummaryReady": {
 		"message": "缓存摘要已就绪。"

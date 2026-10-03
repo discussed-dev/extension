@@ -129,8 +129,8 @@
 			}
 		}
 	},
-	"openAiSettings": {
-		"message": "Ouvrir les paramètres IA"
+	"addApiKey": {
+		"message": "Ajouter une clé API"
 	},
 	"cachedSummaryReady": {
 		"message": "Résumé en cache prêt."

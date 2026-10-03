@@ -129,8 +129,8 @@
 			}
 		}
 	},
-	"openAiSettings": {
-		"message": "AI設定を開く"
+	"addApiKey": {
+		"message": "APIキーを追加"
 	},
 	"cachedSummaryReady": {
 		"message": "キャッシュ済みの要約があります。"

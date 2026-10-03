@@ -505,7 +505,7 @@ load();
             class="inline-flex min-h-9 w-full cursor-pointer items-center justify-center rounded-md px-4 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60
               {hasApiKey ? 'bg-stone-900 text-white hover:bg-stone-800' : 'border border-stone-300 bg-white text-stone-700 hover:border-stone-400'}"
           >
-            {summarizing ? t('summarizing') : hasApiKey ? t('summarizeAll') : t('openAiSettings')}
+            {summarizing ? t('summarizing') : hasApiKey ? t('summarizeAll') : t('addApiKey')}
           </button>
         {/if}
 

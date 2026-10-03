@@ -480,7 +480,8 @@ load();
               </h2>
             </div>
 
-            <div class="divide-y divide-stone-200/70">
+            <!-- isolate: the row hover wash sits at -z-10 and must not fall behind the popup. -->
+            <div class="isolate divide-y divide-stone-200/70">
               {#each group.items as discussion (discussion.externalId)}
                 <DiscussionRow
                   {discussion}

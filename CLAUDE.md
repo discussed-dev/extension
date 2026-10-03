@@ -123,9 +123,13 @@ Both submissions auto-submit for review. `continue-on-error: true` ensures one s
 
 The CWS OAuth client (Google Cloud project `discussed-extension`) lives in Testing mode. Sensitive scopes rotate refresh tokens every ~7 days. When the workflow's Chrome step fails with `invalid_grant`:
 
-1. Locally: `bunx publish-extension init` — re-authorizes via browser, writes new values to gitignored `.env.submit`
-2. Update only the one secret: `gh secret set CWS_REFRESH_TOKEN` (paste from `.env.submit`)
-3. Re-run the failed workflow, or wait for next tag push
+`bunx publish-extension init` can no longer mint tokens: it uses Google's retired out-of-band redirect (`urn:ietf:wg:oauth:2.0:oob`) and the consent page fails with `Error 400: invalid_request`. Use `scripts/cws-token.mjs`, which uses a localhost redirect (the OAuth client must be the Desktop app type). It never prints secrets.
+
+1. `node scripts/cws-token.mjs .env.submit check client` — expect `invalid_grant`. `invalid_client` means the client secret in `.env.submit` is stale: add a new secret on the OAuth client in Google Cloud Credentials and paste it into `.env.submit` first.
+2. `node scripts/cws-token.mjs .env.submit mint` — open the printed URL, consent; the script writes `CHROME_REFRESH_TOKEN`.
+3. `node scripts/cws-token.mjs .env.submit check` — must print `OK: access_token issued`.
+4. Update the CI secrets with surrounding quotes stripped (`.env.submit` stores values quoted): `CWS_REFRESH_TOKEN`, plus `CWS_CLIENT_SECRET` if the secret changed.
+5. Submit Chrome only, from the CI-built zip: `gh release download vX.Y.Z -p '*-chrome.zip'`, then `bunx wxt submit --chrome-zip <zip>`. Do not re-run the whole workflow: Firefox already took that version and AMO rejects a duplicate upload.
 
 Submitting the OAuth app for verification removes this expiry but adds Google review overhead.
 

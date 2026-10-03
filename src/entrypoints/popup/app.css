@@ -35,6 +35,10 @@ body {
 		--color-amber-300: #6b5520;
 		--color-amber-600: #d9a441;
 		--color-amber-800: #f0c674;
+		/* Error notice: dim red surface, light red text. */
+		--color-red-50: #2b1a1a;
+		--color-red-200: #4d2626;
+		--color-red-700: #f09a9a;
 	}
 
 	html,

@@ -6,6 +6,7 @@ import type { TokenUsage } from '@/lib/llm';
 import { renderMarkdown } from '@/lib/markdown';
 import type { Platform } from '@/lib/types';
 import CiteChip from './CiteChip.svelte';
+import PlatformMark from './PlatformMark.svelte';
 
 interface DiscussionExport {
 	platform: Platform;
@@ -51,6 +52,13 @@ let {
 	hasPageComments,
 	platforms,
 }: Props = $props();
+
+// Brand names are not translated.
+const PLATFORM_NAMES: Record<Platform, string> = {
+	hn: 'Hacker News',
+	reddit: 'Reddit',
+	lobsters: 'Lobsters',
+};
 
 let copied = $state(false);
 let showExportMenu = $state(false);
@@ -248,28 +256,25 @@ const supportingBlocks = $derived(
     {/if}
   </div>
 
-  <div class="flex flex-wrap items-center gap-2 border-t border-stone-200/80 px-4 py-3 text-xs text-stone-500">
-    {#if platforms?.includes('hn')}
-      <span class="rounded-md border border-orange-200 bg-orange-50 px-2.5 py-1 text-orange-700">HN</span>
-    {/if}
-    {#if platforms?.includes('reddit')}
-      <span class="rounded-md border border-orange-200 bg-orange-50 px-2.5 py-1 text-orange-700">Reddit</span>
-    {/if}
-    {#if platforms?.includes('lobsters')}
-      <span class="rounded-md border border-red-200 bg-red-50 px-2.5 py-1 text-red-700">Lobsters</span>
+  <!-- Metadata, so it stays quieter than the body: platform icons instead of
+       coloured pills, and model/date/tokens as one muted line. -->
+  <div class="flex flex-wrap items-center gap-x-3 gap-y-1.5 border-t border-stone-200/80 px-4 py-2.5 text-xs text-stone-500">
+    {#if platforms?.length}
+      <span class="flex items-center gap-1.5">
+        {#each platforms as platform (platform)}
+          <PlatformMark {platform} sizeClass="size-4" />
+          <span class="sr-only">{PLATFORM_NAMES[platform]}</span>
+        {/each}
+      </span>
     {/if}
     {#if hasArticleContext}
-      <span class="rounded-md border border-blue-200 bg-blue-50 px-2.5 py-1 text-blue-700">{t('sourceArticle')}</span>
+      <span class="rounded-md border border-stone-200 bg-stone-50 px-2 py-0.5">{t('sourceArticle')}</span>
     {/if}
     {#if hasPageComments}
-      <span class="rounded-md border border-green-200 bg-green-50 px-2.5 py-1 text-green-700">{t('sourcePageComments')}</span>
+      <span class="rounded-md border border-stone-200 bg-stone-50 px-2 py-0.5">{t('sourcePageComments')}</span>
     {/if}
-    <span class="rounded-md border border-stone-200 bg-stone-50 px-2.5 py-1">{model}</span>
-    <span class="rounded-md border border-stone-200 bg-stone-50 px-2.5 py-1">
-      {new Date(createdAt).toLocaleDateString()}
+    <span class="ml-auto min-w-0 truncate tabular-nums">
+      {model} &middot; {new Date(createdAt).toLocaleDateString()}{tokenInfo ? ` · ${tokenInfo}` : ''}
     </span>
-    {#if tokenInfo}
-      <span class="rounded-md border border-stone-200 bg-stone-50 px-2.5 py-1">{tokenInfo}</span>
-    {/if}
   </div>
 </div>

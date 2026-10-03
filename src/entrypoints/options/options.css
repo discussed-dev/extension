@@ -30,6 +30,9 @@ body {
 		--color-stone-800: #e4e5ea;
 		--color-stone-900: #f2f3f5;
 		--color-stone-950: #fafafa;
+		/* Key-test status text: the light-mode 700s are too dark on this surface. */
+		--color-red-700: #f09a9a;
+		--color-emerald-700: #7fd4a6;
 	}
 
 	html,

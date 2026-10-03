@@ -334,6 +334,21 @@ load();
       <PopupBrand host={currentHost} />
 
       <div class="flex shrink-0 gap-1.5">
+        {#if !loading && !blocked && currentUrl}
+          <!-- Per-site control, so it lives with the other per-popup controls rather
+               than as a stray link under the footer, where it wrapped for most hosts. -->
+          <button
+            type="button"
+            onclick={blockSite}
+            class="inline-flex size-8.5 cursor-pointer items-center justify-center rounded-md border border-stone-200 bg-white text-stone-600 transition-colors hover:border-stone-300 hover:text-stone-950"
+            aria-label={t('blockDomain', currentHost)}
+            title={t('blockDomain', currentHost)}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-4">
+              <path fill-rule="evenodd" d="M5.965 4.904l9.131 9.131a6.5 6.5 0 0 0-9.131-9.131Zm8.07 10.192L4.904 5.965a6.5 6.5 0 0 0 9.131 9.131ZM4.343 4.343a8 8 0 1 1 11.314 11.314A8 8 0 0 1 4.343 4.343Z" clip-rule="evenodd" />
+            </svg>
+          </button>
+        {/if}
         <button
           type="button"
           onclick={refresh}
@@ -524,15 +539,7 @@ load();
 
         <p class="mt-1 text-xs leading-4 text-stone-500">{ctaDescription}</p>
 
-        <ExternalLinks url={currentUrl}>
-          <button
-            type="button"
-            onclick={blockSite}
-            class="cursor-pointer text-2xs text-stone-400 transition-colors hover:text-stone-600"
-          >
-            {t('blockDomain', currentHost)}
-          </button>
-        </ExternalLinks>
+        <ExternalLinks url={currentUrl} />
       </div>
     {/if}
   </main>

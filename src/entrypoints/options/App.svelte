@@ -175,8 +175,9 @@ load();
 </script>
 
 {#if current}
-<div class="mx-auto min-h-screen max-w-3xl px-2 py-3 text-stone-900 sm:px-4">
-  <div class="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+<div class="mx-auto min-h-screen max-w-3xl px-2 pb-3 text-stone-900 sm:px-4">
+  <!-- Sticky, so Save is reachable from the bottom of the expanded advanced section. -->
+  <div class="sticky top-0 z-10 -mx-2 mb-3 flex flex-col gap-2 border-b border-stone-200 bg-canvas px-2 py-3 sm:-mx-4 sm:flex-row sm:items-center sm:justify-between sm:px-4">
     <header class="min-w-0">
       <p class="text-xs font-semibold uppercase tracking-[0.24em] text-stone-500">Discussed <span class="font-normal normal-case tracking-normal text-stone-400">v{version}</span></p>
       <h1 class="mt-1 text-xl font-semibold tracking-tight text-stone-950">{t('settings')}</h1>

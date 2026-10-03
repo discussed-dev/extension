@@ -78,6 +78,15 @@ $effect(() => {
 	if (showExportMenu) firstExportItem?.focus();
 });
 
+// So the reader knows which page this summary is about; the overview header is gone here.
+const pageHost = $derived.by(() => {
+	try {
+		return new URL(pageUrl).hostname.replace(/^www\./, '');
+	} catch {
+		return pageUrl;
+	}
+});
+
 const tokenInfo = $derived(
 	usage ? t('tokensUsed', (usage.inputTokens + usage.outputTokens).toLocaleString()) : '',
 );
@@ -140,7 +149,7 @@ const supportingBlocks = $derived(
 <svelte:window onkeydown={handleWindowKeydown} />
 
 <div class="w-[28rem] overflow-hidden border border-stone-200/80 bg-white text-stone-900">
-  <div class="flex items-center justify-between gap-4 border-b border-stone-200/80 px-4 py-3">
+  <div class="flex items-center justify-between gap-3 border-b border-stone-200/80 px-4 py-2">
     <div class="flex min-w-0 items-center gap-2">
       <button
         type="button"
@@ -155,6 +164,7 @@ const supportingBlocks = $derived(
       </button>
       <div class="min-w-0">
         <p class="text-2xs font-semibold uppercase tracking-[0.22em] text-stone-500">{t('summary')}</p>
+        <p class="truncate text-sm font-medium text-stone-800" title={pageTitle || pageHost}>{pageTitle || pageHost}</p>
       </div>
     </div>
 

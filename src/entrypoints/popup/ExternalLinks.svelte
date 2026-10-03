@@ -48,7 +48,7 @@ const submitLinks = $derived([
 
 {#if showSubmit}
 <div class="mt-2 flex flex-wrap items-center gap-1.5">
-  <span class="text-2xs font-semibold uppercase tracking-[0.18em] text-stone-500">{t('submitTo')}</span>
+  <span class="text-xs text-stone-500">{t('submitTo')}</span>
   {#each submitLinks as link}
     <a
       href={link.href}
@@ -63,7 +63,7 @@ const submitLinks = $derived([
 </div>
 {/if}
 <div class="mt-2 flex flex-wrap items-center gap-1.5">
-  <span class="text-2xs font-semibold uppercase tracking-[0.18em] text-stone-500">{t('searchElsewhere')}</span>
+  <span class="text-xs text-stone-500">{t('searchElsewhere')}</span>
   {#each searchLinks as link}
     <a
       href={link.href}

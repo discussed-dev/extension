@@ -87,7 +87,7 @@ function handleWindowKeydown(event: KeyboardEvent) {
         ? 'right-0'
         : 'left-0'} {alignAbove ? 'bottom-full mb-1' : 'top-full mt-1'}"
     >
-      <span class="block text-2xs font-semibold uppercase tracking-[0.18em] text-stone-500">
+      <span class="block text-xs font-medium text-stone-700">
         {sourceLabel}
       </span>
       <span class="mt-1 block text-xs text-stone-500">

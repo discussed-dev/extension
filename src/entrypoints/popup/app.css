@@ -58,6 +58,12 @@ body {
 	min-width: 25rem;
 }
 
+/* Thin, palette-coloured scrollbars; the Windows default draws arrow buttons. */
+html {
+	scrollbar-width: thin;
+	scrollbar-color: var(--color-stone-300) transparent;
+}
+
 :focus-visible {
 	outline: 2px solid #3657c7;
 	outline-offset: 2px;

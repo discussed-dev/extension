@@ -1,4 +1,5 @@
 <script lang="ts">
+import BrandMark from '@/components/BrandMark.svelte';
 import { t } from '@/lib/i18n';
 import { type LlmProvider, needsMaxCompletionTokens } from '@/lib/llm';
 import { PROVIDERS, type Settings, settings } from '@/lib/settings';
@@ -178,9 +179,9 @@ load();
 <div class="mx-auto min-h-screen max-w-3xl px-2 pb-3 text-stone-900 sm:px-4">
   <!-- Sticky, so Save is reachable from the bottom of the expanded advanced section. -->
   <div class="sticky top-0 z-10 -mx-2 mb-3 flex flex-col gap-2 border-b border-stone-200 bg-canvas px-2 py-3 sm:-mx-4 sm:flex-row sm:items-center sm:justify-between sm:px-4">
-    <header class="min-w-0">
-      <p class="text-xs font-semibold uppercase tracking-[0.24em] text-stone-500">Discussed <span class="font-normal normal-case tracking-normal text-stone-400">v{version}</span></p>
-      <h1 class="mt-1 text-xl font-semibold tracking-tight text-stone-950">{t('settings')}</h1>
+    <header class="flex min-w-0 items-center gap-2.5">
+      <BrandMark />
+      <h1 class="text-xl font-semibold tracking-tight text-stone-950">{t('settings')}</h1>
     </header>
 
     <div class="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:items-center">
@@ -515,6 +516,8 @@ load();
     <a href="https://github.com/discussed-dev/extension/issues" target="_blank" rel="noopener noreferrer" class="transition-colors hover:text-stone-900">{t('reportIssue')}</a>
     <span>&middot;</span>
     <a href="https://github.com/discussed-dev/extension" target="_blank" rel="noopener noreferrer" class="transition-colors hover:text-stone-900">GitHub</a>
+    <span>&middot;</span>
+    <span class="text-stone-400">v{version}</span>
   </footer>
 </div>
 {/if}

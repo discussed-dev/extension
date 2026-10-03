@@ -5,6 +5,11 @@
 @theme {
 	--text-2xs: 0.6875rem;
 	--text-2xs--line-height: 1rem;
+	/* Square corners throughout: every rounded-* utility resolves to 0. */
+	--radius-xs: 0;
+	--radius-sm: 0;
+	--radius-md: 0;
+	--radius-lg: 0;
 	/* Page background, exposed as a utility so the sticky header can repeat it. */
 	--color-canvas: #f4f5f7;
 }
@@ -76,7 +81,6 @@ input[type="checkbox"] {
 	}
 
 	::-webkit-scrollbar-thumb {
-		border-radius: 4px;
 		background: var(--color-stone-300);
 	}
 

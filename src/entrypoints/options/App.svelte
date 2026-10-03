@@ -209,21 +209,21 @@ load();
           <h3 class="text-2xs font-semibold uppercase tracking-[0.18em] text-stone-500">{t('sources')}</h3>
           <div class="mt-1 divide-y divide-stone-200/80">
             <label class="flex items-start gap-3 py-2">
-              <input type="checkbox" bind:checked={current.enableHn} class="mt-1 rounded border-stone-300" />
+              <input type="checkbox" bind:checked={current.enableHn} class="mt-1 border-stone-300" />
               <span>
                 <span class="block text-sm font-medium text-stone-900">Hacker News</span>
                 <span class="mt-0.5 block text-xs leading-5 text-stone-600">{t('sourceHintHn')}</span>
               </span>
             </label>
             <label class="flex items-start gap-3 py-2">
-              <input type="checkbox" bind:checked={current.enableReddit} class="mt-1 rounded border-stone-300" />
+              <input type="checkbox" bind:checked={current.enableReddit} class="mt-1 border-stone-300" />
               <span>
                 <span class="block text-sm font-medium text-stone-900">Reddit</span>
                 <span class="mt-0.5 block text-xs leading-5 text-stone-600">{t('sourceHintMatching')}</span>
               </span>
             </label>
             <label class="flex items-start gap-3 py-2">
-              <input type="checkbox" bind:checked={current.enableLobsters} class="mt-1 rounded border-stone-300" />
+              <input type="checkbox" bind:checked={current.enableLobsters} class="mt-1 border-stone-300" />
               <span>
                 <span class="block text-sm font-medium text-stone-900">Lobsters</span>
                 <span class="mt-0.5 block text-xs leading-5 text-stone-600">{t('sourceHintMatching')}</span>
@@ -236,14 +236,14 @@ load();
           <h3 class="text-2xs font-semibold uppercase tracking-[0.18em] text-stone-500">{t('linkBehavior')}</h3>
           <div class="mt-1 divide-y divide-stone-200/80">
             <label class="flex items-start gap-3 py-2">
-              <input type="checkbox" bind:checked={current.openLinksInNewTab} class="mt-1 rounded border-stone-300" />
+              <input type="checkbox" bind:checked={current.openLinksInNewTab} class="mt-1 border-stone-300" />
               <span>
                 <span class="block text-sm font-medium text-stone-900">{t('openLinksNewTab')}</span>
                 <span class="mt-0.5 block text-xs leading-5 text-stone-600">{t('openLinksNewTabHint')}</span>
               </span>
             </label>
             <label class="flex items-start gap-3 py-2">
-              <input type="checkbox" bind:checked={current.useOldReddit} class="mt-1 rounded border-stone-300" />
+              <input type="checkbox" bind:checked={current.useOldReddit} class="mt-1 border-stone-300" />
               <span>
                 <span class="block text-sm font-medium text-stone-900">{t('preferOldReddit')}</span>
                 <span class="mt-0.5 block text-xs leading-5 text-stone-600">{t('preferOldRedditHint')}</span>
@@ -410,14 +410,14 @@ load();
             <h3 class="text-2xs font-semibold uppercase tracking-[0.18em] text-stone-500">{t('matching')}</h3>
             <div class="mt-2.5 space-y-2">
               <label class="flex items-start gap-3">
-                <input type="checkbox" bind:checked={current.redditExactMatch} class="mt-1 rounded border-stone-300" />
+                <input type="checkbox" bind:checked={current.redditExactMatch} class="mt-1 border-stone-300" />
                 <span>
                   <span class="block text-sm font-medium text-stone-900">{t('redditExactMatchLabel')}</span>
                   <span class="mt-0.5 block text-xs leading-5 text-stone-600">{t('redditExactMatchHint')}</span>
                 </span>
               </label>
               <label class="flex items-start gap-3">
-                <input type="checkbox" bind:checked={current.ignoreQueryString} class="mt-1 rounded border-stone-300" />
+                <input type="checkbox" bind:checked={current.ignoreQueryString} class="mt-1 border-stone-300" />
                 <span>
                   <span class="block text-sm font-medium text-stone-900">{t('ignoreQueryStrings')}</span>
                   <span class="mt-0.5 block text-xs leading-5 text-stone-600">{t('ignoreQueryStringsHint')}</span>
@@ -430,14 +430,14 @@ load();
             <h3 class="text-2xs font-semibold uppercase tracking-[0.18em] text-stone-500">{t('backgroundScanning')}</h3>
             <div class="mt-2.5 space-y-2">
               <label class="flex items-start gap-3">
-                <input type="checkbox" bind:checked={current.searchOnTabUpdate} class="mt-1 rounded border-stone-300" />
+                <input type="checkbox" bind:checked={current.searchOnTabUpdate} class="mt-1 border-stone-300" />
                 <span>
                   <span class="block text-sm font-medium text-stone-900">{t('scanOnTabUpdate')}</span>
                   <span class="mt-0.5 block text-xs leading-5 text-stone-600">{t('scanOnTabUpdateHint')}</span>
                 </span>
               </label>
               <label class="flex items-start gap-3">
-                <input type="checkbox" bind:checked={current.searchOnTabActivate} class="mt-1 rounded border-stone-300" />
+                <input type="checkbox" bind:checked={current.searchOnTabActivate} class="mt-1 border-stone-300" />
                 <span>
                   <span class="block text-sm font-medium text-stone-900">{t('scanOnTabActivate')}</span>
                   <span class="mt-0.5 block text-xs leading-5 text-stone-600">{t('scanOnTabActivateHint')}</span>

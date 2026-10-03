@@ -233,19 +233,16 @@ const supportingBlocks = $derived(
         {/if}
       </div>
 
-      <!-- Icon-only: regenerating costs a paid API call and is rare, so it should
-           not weigh the same as Copy. -->
+      <!-- Quieter than Copy (no border, smaller type) because it spends an API
+           call and is rare, but still labelled: an icon alone needed a hover to
+           be understood. -->
       <button
         type="button"
         onclick={onRegenerate}
         disabled={regenerating}
-        class="inline-flex size-9 cursor-pointer items-center justify-center rounded-md border border-stone-200 bg-white text-stone-600 transition-colors hover:border-stone-300 hover:text-stone-950 disabled:cursor-not-allowed disabled:opacity-50"
-        aria-label={regenerating ? t('generating') : t('regenerate')}
-        title={regenerating ? t('generating') : t('regenerate')}
+        class="inline-flex min-h-9 cursor-pointer items-center justify-center rounded-md px-2.5 text-xs font-medium text-stone-600 transition-colors hover:bg-stone-50 hover:text-stone-950 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-3.5 {regenerating ? 'animate-spin' : ''}">
-          <path fill-rule="evenodd" d="M13.836 2.477a.75.75 0 0 1 .75.75v3.182a.75.75 0 0 1-.75.75h-3.182a.75.75 0 0 1 0-1.5h1.37l-.84-.841a4.5 4.5 0 0 0-7.08.681.75.75 0 0 1-1.3-.75 6 6 0 0 1 9.44-.908l.84.84V3.227a.75.75 0 0 1 .75-.75Zm-.911 7.5A.75.75 0 0 1 13.199 11a6 6 0 0 1-9.44.908l-.84-.84v1.546a.75.75 0 0 1-1.5 0V9.432a.75.75 0 0 1 .75-.75h3.182a.75.75 0 0 1 0 1.5H3.98l.841.841a4.5 4.5 0 0 0 7.08-.681.75.75 0 0 1 1.025-.274Z" clip-rule="evenodd" />
-        </svg>
+        {regenerating ? t('generating') : t('regenerate')}
       </button>
     </div>
   </div>

@@ -20,6 +20,7 @@ const searchHref = $derived(`https://www.reddit.com/search/?q=url%3A${encodeURIC
   >
     {t('redditSignIn')}
   </a>
+  <span aria-hidden="true">&middot;</span>
   <a
     href={searchHref}
     target="_blank"

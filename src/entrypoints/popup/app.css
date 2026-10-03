@@ -9,7 +9,8 @@
 
 :root {
 	color-scheme: light dark;
-	font-family: "IBM Plex Sans", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+	/* System UI faces only: nothing is bundled, so the stack names what will actually render. */
+	font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 }
 
 html,

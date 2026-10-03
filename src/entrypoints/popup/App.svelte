@@ -487,7 +487,7 @@ load();
       {#if signInRequired.includes('reddit')}
         <RedditSignInNotice url={redditSearchUrl} />
       {/if}
-      <div class="max-h-[19rem] min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-3">
+      <div class="max-h-[24rem] min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-3">
         {#each groupedDiscussions as group (group.platform)}
           <section id={`platform-${group.platform}`} class="scroll-mt-3">
             <div class="mb-0.5 flex items-center gap-3">

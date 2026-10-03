@@ -195,6 +195,12 @@
 			}
 		}
 	},
+	"summaryPhaseFetching": {
+		"message": "Récupération des commentaires…"
+	},
+	"summaryPhaseGenerating": {
+		"message": "Rédaction du résumé…"
+	},
 	"summarizationFailed": {
 		"message": "Échec du résumé"
 	},

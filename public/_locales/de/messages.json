@@ -195,6 +195,12 @@
 			}
 		}
 	},
+	"summaryPhaseFetching": {
+		"message": "Kommentare werden geladen…"
+	},
+	"summaryPhaseGenerating": {
+		"message": "Zusammenfassung wird erstellt…"
+	},
 	"summarizationFailed": {
 		"message": "Zusammenfassung fehlgeschlagen"
 	},

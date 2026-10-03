@@ -195,6 +195,12 @@
 			}
 		}
 	},
+	"summaryPhaseFetching": {
+		"message": "Obteniendo comentarios…"
+	},
+	"summaryPhaseGenerating": {
+		"message": "Redactando el resumen…"
+	},
 	"summarizationFailed": {
 		"message": "Error al resumir"
 	},

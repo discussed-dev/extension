@@ -1,6 +1,42 @@
-import { describe, expect, it } from 'vitest';
-import { selectTopThreads } from './summarize';
+import { describe, expect, it, vi } from 'vitest';
+import { selectTopThreads, summarizeDiscussions } from './summarize';
 import type { Discussion } from './types';
+
+vi.mock('./cache', () => ({ cacheGet: vi.fn(async () => null), cacheSet: vi.fn(async () => {}) }));
+vi.mock('./settings', () => ({
+	settings: {
+		getValue: vi.fn(async () => ({
+			apiKey: 'k',
+			llmProvider: 'anthropic',
+			model: 'm',
+			summaryLanguage: 'en',
+			openaiBaseUrl: '',
+			maxCommentsForSummary: 40,
+		})),
+	},
+}));
+vi.mock('./comments', () => ({
+	fetchHnComments: vi.fn(async () => [
+		{
+			id: '1',
+			ref: 'hn:1',
+			author: 'a',
+			text: 'a comment long enough to survive preprocessing',
+			score: 1,
+			depth: 0,
+			platform: 'hn',
+		},
+	]),
+	fetchRedditComments: vi.fn(async () => []),
+	fetchLobstersComments: vi.fn(async () => []),
+}));
+vi.mock('./llm', () => ({
+	summarize: vi.fn(async () => ({
+		summary: 'done',
+		model: 'm',
+		usage: { inputTokens: 1, outputTokens: 1 },
+	})),
+}));
 
 function discussion(commentCount: number, externalId: string): Discussion {
 	return {
@@ -30,5 +66,17 @@ describe('selectTopThreads', () => {
 		const selected = selectTopThreads(discussions);
 
 		expect(selected.map((d) => d.externalId)).toEqual(['b', 'a', 'c']);
+	});
+});
+
+describe('summarizeDiscussions progress', () => {
+	it('reports fetching before generating, once each', async () => {
+		const phases: string[] = [];
+
+		await summarizeDiscussions('https://example.com/a', [discussion(5, 'x')], {
+			onPhase: (phase) => phases.push(phase),
+		});
+
+		expect(phases).toEqual(['fetching', 'generating']);
 	});
 });

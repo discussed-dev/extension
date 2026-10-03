@@ -195,6 +195,12 @@
 			}
 		}
 	},
+	"summaryPhaseFetching": {
+		"message": "댓글 가져오는 중…"
+	},
+	"summaryPhaseGenerating": {
+		"message": "요약 작성 중…"
+	},
 	"summarizationFailed": {
 		"message": "요약 실패"
 	},

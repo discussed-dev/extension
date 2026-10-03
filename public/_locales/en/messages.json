@@ -195,6 +195,12 @@
 			}
 		}
 	},
+	"summaryPhaseFetching": {
+		"message": "Fetching comments…"
+	},
+	"summaryPhaseGenerating": {
+		"message": "Writing the summary…"
+	},
 	"summarizationFailed": {
 		"message": "Summarization failed"
 	},

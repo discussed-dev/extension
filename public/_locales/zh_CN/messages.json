@@ -195,6 +195,12 @@
 			}
 		}
 	},
+	"summaryPhaseFetching": {
+		"message": "正在获取评论…"
+	},
+	"summaryPhaseGenerating": {
+		"message": "正在生成摘要…"
+	},
 	"summarizationFailed": {
 		"message": "摘要生成失败"
 	},

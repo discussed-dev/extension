@@ -6,7 +6,7 @@ import { t } from '@/lib/i18n';
 import { type PageContent, injectAndExtract } from '@/lib/page-content';
 import { type ResolvedDiscussion, isPlatformUrl, resolveLinkedUrl } from '@/lib/resolve-discussion';
 import { type Settings, settings } from '@/lib/settings';
-import { type SummaryResult, summarizeDiscussions } from '@/lib/summarize';
+import { type SummaryPhase, type SummaryResult, summarizeDiscussions } from '@/lib/summarize';
 import { setToolbarBadge } from '@/lib/toolbar-action';
 import type { Discussion, Platform } from '@/lib/types';
 import { isBlacklisted, normalizeUrl } from '@/lib/url';
@@ -36,6 +36,7 @@ let currentTabId = $state<number | null>(null);
 let view = $state<View>('overview');
 let summaryResult = $state<SummaryResult | null>(null);
 let summarizing = $state(false);
+let summaryPhase = $state<SummaryPhase>('fetching');
 let summaryError = $state('');
 let hasApiKey = $state(false);
 let userSettings = $state<Settings | null>(null);
@@ -228,17 +229,26 @@ async function doSummarize(force = false) {
 	const summarizeUrl = resolved?.linkedUrl ?? currentUrl;
 	if (!summarizeUrl || discussions.length === 0) return;
 	summarizing = true;
+	summaryPhase = 'fetching';
 	summaryError = '';
+	// Show the summary skeleton at once; a failure drops back to the overview below.
+	view = 'summary';
 	try {
 		let pageContent = undefined;
 		if (currentTabId != null) {
 			pageContent = await injectAndExtract(currentTabId);
 		}
 		lastPageContent = pageContent;
-		summaryResult = await summarizeDiscussions(summarizeUrl, discussions, { force, pageContent });
-		view = 'summary';
+		summaryResult = await summarizeDiscussions(summarizeUrl, discussions, {
+			force,
+			pageContent,
+			onPhase: (phase) => {
+				summaryPhase = phase;
+			},
+		});
 	} catch (e) {
 		summaryError = e instanceof Error ? e.message : t('summarizationFailed');
+		if (!summaryResult) view = 'overview';
 	} finally {
 		summarizing = false;
 	}
@@ -305,7 +315,49 @@ const ctaDescription = $derived.by(() => {
 load();
 </script>
 
-{#if view === 'summary' && summaryResult}
+{#if view === 'summary' && summarizing && !summaryResult}
+  <!-- First-run skeleton. A regenerate keeps the existing summary on screen and
+       spins its own button instead. -->
+  <div class="w-[28rem] overflow-hidden border border-stone-200/80 bg-white text-stone-900">
+    <div class="flex items-center gap-2 border-b border-stone-200/80 px-4 py-2">
+      <button
+        type="button"
+        onclick={() => { view = 'overview'; }}
+        class="inline-flex size-8.5 shrink-0 cursor-pointer items-center justify-center rounded-md border border-stone-200 bg-white text-stone-500 transition-colors hover:border-stone-300 hover:text-stone-900"
+        title={t('backToOverview')}
+        aria-label={t('backToOverview')}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
+          <path fill-rule="evenodd" d="M9.78 4.22a.75.75 0 0 1 0 1.06L7.06 8l2.72 2.72a.75.75 0 1 1-1.06 1.06L5.47 8.53a.75.75 0 0 1 0-1.06l3.25-3.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+        </svg>
+      </button>
+      <div class="min-w-0">
+        <p class="text-2xs font-semibold uppercase tracking-[0.22em] text-stone-500">{t('summary')}</p>
+        <p class="truncate text-sm font-medium text-stone-800">{currentTitle || currentHost}</p>
+      </div>
+    </div>
+    <div class="px-4 py-3" role="status" aria-live="polite">
+      <div class="animate-pulse" aria-hidden="true">
+        <div class="rounded-md border border-stone-200 bg-stone-50 px-4 py-3">
+          <div class="h-2.5 w-14 rounded-sm bg-stone-200"></div>
+          <div class="mt-3 space-y-2">
+            <div class="h-3.5 w-full rounded-sm bg-stone-200"></div>
+            <div class="h-3.5 w-11/12 rounded-sm bg-stone-200"></div>
+            <div class="h-3.5 w-3/5 rounded-sm bg-stone-200"></div>
+          </div>
+        </div>
+        <div class="mt-4 space-y-2">
+          <div class="h-3 w-full rounded-sm bg-stone-200"></div>
+          <div class="h-3 w-full rounded-sm bg-stone-200"></div>
+          <div class="h-3 w-4/5 rounded-sm bg-stone-200"></div>
+        </div>
+      </div>
+      <p class="mt-4 text-xs text-stone-500">
+        {summaryPhase === 'generating' ? t('summaryPhaseGenerating') : t('summaryPhaseFetching')}
+      </p>
+    </div>
+  </div>
+{:else if view === 'summary' && summaryResult}
   <Summary
     summary={summaryResult.summary}
     model={summaryResult.model}

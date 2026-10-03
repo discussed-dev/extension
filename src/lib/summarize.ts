@@ -25,6 +25,9 @@ const MAX_HN_COMMENTS_PER_THREAD = 200;
 
 export type { Citation } from './grounding';
 
+/** Coarse progress for the UI: comments are fetched, then the model writes. */
+export type SummaryPhase = 'fetching' | 'generating';
+
 export interface SummaryResult {
 	summary: string;
 	model: string;
@@ -119,7 +122,11 @@ ${platformLines}`;
 export async function summarizeDiscussions(
 	pageUrl: string,
 	discussions: Discussion[],
-	options: { force?: boolean; pageContent?: PageContent } = {},
+	options: {
+		force?: boolean;
+		pageContent?: PageContent;
+		onPhase?: (phase: SummaryPhase) => void;
+	} = {},
 ): Promise<SummaryResult> {
 	const cacheKey = `summary:${pageUrl}`;
 
@@ -134,6 +141,7 @@ export async function summarizeDiscussions(
 		throw new Error('No API key configured. Add one in extension settings.');
 	}
 
+	options.onPhase?.('fetching');
 	const { comments: allComments, fetchedThreads } = await fetchAllComments(discussions);
 
 	if (allComments.length === 0) {
@@ -181,6 +189,7 @@ export async function summarizeDiscussions(
 		pageCommentSource: options.pageContent?.commentSource,
 	};
 
+	options.onPhase?.('generating');
 	const result = await summarize(commentsText, summarizeOptions);
 
 	// `processed` — not `allComments` — is what formatCommentsForPrompt rendered.

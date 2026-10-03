@@ -195,6 +195,12 @@
 			}
 		}
 	},
+	"summaryPhaseFetching": {
+		"message": "コメントを取得中…"
+	},
+	"summaryPhaseGenerating": {
+		"message": "要約を作成中…"
+	},
 	"summarizationFailed": {
 		"message": "要約に失敗しました"
 	},

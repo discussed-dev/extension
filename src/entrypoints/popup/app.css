@@ -59,10 +59,36 @@ body {
 	min-width: 25rem;
 }
 
-/* Thin, palette-coloured scrollbars; the Windows default draws arrow buttons. */
-html {
-	scrollbar-width: thin;
-	scrollbar-color: var(--color-stone-300) transparent;
+/* Thin, palette-coloured scrollbars without the Windows arrow buttons. Chromium
+   ignores the ::-webkit-scrollbar pseudo-elements once the standard properties
+   are set, and only those pseudo-elements can remove the buttons, so the two
+   are forked by engine: Firefox gets the standard properties, Chromium the
+   pseudo-elements. */
+@supports not selector(::-webkit-scrollbar) {
+	html {
+		scrollbar-width: thin;
+		scrollbar-color: var(--color-stone-300) transparent;
+	}
+}
+
+@supports selector(::-webkit-scrollbar) {
+	::-webkit-scrollbar {
+		width: 8px;
+		height: 8px;
+	}
+
+	::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	::-webkit-scrollbar-thumb {
+		border-radius: 4px;
+		background: var(--color-stone-300);
+	}
+
+	::-webkit-scrollbar-button {
+		display: none;
+	}
 }
 
 :focus-visible {

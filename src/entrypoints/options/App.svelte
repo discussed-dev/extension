@@ -205,7 +205,7 @@ load();
 
       <div class="mt-3 grid gap-3 md:grid-cols-2">
         <section>
-          <h3 class="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-stone-500">{t('sources')}</h3>
+          <h3 class="text-2xs font-semibold uppercase tracking-[0.18em] text-stone-500">{t('sources')}</h3>
           <div class="mt-2 overflow-hidden rounded-md border border-stone-200 bg-white">
             <label class="flex items-start gap-3 px-3 py-2">
               <input type="checkbox" bind:checked={current.enableHn} class="mt-1 rounded border-stone-300" />
@@ -234,7 +234,7 @@ load();
         </section>
 
         <section>
-          <h3 class="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-stone-500">{t('linkBehavior')}</h3>
+          <h3 class="text-2xs font-semibold uppercase tracking-[0.18em] text-stone-500">{t('linkBehavior')}</h3>
           <div class="mt-2 overflow-hidden rounded-md border border-stone-200 bg-white">
             <label class="flex items-start gap-3 px-3 py-2">
               <input type="checkbox" bind:checked={current.openLinksInNewTab} class="mt-1 rounded border-stone-300" />
@@ -412,7 +412,7 @@ load();
       {#if showAdvanced}
         <div id="advanced-settings" class="mt-3 grid gap-3 md:grid-cols-2">
           <section class="rounded-md border border-stone-200 bg-white p-3">
-            <h3 class="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-stone-500">{t('matching')}</h3>
+            <h3 class="text-2xs font-semibold uppercase tracking-[0.18em] text-stone-500">{t('matching')}</h3>
             <div class="mt-2.5 space-y-2">
               <label class="flex items-start gap-3">
                 <input type="checkbox" bind:checked={current.redditExactMatch} class="mt-1 rounded border-stone-300" />
@@ -432,7 +432,7 @@ load();
           </section>
 
           <section class="rounded-md border border-stone-200 bg-white p-3">
-            <h3 class="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-stone-500">{t('backgroundScanning')}</h3>
+            <h3 class="text-2xs font-semibold uppercase tracking-[0.18em] text-stone-500">{t('backgroundScanning')}</h3>
             <div class="mt-2.5 space-y-2">
               <label class="flex items-start gap-3">
                 <input type="checkbox" bind:checked={current.searchOnTabUpdate} class="mt-1 rounded border-stone-300" />
@@ -452,7 +452,7 @@ load();
           </section>
 
           <section class="rounded-md border border-stone-200 bg-white p-3">
-            <h3 class="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-stone-500">{t('badgeAndCache')}</h3>
+            <h3 class="text-2xs font-semibold uppercase tracking-[0.18em] text-stone-500">{t('badgeAndCache')}</h3>
             <div class="mt-2.5 space-y-3">
               <label class="block">
                 <span class="block text-sm font-medium text-stone-900">{t('badgeDisplay')}</span>
@@ -478,7 +478,7 @@ load();
           </section>
 
           <section class="rounded-md border border-stone-200 bg-white p-3">
-            <h3 class="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-stone-500">{t('domainFilter')}</h3>
+            <h3 class="text-2xs font-semibold uppercase tracking-[0.18em] text-stone-500">{t('domainFilter')}</h3>
             <div class="mt-2.5 space-y-3">
               <label class="block">
                 <span class="block text-sm font-medium text-stone-900">{t('filterMode')}</span>

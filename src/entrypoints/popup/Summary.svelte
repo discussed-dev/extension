@@ -154,7 +154,7 @@ const supportingBlocks = $derived(
         </svg>
       </button>
       <div class="min-w-0">
-        <p class="text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-stone-500">{t('summary')}</p>
+        <p class="text-2xs font-semibold uppercase tracking-[0.22em] text-stone-500">{t('summary')}</p>
       </div>
     </div>
 
@@ -236,11 +236,11 @@ const supportingBlocks = $derived(
 
   <div class="max-h-[28rem] space-y-3 overflow-y-auto px-4 py-3">
     <section class="rounded-md border border-stone-200 bg-stone-50 px-4 py-3">
-      <p class="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-stone-500">{t('verdict')}</p>
+      <p class="text-2xs font-semibold uppercase tracking-[0.18em] text-stone-500">{t('verdict')}</p>
       <!-- Kept on one line: whitespace between the each/if tags becomes a text
            node, which would put a space between a chip and the punctuation
            that follows it ("flawed¹ ," instead of "flawed¹,"). -->
-      <div class="mt-2 text-[0.95rem] font-medium leading-6 text-stone-900">
+      <div class="mt-2 text-base font-medium leading-6 text-stone-900">
         {#each verdict as seg}{#if seg.kind === 'text'}{@html renderMarkdown(seg.text)}{:else}<CiteChip citation={seg.citation} index={seg.index} />{/if}{/each}
       </div>
     </section>

@@ -46,19 +46,19 @@ const href = $derived(
 >
   <div class="flex w-9 shrink-0 self-center flex-col items-center justify-center gap-1.5 text-center">
     <PlatformMark platform={discussion.platform} sizeClass="size-4" />
-    <span class="text-[0.62rem] font-medium leading-none text-stone-500">
+    <span class="text-2xs font-medium leading-none text-stone-500">
       {timeAgo(discussion.createdAt)}
     </span>
   </div>
 
   <div class="min-w-0 flex-1">
     <div class="min-w-0">
-      <span class="line-clamp-2 min-w-0 text-[0.9rem] font-medium leading-[1.12rem] text-stone-900 group-hover:text-stone-950">
+      <span class="line-clamp-2 min-w-0 text-sm font-medium leading-tight text-stone-900 group-hover:text-stone-950">
         {discussion.title}
       </span>
     </div>
 
-    <span class="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[0.68rem] text-stone-500">
+    <span class="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-2xs text-stone-500">
       <span class="font-semibold tabular-nums text-stone-800">{discussion.commentCount.toLocaleString()} {t('comments')}</span>
       <span class="tabular-nums text-stone-600">{discussion.points.toLocaleString()} {t('points')}</span>
       {#if discussion.subreddit}

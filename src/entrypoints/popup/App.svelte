@@ -435,7 +435,7 @@ load();
     {:else}
       {#if resolved}
         <div class="border-b border-stone-200/80 bg-stone-50/60 px-4 py-2">
-          <p class="text-[0.7rem] font-medium text-stone-500">
+          <p class="text-2xs font-medium text-stone-500">
             {t('linkedFrom', PLATFORM_LABELS[resolved.platform])}
           </p>
           <a
@@ -463,7 +463,7 @@ load();
         {#each groupedDiscussions as group (group.platform)}
           <section id={`platform-${group.platform}`} class="scroll-mt-3">
             <div class="mb-0.5 flex items-center gap-3">
-              <h2 class="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-stone-500">
+              <h2 class="text-2xs font-semibold uppercase tracking-[0.18em] text-stone-500">
                 {group.label}
               </h2>
             </div>
@@ -509,14 +509,14 @@ load();
           </button>
         {/if}
 
-        <p class="mt-1 text-[0.72rem] leading-4 text-stone-500">{ctaDescription}</p>
+        <p class="mt-1 text-xs leading-4 text-stone-500">{ctaDescription}</p>
 
         <ExternalLinks url={currentUrl} />
 
         <button
           type="button"
           onclick={blockSite}
-          class="mt-1 cursor-pointer text-[0.68rem] text-stone-400 transition-colors hover:text-stone-600"
+          class="mt-1 cursor-pointer text-2xs text-stone-400 transition-colors hover:text-stone-600"
         >
           {t('blockDomain', currentHost)}
         </button>

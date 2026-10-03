@@ -70,7 +70,7 @@ function handleWindowKeydown(event: KeyboardEvent) {
     type="button"
     bind:this={toggle}
     onclick={toggleOpen}
-    class="relative -top-[0.45em] cursor-pointer text-[0.65rem] font-semibold leading-none text-stone-500 underline decoration-dotted decoration-stone-400 underline-offset-2 transition-colors hover:text-stone-900"
+    class="relative -top-[0.45em] cursor-pointer text-2xs font-semibold leading-none text-stone-500 underline decoration-dotted decoration-stone-400 underline-offset-2 transition-colors hover:text-stone-900"
     aria-label={t('citationSource', String(index))}
     aria-haspopup="dialog"
     aria-expanded={open}
@@ -87,7 +87,7 @@ function handleWindowKeydown(event: KeyboardEvent) {
         ? 'right-0'
         : 'left-0'} {alignAbove ? 'bottom-full mb-1' : 'top-full mt-1'}"
     >
-      <span class="block text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-stone-500">
+      <span class="block text-2xs font-semibold uppercase tracking-[0.18em] text-stone-500">
         {sourceLabel}
       </span>
       <span class="mt-1 block text-xs text-stone-500">

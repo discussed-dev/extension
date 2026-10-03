@@ -45,13 +45,13 @@ const submitLinks = $derived([
 
 {#if showSubmit}
 <div class="mt-2 flex flex-wrap items-center gap-1.5">
-  <span class="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-stone-500">{t('submitTo')}</span>
+  <span class="text-2xs font-semibold uppercase tracking-[0.18em] text-stone-500">{t('submitTo')}</span>
   {#each submitLinks as link}
     <a
       href={link.href}
       target="_blank"
       rel="noopener noreferrer"
-      class="inline-flex min-h-8 items-center gap-1.5 rounded-md border border-stone-200 bg-white px-2.5 text-[0.72rem] font-medium text-stone-700 transition-colors hover:border-stone-300 hover:text-stone-950"
+      class="inline-flex min-h-8 items-center gap-1.5 rounded-md border border-stone-200 bg-white px-2.5 text-xs font-medium text-stone-700 transition-colors hover:border-stone-300 hover:text-stone-950"
     >
       <PlatformMark platform={link.platform} sizeClass="size-3.5" />
       {link.label}
@@ -60,13 +60,13 @@ const submitLinks = $derived([
 </div>
 {/if}
 <div class="mt-2 flex flex-wrap items-center gap-1.5">
-  <span class="text-[0.62rem] font-semibold uppercase tracking-[0.18em] text-stone-500">{t('searchElsewhere')}</span>
+  <span class="text-2xs font-semibold uppercase tracking-[0.18em] text-stone-500">{t('searchElsewhere')}</span>
   {#each searchLinks as link}
     <a
       href={link.href}
       target="_blank"
       rel="noopener noreferrer"
-      class="inline-flex min-h-8 items-center gap-1.5 rounded-md border border-stone-200 bg-white px-2.5 text-[0.72rem] font-medium text-stone-700 transition-colors hover:border-stone-300 hover:text-stone-950"
+      class="inline-flex min-h-8 items-center gap-1.5 rounded-md border border-stone-200 bg-white px-2.5 text-xs font-medium text-stone-700 transition-colors hover:border-stone-300 hover:text-stone-950"
     >
       {#if link.icon === 'x'}
         <svg class="size-3" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

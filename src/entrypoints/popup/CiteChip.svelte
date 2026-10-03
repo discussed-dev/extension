@@ -83,7 +83,7 @@ function handleWindowKeydown(event: KeyboardEvent) {
     ></button><span
       role="dialog"
       aria-label={t('citationSource', String(index))}
-      class="absolute z-20 block w-64 rounded-md border border-stone-200 bg-white px-3 py-2 text-left {alignRight
+      class="absolute z-20 block w-64 rounded-md border border-stone-200 bg-white px-3 py-2 text-left shadow-lg {alignRight
         ? 'right-0'
         : 'left-0'} {alignAbove ? 'bottom-full mb-1' : 'top-full mt-1'}"
     >

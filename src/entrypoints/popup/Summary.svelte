@@ -193,7 +193,7 @@ const supportingBlocks = $derived(
             aria-label={t('closeMenu')}
             onclick={closeExportMenu}
           ></button>
-          <div class="absolute right-0 top-full z-20 mt-1 min-w-44 overflow-hidden rounded-md border border-stone-200 bg-white">
+          <div class="absolute right-0 top-full z-20 mt-1 min-w-44 overflow-hidden rounded-md border border-stone-200 bg-white shadow-lg">
             <button
               type="button"
               bind:this={firstExportItem}

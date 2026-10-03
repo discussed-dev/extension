@@ -397,8 +397,8 @@ load();
         <p class="mt-4 text-xs text-stone-500">{t('searching')} {t('searchingHint')}</p>
       </div>
     {:else if loadError}
-      <section class="px-4 py-6">
-        <div class="rounded-md border border-dashed border-stone-300 bg-stone-50 px-4 py-5" role="status" aria-live="polite">
+      <section class="px-4 py-5">
+        <div role="status" aria-live="polite">
           <p class="text-sm leading-6 text-stone-700">{t('loadFailed')}</p>
           <div class="mt-4 flex flex-wrap gap-2">
             <button
@@ -412,8 +412,8 @@ load();
         </div>
       </section>
     {:else if blocked}
-      <section class="px-4 py-6">
-        <div class="rounded-md border border-dashed border-stone-300 bg-stone-50 px-4 py-5">
+      <section class="px-4 py-5">
+        <div>
           <p class="text-base font-semibold tracking-tight text-stone-950">{t('domainFiltered')}</p>
           <p class="mt-2 text-sm leading-6 text-stone-600">
             {userSettings?.blacklistMode === 'whitelist'
@@ -435,8 +435,8 @@ load();
       {#if signInRequired.includes('reddit')}
         <RedditSignInNotice url={redditSearchUrl} />
       {/if}
-      <section class="px-4 py-6">
-        <div class="rounded-md border border-dashed border-stone-300 bg-stone-50 px-4 py-5">
+      <section class="px-4 py-5">
+        <div>
           {#if unavailable.length > 0}
             <p class="text-base font-semibold tracking-tight text-stone-950">{t('sourceUnavailable', unavailableLabel)}</p>
             <p class="mt-2 text-sm leading-6 text-stone-600">
@@ -458,7 +458,9 @@ load();
             </button>
           </div>
         </div>
-        <ExternalLinks url={currentUrl} title={currentTitle} showSubmit />
+        <div class="mt-4 border-t border-stone-200/80 pt-2">
+          <ExternalLinks url={currentUrl} title={currentTitle} showSubmit />
+        </div>
       </section>
     {:else}
       {#if resolved}

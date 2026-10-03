@@ -79,9 +79,6 @@
 	"domainFilter": {
 		"message": "ドメインフィルター"
 	},
-	"aiSummarization": {
-		"message": "AI要約"
-	},
 	"provider": {
 		"message": "プロバイダー"
 	},
@@ -247,9 +244,6 @@
 			}
 		}
 	},
-	"basics": {
-		"message": "基本"
-	},
 	"coreControls": {
 		"message": "主要な設定"
 	},
@@ -297,9 +291,6 @@
 	},
 	"presets": {
 		"message": "プリセット"
-	},
-	"advanced": {
-		"message": "詳細"
 	},
 	"advancedControls": {
 		"message": "詳細設定"

@@ -79,9 +79,6 @@
 	"domainFilter": {
 		"message": "域名过滤"
 	},
-	"aiSummarization": {
-		"message": "AI 摘要"
-	},
 	"provider": {
 		"message": "提供商"
 	},
@@ -247,9 +244,6 @@
 			}
 		}
 	},
-	"basics": {
-		"message": "基础"
-	},
 	"coreControls": {
 		"message": "核心设置"
 	},
@@ -297,9 +291,6 @@
 	},
 	"presets": {
 		"message": "预设"
-	},
-	"advanced": {
-		"message": "高级"
 	},
 	"advancedControls": {
 		"message": "高级选项"

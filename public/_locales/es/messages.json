@@ -79,9 +79,6 @@
 	"domainFilter": {
 		"message": "Filtro de dominio"
 	},
-	"aiSummarization": {
-		"message": "Resumen con IA"
-	},
 	"provider": {
 		"message": "Proveedor"
 	},
@@ -247,9 +244,6 @@
 			}
 		}
 	},
-	"basics": {
-		"message": "Básicos"
-	},
 	"coreControls": {
 		"message": "Controles principales"
 	},
@@ -297,9 +291,6 @@
 	},
 	"presets": {
 		"message": "Preajustes"
-	},
-	"advanced": {
-		"message": "Avanzado"
 	},
 	"advancedControls": {
 		"message": "Controles avanzados"

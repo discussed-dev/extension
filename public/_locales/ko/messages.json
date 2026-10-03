@@ -79,9 +79,6 @@
 	"domainFilter": {
 		"message": "도메인 필터"
 	},
-	"aiSummarization": {
-		"message": "AI 요약"
-	},
 	"provider": {
 		"message": "제공자"
 	},
@@ -247,9 +244,6 @@
 			}
 		}
 	},
-	"basics": {
-		"message": "기본"
-	},
 	"coreControls": {
 		"message": "핵심 설정"
 	},
@@ -297,9 +291,6 @@
 	},
 	"presets": {
 		"message": "프리셋"
-	},
-	"advanced": {
-		"message": "고급"
 	},
 	"advancedControls": {
 		"message": "고급 설정"

@@ -199,8 +199,7 @@ load();
   <div class="space-y-3">
     <section class="rounded-md border border-stone-200 bg-white p-3">
       <div>
-        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">{t('basics')}</p>
-        <h2 class="mt-1 text-base font-semibold tracking-tight text-stone-950">{t('coreControls')}</h2>
+        <h2 class="text-base font-semibold tracking-tight text-stone-950">{t('coreControls')}</h2>
       </div>
 
       <div class="mt-3 grid gap-3 md:grid-cols-2">
@@ -258,8 +257,7 @@ load();
 
     <section class="rounded-md border border-stone-200 bg-white p-3">
       <div>
-        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">{t('aiSummarization')}</p>
-        <h2 class="mt-1 text-base font-semibold tracking-tight text-stone-950">{t('aiSetup')}</h2>
+        <h2 class="text-base font-semibold tracking-tight text-stone-950">{t('aiSetup')}</h2>
       </div>
 
       <div class="mt-3 grid gap-3 md:grid-cols-2">
@@ -366,8 +364,7 @@ load();
 
     <section class="rounded-md border border-stone-200 bg-white p-3">
       <div>
-        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">{t('exportSection')}</p>
-        <h2 class="mt-1 text-base font-semibold tracking-tight text-stone-950">{t('exportSection')}</h2>
+        <h2 class="text-base font-semibold tracking-tight text-stone-950">{t('exportSection')}</h2>
       </div>
       <div class="mt-3">
         <label class="block">
@@ -386,8 +383,7 @@ load();
     <section class="rounded-md border border-stone-200 bg-white p-3">
       <div class="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
         <div>
-          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">{t('advanced')}</p>
-          <h2 class="mt-1 text-base font-semibold tracking-tight text-stone-950">{t('advancedControls')}</h2>
+          <h2 class="text-base font-semibold tracking-tight text-stone-950">{t('advancedControls')}</h2>
         </div>
 
         <button

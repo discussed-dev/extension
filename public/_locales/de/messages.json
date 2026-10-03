@@ -79,9 +79,6 @@
 	"domainFilter": {
 		"message": "Domain-Filter"
 	},
-	"aiSummarization": {
-		"message": "KI-Zusammenfassung"
-	},
 	"provider": {
 		"message": "Anbieter"
 	},
@@ -247,9 +244,6 @@
 			}
 		}
 	},
-	"basics": {
-		"message": "Grundlagen"
-	},
 	"coreControls": {
 		"message": "Zentrale Einstellungen"
 	},
@@ -297,9 +291,6 @@
 	},
 	"presets": {
 		"message": "Voreinstellungen"
-	},
-	"advanced": {
-		"message": "Erweitert"
 	},
 	"advancedControls": {
 		"message": "Erweiterte Einstellungen"

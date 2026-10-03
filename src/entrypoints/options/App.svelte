@@ -207,24 +207,22 @@ load();
       <div class="mt-3 grid gap-3 md:grid-cols-2">
         <section>
           <h3 class="text-2xs font-semibold uppercase tracking-[0.18em] text-stone-500">{t('sources')}</h3>
-          <div class="mt-2 overflow-hidden rounded-md border border-stone-200 bg-white">
-            <label class="flex items-start gap-3 px-3 py-2">
+          <div class="mt-1 divide-y divide-stone-200/80">
+            <label class="flex items-start gap-3 py-2">
               <input type="checkbox" bind:checked={current.enableHn} class="mt-1 rounded border-stone-300" />
               <span>
                 <span class="block text-sm font-medium text-stone-900">Hacker News</span>
                 <span class="mt-0.5 block text-xs leading-5 text-stone-600">{t('sourceHintHn')}</span>
               </span>
             </label>
-            <div class="border-t border-stone-200/80"></div>
-            <label class="flex items-start gap-3 px-3 py-2">
+            <label class="flex items-start gap-3 py-2">
               <input type="checkbox" bind:checked={current.enableReddit} class="mt-1 rounded border-stone-300" />
               <span>
                 <span class="block text-sm font-medium text-stone-900">Reddit</span>
                 <span class="mt-0.5 block text-xs leading-5 text-stone-600">{t('sourceHintMatching')}</span>
               </span>
             </label>
-            <div class="border-t border-stone-200/80"></div>
-            <label class="flex items-start gap-3 px-3 py-2">
+            <label class="flex items-start gap-3 py-2">
               <input type="checkbox" bind:checked={current.enableLobsters} class="mt-1 rounded border-stone-300" />
               <span>
                 <span class="block text-sm font-medium text-stone-900">Lobsters</span>
@@ -236,16 +234,15 @@ load();
 
         <section>
           <h3 class="text-2xs font-semibold uppercase tracking-[0.18em] text-stone-500">{t('linkBehavior')}</h3>
-          <div class="mt-2 overflow-hidden rounded-md border border-stone-200 bg-white">
-            <label class="flex items-start gap-3 px-3 py-2">
+          <div class="mt-1 divide-y divide-stone-200/80">
+            <label class="flex items-start gap-3 py-2">
               <input type="checkbox" bind:checked={current.openLinksInNewTab} class="mt-1 rounded border-stone-300" />
               <span>
                 <span class="block text-sm font-medium text-stone-900">{t('openLinksNewTab')}</span>
                 <span class="mt-0.5 block text-xs leading-5 text-stone-600">{t('openLinksNewTabHint')}</span>
               </span>
             </label>
-            <div class="border-t border-stone-200/80"></div>
-            <label class="flex items-start gap-3 px-3 py-2">
+            <label class="flex items-start gap-3 py-2">
               <input type="checkbox" bind:checked={current.useOldReddit} class="mt-1 rounded border-stone-300" />
               <span>
                 <span class="block text-sm font-medium text-stone-900">{t('preferOldReddit')}</span>
@@ -408,8 +405,8 @@ load();
       </div>
 
       {#if showAdvanced}
-        <div id="advanced-settings" class="mt-3 grid gap-3 md:grid-cols-2">
-          <section class="rounded-md border border-stone-200 bg-white p-3">
+        <div id="advanced-settings" class="mt-3 grid gap-x-3 gap-y-4 md:grid-cols-2">
+          <section>
             <h3 class="text-2xs font-semibold uppercase tracking-[0.18em] text-stone-500">{t('matching')}</h3>
             <div class="mt-2.5 space-y-2">
               <label class="flex items-start gap-3">
@@ -429,7 +426,7 @@ load();
             </div>
           </section>
 
-          <section class="rounded-md border border-stone-200 bg-white p-3">
+          <section>
             <h3 class="text-2xs font-semibold uppercase tracking-[0.18em] text-stone-500">{t('backgroundScanning')}</h3>
             <div class="mt-2.5 space-y-2">
               <label class="flex items-start gap-3">
@@ -449,7 +446,7 @@ load();
             </div>
           </section>
 
-          <section class="rounded-md border border-stone-200 bg-white p-3">
+          <section>
             <h3 class="text-2xs font-semibold uppercase tracking-[0.18em] text-stone-500">{t('badgeAndCache')}</h3>
             <div class="mt-2.5 space-y-3">
               <label class="block">
@@ -475,7 +472,7 @@ load();
             </div>
           </section>
 
-          <section class="rounded-md border border-stone-200 bg-white p-3">
+          <section>
             <h3 class="text-2xs font-semibold uppercase tracking-[0.18em] text-stone-500">{t('domainFilter')}</h3>
             <div class="mt-2.5 space-y-3">
               <label class="block">

@@ -164,7 +164,7 @@ const supportingBlocks = $derived(
         <button
           type="button"
           onclick={copyAsMarkdown}
-          class="inline-flex min-h-9 cursor-pointer items-center justify-center rounded-l-lg border border-r-0 border-stone-200 bg-white px-3.5 text-sm font-medium text-stone-700 transition-colors hover:border-stone-300 hover:text-stone-950"
+          class="inline-flex min-h-9 cursor-pointer items-center justify-center rounded-l-md border border-r-0 border-stone-200 bg-white px-3.5 text-sm font-medium text-stone-700 transition-colors hover:border-stone-300 hover:text-stone-950"
           title={t('copyMarkdown')}
         >
           {copied ? t('copied') : t('copy')}
@@ -173,7 +173,7 @@ const supportingBlocks = $derived(
           type="button"
           bind:this={exportToggle}
           onclick={() => { showExportMenu = !showExportMenu; }}
-          class="inline-flex min-h-9 cursor-pointer items-center justify-center rounded-r-lg border border-stone-200 bg-white px-2 text-stone-500 transition-colors hover:border-stone-300 hover:text-stone-900"
+          class="inline-flex min-h-9 cursor-pointer items-center justify-center rounded-r-md border border-stone-200 bg-white px-2 text-stone-500 transition-colors hover:border-stone-300 hover:text-stone-900"
           title={t('moreExportOptions')}
           aria-label={t('moreExportOptions')}
           aria-haspopup="true"

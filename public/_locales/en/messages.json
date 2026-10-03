@@ -38,13 +38,13 @@
 		"message": "Scan again"
 	},
 	"summarizeAll": {
-		"message": "Summarize All"
+		"message": "Summarize all"
 	},
 	"summarizing": {
 		"message": "Summarizing..."
 	},
 	"viewSummary": {
-		"message": "View Summary"
+		"message": "View summary"
 	},
 	"regenerate": {
 		"message": "Regenerate"
@@ -74,10 +74,10 @@
 		"message": "Sources"
 	},
 	"badgeDisplay": {
-		"message": "Badge Display"
+		"message": "Badge display"
 	},
 	"domainFilter": {
-		"message": "Domain Filter"
+		"message": "Domain filter"
 	},
 	"provider": {
 		"message": "Provider"
@@ -86,7 +86,7 @@
 		"message": "Model"
 	},
 	"apiKey": {
-		"message": "API Key"
+		"message": "API key"
 	},
 	"reportIssue": {
 		"message": "Report an issue"
@@ -98,7 +98,7 @@
 		"message": "Copy as Markdown"
 	},
 	"copyPlainText": {
-		"message": "Copy as Plain Text"
+		"message": "Copy as plain text"
 	},
 	"openInObsidian": {
 		"message": "Open in Obsidian"

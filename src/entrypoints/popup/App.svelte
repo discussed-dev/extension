@@ -376,7 +376,7 @@ load();
             <button
               type="button"
               onclick={load}
-              class="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-md bg-stone-900 px-4 text-sm font-medium text-white transition-colors hover:bg-stone-800"
+              class="inline-flex min-h-9 cursor-pointer items-center justify-center rounded-md bg-stone-900 px-4 text-sm font-medium text-white transition-colors hover:bg-stone-800"
             >
               {t('scanAgain')}
             </button>
@@ -396,7 +396,7 @@ load();
             <button
               type="button"
               onclick={toggleBlock}
-              class="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-md bg-stone-900 px-4 text-sm font-medium text-white transition-colors hover:bg-stone-800"
+              class="inline-flex min-h-9 cursor-pointer items-center justify-center rounded-md bg-stone-900 px-4 text-sm font-medium text-white transition-colors hover:bg-stone-800"
             >
               {t('unblockDomain', currentHost)}
             </button>
@@ -424,7 +424,7 @@ load();
             <button
               type="button"
               onclick={refresh}
-              class="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-md bg-stone-900 px-4 text-sm font-medium text-white transition-colors hover:bg-stone-800"
+              class="inline-flex min-h-9 cursor-pointer items-center justify-center rounded-md bg-stone-900 px-4 text-sm font-medium text-white transition-colors hover:bg-stone-800"
             >
               {t('scanAgain')}
             </button>

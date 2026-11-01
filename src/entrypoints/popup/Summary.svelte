@@ -103,9 +103,15 @@ const exportInput = $derived({
 	discussions,
 });
 
+// Only when the menu was open: the main Copy button shares these actions, and
+// moving focus from it to the chevron would be wrong.
+function closeExportMenuIfOpen() {
+	if (showExportMenu) closeExportMenu();
+}
+
 function markCopied() {
 	copied = true;
-	showExportMenu = false;
+	closeExportMenuIfOpen();
 	setTimeout(() => {
 		copied = false;
 	}, 2000);
@@ -127,7 +133,7 @@ function openInObsidian() {
 	const content = formatMarkdownExport(exportInput);
 	const uri = buildObsidianUri(obsidianVault, title, content);
 	window.open(uri, '_blank');
-	showExportMenu = false;
+	closeExportMenuIfOpen();
 }
 
 const blocks = $derived(
@@ -174,6 +180,8 @@ const supportingBlocks = $derived(
     <div class="flex shrink-0 gap-2">
       <!-- Split export button -->
       <div class="relative flex">
+        <!-- Always mounted so the change is announced; the button's own text change is not. -->
+        <span class="sr-only" role="status" aria-live="polite">{copied ? t('copied') : ''}</span>
         <button
           type="button"
           onclick={copyAsMarkdown}

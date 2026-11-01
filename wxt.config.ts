@@ -35,8 +35,10 @@ export default defineConfig({
 			gecko: {
 				id: 'discussed@discussed.dev',
 				// @ts-expect-error -- AMO's data_collection_permissions is not yet in WXT's manifest types
+				// Mozilla counts any data handled outside the browser, third parties included:
+				// page URLs go to the discussion APIs, page text to the user's LLM on Summarize.
 				data_collection_permissions: {
-					required: ['none'],
+					required: ['browsingActivity', 'websiteContent'],
 				},
 			},
 		},

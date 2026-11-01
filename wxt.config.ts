@@ -18,8 +18,11 @@ export default defineConfig({
 				description: 'Open Discussed popup',
 			},
 		},
-		// Granted at runtime from the popup; see src/lib/reddit-access.ts
-		optional_host_permissions: ['https://old.reddit.com/*'],
+		// Granted at runtime from the popup; keep in sync with src/lib/reddit-access.ts
+		optional_host_permissions: [
+			'https://old.reddit.com/*',
+			'https://arctic-shift.photon-reddit.com/*',
+		],
 		host_permissions: [
 			'https://hn.algolia.com/*',
 			'https://www.reddit.com/*',
@@ -45,6 +48,7 @@ export default defineConfig({
 			manifest.optional_permissions = [
 				...(manifest.optional_permissions ?? []),
 				'https://old.reddit.com/*',
+				'https://arctic-shift.photon-reddit.com/*',
 			];
 		},
 	},

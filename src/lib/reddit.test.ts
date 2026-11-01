@@ -3,8 +3,12 @@ import { PermissionRequiredError, SignInRequiredError } from './errors';
 import { searchReddit } from './reddit';
 import { hasRedditSearchAccess } from './reddit-access';
 
+import { searchRedditArchive } from './arctic-shift';
+
 vi.mock('./reddit-access', () => ({ hasRedditSearchAccess: vi.fn() }));
+vi.mock('./arctic-shift', () => ({ searchRedditArchive: vi.fn() }));
 const accessMock = vi.mocked(hasRedditSearchAccess);
+const archiveMock = vi.mocked(searchRedditArchive);
 
 const mockFetch = vi.fn() as Mock;
 vi.stubGlobal('fetch', mockFetch);
@@ -38,6 +42,8 @@ describe('searchReddit', () => {
 		mockFetch.mockReset();
 		accessMock.mockReset();
 		accessMock.mockResolvedValue(true);
+		archiveMock.mockReset();
+		archiveMock.mockRejectedValue(new Error('archive down'));
 	});
 
 	it('returns discussions from Reddit search', async () => {
@@ -83,6 +89,38 @@ describe('searchReddit', () => {
 		const error = await searchReddit('https://example.com').catch((e: unknown) => e);
 		expect(error).toBeInstanceOf(Error);
 		expect(error).not.toBeInstanceOf(SignInRequiredError);
+	});
+
+	it('falls back to the archive when Reddit refuses the search', async () => {
+		mockFetch.mockResolvedValueOnce({ ok: false, status: 403 });
+		const archived = [
+			{
+				platform: 'reddit' as const,
+				title: 'A',
+				url: 'u',
+				points: 1,
+				commentCount: 1,
+				createdAt: 'c',
+				externalId: 't3_a',
+			},
+		];
+		archiveMock.mockResolvedValueOnce(archived);
+
+		await expect(searchReddit('https://example.com', { exactMatch: true })).resolves.toBe(archived);
+		expect(archiveMock).toHaveBeenCalledWith('https://example.com', { exactMatch: true });
+	});
+
+	it('falls back to the archive when Reddit cannot be reached', async () => {
+		mockFetch.mockRejectedValueOnce(new TypeError('Failed to fetch'));
+		archiveMock.mockResolvedValueOnce([]);
+
+		await expect(searchReddit('https://example.com')).resolves.toEqual([]);
+	});
+
+	it('keeps the sign-in error when the archive also fails', async () => {
+		mockFetch.mockResolvedValueOnce({ ok: false, status: 403 });
+
+		await expect(searchReddit('https://example.com')).rejects.toBeInstanceOf(SignInRequiredError);
 	});
 
 	it('sends the Reddit session cookie with the search request', async () => {

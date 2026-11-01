@@ -474,5 +474,8 @@
 	},
 	"refreshFailed": {
 		"message": "Aktualisieren fehlgeschlagen. Die vorherigen Ergebnisse werden angezeigt."
-	}
+	},
+	"providerOllamaLocal": { "message": "Ollama (lokal)" },
+	"providerCustomOpenai": { "message": "Benutzerdefiniert (OpenAI-kompatibel)" },
+	"obsidianVaultPlaceholder": { "message": "Mein Tresor" }
 }

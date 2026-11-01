@@ -466,5 +466,8 @@
 	"openComment": { "message": "打开评论" },
 	"citationPageComment": { "message": "页面评论" },
 	"regenerateFailed": { "message": "重新生成失败，仍显示之前的摘要。" },
-	"refreshFailed": { "message": "刷新失败，仍显示之前的结果。" }
+	"refreshFailed": { "message": "刷新失败，仍显示之前的结果。" },
+	"providerOllamaLocal": { "message": "Ollama（本地）" },
+	"providerCustomOpenai": { "message": "自定义（兼容 OpenAI）" },
+	"obsidianVaultPlaceholder": { "message": "我的仓库" }
 }

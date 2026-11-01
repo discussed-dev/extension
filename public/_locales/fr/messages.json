@@ -470,5 +470,10 @@
 	"openComment": { "message": "Ouvrir le commentaire" },
 	"citationPageComment": { "message": "Commentaire de la page" },
 	"regenerateFailed": { "message": "Impossible de régénérer. Le résumé précédent est affiché." },
-	"refreshFailed": { "message": "Impossible d'actualiser. Les résultats précédents sont affichés." }
+	"refreshFailed": {
+		"message": "Impossible d'actualiser. Les résultats précédents sont affichés."
+	},
+	"providerOllamaLocal": { "message": "Ollama (local)" },
+	"providerCustomOpenai": { "message": "Personnalisé (compatible OpenAI)" },
+	"obsidianVaultPlaceholder": { "message": "Mon coffre" }
 }

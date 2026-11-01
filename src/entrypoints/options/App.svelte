@@ -8,14 +8,17 @@ type StatusTone = 'neutral' | 'success' | 'error';
 
 const version = browser.runtime.getManifest().version;
 
+// Each language in its own name (endonym), the usual convention for a language
+// picker: a reader finds their language whatever the UI locale, and the names
+// need no translation. Values are persisted and fed to the prompt; keep them.
 const LANGUAGE_OPTIONS = [
-	{ value: 'en', label: 'English' },
-	{ value: 'Chinese', label: 'Chinese (中文)' },
-	{ value: 'Spanish', label: 'Spanish (Español)' },
-	{ value: 'Japanese', label: 'Japanese (日本語)' },
-	{ value: 'Korean', label: 'Korean (한국어)' },
-	{ value: 'French', label: 'French (Français)' },
-	{ value: 'German', label: 'German (Deutsch)' },
+	{ value: 'en', lang: 'en', label: 'English' },
+	{ value: 'Chinese', lang: 'zh', label: '中文' },
+	{ value: 'Spanish', lang: 'es', label: 'Español' },
+	{ value: 'Japanese', lang: 'ja', label: '日本語' },
+	{ value: 'Korean', lang: 'ko', label: '한국어' },
+	{ value: 'French', lang: 'fr', label: 'Français' },
+	{ value: 'German', lang: 'de', label: 'Deutsch' },
 ];
 
 let current = $state<Settings | null>(null);
@@ -269,7 +272,7 @@ load();
               class="mt-2 min-h-10 w-full rounded-md border border-stone-300 bg-white px-4 text-sm text-stone-900"
             >
               {#each providerEntries as [key, config]}
-                <option value={key}>{config.label}</option>
+                <option value={key}>{config.labelKey ? t(config.labelKey) : config.label}</option>
               {/each}
             </select>
           </label>
@@ -353,7 +356,7 @@ load();
             <span class="block text-sm font-medium text-stone-900">{t('summaryLanguage')}</span>
             <select bind:value={current.summaryLanguage} class="mt-2 min-h-10 w-full rounded-md border border-stone-300 bg-white px-4 text-sm text-stone-900">
               {#each LANGUAGE_OPTIONS as option}
-                <option value={option.value}>{option.label}</option>
+                <option value={option.value} lang={option.lang}>{option.label}</option>
               {/each}
             </select>
           </label>
@@ -372,7 +375,7 @@ load();
           <input
             type="text"
             bind:value={current.obsidianVault}
-            placeholder="My Vault"
+            placeholder={t('obsidianVaultPlaceholder')}
             class="mt-2 min-h-10 w-full rounded-md border border-stone-300 bg-white px-4 text-sm text-stone-900"
           />
         </label>

@@ -470,5 +470,8 @@
 	"openComment": { "message": "Abrir comentario" },
 	"citationPageComment": { "message": "Comentario de la página" },
 	"regenerateFailed": { "message": "No se pudo regenerar. Se muestra el resumen anterior." },
-	"refreshFailed": { "message": "No se pudo actualizar. Se muestran los resultados anteriores." }
+	"refreshFailed": { "message": "No se pudo actualizar. Se muestran los resultados anteriores." },
+	"providerOllamaLocal": { "message": "Ollama (local)" },
+	"providerCustomOpenai": { "message": "Personalizado (compatible con OpenAI)" },
+	"obsidianVaultPlaceholder": { "message": "Mi bóveda" }
 }

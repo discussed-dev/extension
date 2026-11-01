@@ -468,5 +468,8 @@
 	"openComment": { "message": "Open comment" },
 	"citationPageComment": { "message": "Page comment" },
 	"regenerateFailed": { "message": "Couldn't regenerate. Showing the previous summary." },
-	"refreshFailed": { "message": "Couldn't refresh. Showing the earlier results." }
+	"refreshFailed": { "message": "Couldn't refresh. Showing the earlier results." },
+	"providerOllamaLocal": { "message": "Ollama (local)" },
+	"providerCustomOpenai": { "message": "Custom (OpenAI-compatible)" },
+	"obsidianVaultPlaceholder": { "message": "My Vault" }
 }

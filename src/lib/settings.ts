@@ -1,3 +1,4 @@
+import type { I18nKey } from './i18n';
 import type { LlmProvider } from './llm';
 
 export interface Settings {
@@ -75,6 +76,8 @@ const DEFAULTS: Settings = {
 
 export interface ProviderConfig {
 	label: string;
+	/** Set when the label has descriptive words to translate; resolved with t() at render time. */
+	labelKey?: I18nKey;
 	apiFormat: LlmProvider;
 	baseUrl?: string;
 	keyPlaceholder: string;
@@ -171,6 +174,7 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 	},
 	ollama: {
 		label: 'Ollama (local)',
+		labelKey: 'providerOllamaLocal',
 		apiFormat: 'openai',
 		baseUrl: 'http://localhost:11434/v1',
 		keyPlaceholder: 'ollama',
@@ -182,6 +186,7 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 	},
 	custom: {
 		label: 'Custom (OpenAI-compatible)',
+		labelKey: 'providerCustomOpenai',
 		apiFormat: 'openai',
 		keyPlaceholder: 'your-api-key',
 		models: [],

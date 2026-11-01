@@ -9,7 +9,7 @@ import { type Settings, settings } from '@/lib/settings';
 import { type SummaryPhase, type SummaryResult, summarizeDiscussions } from '@/lib/summarize';
 import { setToolbarBadge } from '@/lib/toolbar-action';
 import type { Discussion, Platform } from '@/lib/types';
-import { isBlacklisted, normalizeUrl } from '@/lib/url';
+import { isBlacklisted, matchingDomainRules, normalizeUrl } from '@/lib/url';
 import DiscussionRow from './DiscussionRow.svelte';
 import ExternalLinks from './ExternalLinks.svelte';
 import PopupBrand from './PopupBrand.svelte';
@@ -185,20 +185,18 @@ async function toggleBlock() {
 		.map((d) => d.trim())
 		.filter(Boolean);
 
-	const isCurrentlyListed = domains.some((d) => d.toLowerCase() === host.toLowerCase());
-
 	if (userSettings.blacklistMode === 'whitelist') {
+		const isCurrentlyListed = domains.some((d) => d.toLowerCase() === host.toLowerCase());
 		if (!isCurrentlyListed) {
 			domains.push(host);
 		}
+		userSettings.blacklist = domains.join('\n');
 	} else {
-		if (isCurrentlyListed) {
-			const idx = domains.findIndex((d) => d.toLowerCase() === host.toLowerCase());
-			domains.splice(idx, 1);
-		}
+		// A subdomain inherits its parent's rule, so remove whichever rules match, not just the host.
+		const rules = matchingDomainRules(currentUrl, userSettings.blacklist);
+		userSettings.blacklist = domains.filter((d) => !rules.includes(d)).join('\n');
 	}
 
-	userSettings.blacklist = domains.join('\n');
 	await settings.setValue(userSettings);
 	blocked = false;
 	await refresh();
@@ -293,6 +291,12 @@ const currentHost = $derived.by(() => {
 	} catch {
 		return currentUrl;
 	}
+});
+
+// The blacklist rules blocking this page: the host itself or a parent domain.
+const blockingRules = $derived.by(() => {
+	if (!currentUrl || !userSettings || userSettings.blacklistMode !== 'blacklist') return '';
+	return matchingDomainRules(currentUrl, userSettings.blacklist).join(', ');
 });
 
 const resolvedHost = $derived.by(() => {
@@ -479,7 +483,7 @@ load();
           <p class="mt-2 text-sm leading-6 text-stone-600">
             {userSettings?.blacklistMode === 'whitelist'
               ? t('domainFilteredWhitelistHint', currentHost)
-              : t('domainFilteredBlacklistHint', currentHost)}
+              : t('domainFilteredBlacklistHint', blockingRules || currentHost)}
           </p>
           <div class="mt-4 flex flex-wrap gap-2">
             <button
@@ -487,7 +491,7 @@ load();
               onclick={toggleBlock}
               class="inline-flex min-h-9 cursor-pointer items-center justify-center rounded-md bg-stone-900 px-4 text-sm font-medium text-white transition-colors hover:bg-stone-800"
             >
-              {t('unblockDomain', currentHost)}
+              {t('unblockDomain', blockingRules || currentHost)}
             </button>
           </div>
         </div>

@@ -469,5 +469,10 @@
 	"refreshFailed": { "message": "새로 고치지 못했습니다. 이전 결과를 표시합니다." },
 	"providerOllamaLocal": { "message": "Ollama (로컬)" },
 	"providerCustomOpenai": { "message": "사용자 지정 (OpenAI 호환)" },
-	"obsidianVaultPlaceholder": { "message": "내 보관소" }
+	"obsidianVaultPlaceholder": { "message": "내 보관소" },
+	"numberOutOfRange": {
+		"message": "$MIN$에서 $MAX$ 사이의 정수를 입력하세요.",
+		"placeholders": { "MIN": { "content": "$1" }, "MAX": { "content": "$2" } }
+	},
+	"settingsNotSaved": { "message": "저장되지 않았습니다. 표시된 항목을 수정하세요." }
 }

@@ -74,6 +74,30 @@ const DEFAULTS: Settings = {
 	obsidianVault: '',
 };
 
+export interface IntegerLimits {
+	min: number;
+	max: number;
+}
+
+/** Bounds for the numeric settings; the options inputs use the same values for min/max. */
+export const NUMERIC_LIMITS = {
+	maxCommentsForSummary: { min: 10, max: 100 },
+	cacheDurationMinutes: { min: 1, max: 1440 },
+} as const satisfies Record<string, IntegerLimits>;
+
+/**
+ * Whether a numeric setting is safe to persist. Takes `unknown` because a
+ * number input bound with bind:value yields undefined/null when blank.
+ */
+export function isIntegerInRange(value: unknown, limits: IntegerLimits): value is number {
+	return (
+		typeof value === 'number' &&
+		Number.isInteger(value) &&
+		value >= limits.min &&
+		value <= limits.max
+	);
+}
+
 export interface ProviderConfig {
 	label: string;
 	/** Set when the label has descriptive words to translate; resolved with t() at render time. */

@@ -473,5 +473,10 @@
 	"refreshFailed": { "message": "No se pudo actualizar. Se muestran los resultados anteriores." },
 	"providerOllamaLocal": { "message": "Ollama (local)" },
 	"providerCustomOpenai": { "message": "Personalizado (compatible con OpenAI)" },
-	"obsidianVaultPlaceholder": { "message": "Mi bóveda" }
+	"obsidianVaultPlaceholder": { "message": "Mi bóveda" },
+	"numberOutOfRange": {
+		"message": "Introduce un número entero entre $MIN$ y $MAX$.",
+		"placeholders": { "MIN": { "content": "$1" }, "MAX": { "content": "$2" } }
+	},
+	"settingsNotSaved": { "message": "No se ha guardado. Corrige los campos resaltados." }
 }

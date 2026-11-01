@@ -475,5 +475,10 @@
 	},
 	"providerOllamaLocal": { "message": "Ollama (local)" },
 	"providerCustomOpenai": { "message": "Personnalisé (compatible OpenAI)" },
-	"obsidianVaultPlaceholder": { "message": "Mon coffre" }
+	"obsidianVaultPlaceholder": { "message": "Mon coffre" },
+	"numberOutOfRange": {
+		"message": "Saisissez un nombre entier entre $MIN$ et $MAX$.",
+		"placeholders": { "MIN": { "content": "$1" }, "MAX": { "content": "$2" } }
+	},
+	"settingsNotSaved": { "message": "Non enregistré. Corrigez les champs signalés." }
 }

@@ -471,5 +471,10 @@
 	"refreshFailed": { "message": "Couldn't refresh. Showing the earlier results." },
 	"providerOllamaLocal": { "message": "Ollama (local)" },
 	"providerCustomOpenai": { "message": "Custom (OpenAI-compatible)" },
-	"obsidianVaultPlaceholder": { "message": "My Vault" }
+	"obsidianVaultPlaceholder": { "message": "My Vault" },
+	"numberOutOfRange": {
+		"message": "Enter a whole number from $MIN$ to $MAX$.",
+		"placeholders": { "MIN": { "content": "$1" }, "MAX": { "content": "$2" } }
+	},
+	"settingsNotSaved": { "message": "Not saved. Fix the highlighted fields." }
 }

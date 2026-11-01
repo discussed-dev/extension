@@ -473,5 +473,10 @@
 	"refreshFailed": { "message": "更新できませんでした。以前の結果を表示しています。" },
 	"providerOllamaLocal": { "message": "Ollama（ローカル）" },
 	"providerCustomOpenai": { "message": "カスタム（OpenAI 互換）" },
-	"obsidianVaultPlaceholder": { "message": "マイ保管庫" }
+	"obsidianVaultPlaceholder": { "message": "マイ保管庫" },
+	"numberOutOfRange": {
+		"message": "$MIN$～$MAX$ の整数を入力してください。",
+		"placeholders": { "MIN": { "content": "$1" }, "MAX": { "content": "$2" } }
+	},
+	"settingsNotSaved": { "message": "保存されていません。強調表示された項目を修正してください。" }
 }

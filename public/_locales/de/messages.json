@@ -477,5 +477,10 @@
 	},
 	"providerOllamaLocal": { "message": "Ollama (lokal)" },
 	"providerCustomOpenai": { "message": "Benutzerdefiniert (OpenAI-kompatibel)" },
-	"obsidianVaultPlaceholder": { "message": "Mein Tresor" }
+	"obsidianVaultPlaceholder": { "message": "Mein Tresor" },
+	"numberOutOfRange": {
+		"message": "Gib eine ganze Zahl von $MIN$ bis $MAX$ ein.",
+		"placeholders": { "MIN": { "content": "$1" }, "MAX": { "content": "$2" } }
+	},
+	"settingsNotSaved": { "message": "Nicht gespeichert. Korrigiere die markierten Felder." }
 }

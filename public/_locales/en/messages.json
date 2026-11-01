@@ -457,6 +457,10 @@
 	"redditSignInRequired": { "message": "Sign in to Reddit to see Reddit discussions." },
 	"redditSignIn": { "message": "Sign in" },
 	"redditSearch": { "message": "Search Reddit" },
+	"redditAccessRequired": {
+		"message": "Allow access to old.reddit.com to see Reddit discussions."
+	},
+	"redditGrantAccess": { "message": "Allow access" },
 	"citationSource": {
 		"message": "Source $INDEX$",
 		"placeholders": { "INDEX": { "content": "$1" } }

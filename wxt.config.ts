@@ -18,6 +18,8 @@ export default defineConfig({
 				description: 'Open Discussed popup',
 			},
 		},
+		// Granted at runtime from the popup; see src/lib/reddit-access.ts
+		optional_host_permissions: ['https://old.reddit.com/*'],
 		host_permissions: [
 			'https://hn.algolia.com/*',
 			'https://www.reddit.com/*',
@@ -34,6 +36,16 @@ export default defineConfig({
 					required: ['none'],
 				},
 			},
+		},
+	},
+	hooks: {
+		// WXT drops optional_host_permissions for MV2 (Firefox); MV2 lists optional hosts in optional_permissions.
+		'build:manifestGenerated': (_wxt, manifest) => {
+			if (manifest.manifest_version !== 2) return;
+			manifest.optional_permissions = [
+				...(manifest.optional_permissions ?? []),
+				'https://old.reddit.com/*',
+			];
 		},
 	},
 	vite: () => ({

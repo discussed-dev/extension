@@ -1,6 +1,10 @@
 import { type Mock, beforeEach, describe, expect, it, vi } from 'vitest';
-import { SignInRequiredError } from './errors';
+import { PermissionRequiredError, SignInRequiredError } from './errors';
 import { searchReddit } from './reddit';
+import { hasRedditSearchAccess } from './reddit-access';
+
+vi.mock('./reddit-access', () => ({ hasRedditSearchAccess: vi.fn() }));
+const accessMock = vi.mocked(hasRedditSearchAccess);
 
 const mockFetch = vi.fn() as Mock;
 vi.stubGlobal('fetch', mockFetch);
@@ -32,6 +36,8 @@ const POST = {
 describe('searchReddit', () => {
 	beforeEach(() => {
 		mockFetch.mockReset();
+		accessMock.mockReset();
+		accessMock.mockResolvedValue(true);
 	});
 
 	it('returns discussions from Reddit search', async () => {
@@ -58,7 +64,7 @@ describe('searchReddit', () => {
 		await searchReddit('https://example.com/page');
 
 		const calledUrl = new URL(mockFetch.mock.calls[0][0]);
-		expect(calledUrl.hostname).toBe('www.reddit.com');
+		expect(calledUrl.hostname).toBe('old.reddit.com');
 		expect(calledUrl.pathname).toBe('/search.json');
 		expect(calledUrl.searchParams.get('q')).toBe('url:https://example.com/page');
 		expect(calledUrl.searchParams.get('sort')).toBe('top');
@@ -77,6 +83,23 @@ describe('searchReddit', () => {
 		const error = await searchReddit('https://example.com').catch((e: unknown) => e);
 		expect(error).toBeInstanceOf(Error);
 		expect(error).not.toBeInstanceOf(SignInRequiredError);
+	});
+
+	it('sends the Reddit session cookie with the search request', async () => {
+		mockFetch.mockResolvedValueOnce(redditResponse([]));
+
+		await searchReddit('https://example.com');
+
+		expect(mockFetch.mock.calls[0][1]).toMatchObject({ credentials: 'include' });
+	});
+
+	it('throws PermissionRequiredError without fetching when old.reddit.com access is not granted', async () => {
+		accessMock.mockResolvedValueOnce(false);
+
+		await expect(searchReddit('https://example.com')).rejects.toBeInstanceOf(
+			PermissionRequiredError,
+		);
+		expect(mockFetch).not.toHaveBeenCalled();
 	});
 
 	it('throws SignInRequiredError on 403 (Reddit blocks logged-out JSON access)', async () => {

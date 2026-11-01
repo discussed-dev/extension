@@ -8,7 +8,7 @@ vi.mock('./reddit', () => ({ searchReddit: vi.fn() }));
 vi.mock('./lobsters', () => ({ searchLobsters: vi.fn() }));
 
 import { discoverDiscussions } from './discovery';
-import { SignInRequiredError } from './errors';
+import { PermissionRequiredError, SignInRequiredError } from './errors';
 import { searchHn } from './hn';
 import { searchLobsters } from './lobsters';
 import { searchReddit } from './reddit';
@@ -163,6 +163,31 @@ describe('discoverDiscussions', () => {
 		expect(discussions.map((d) => d.platform)).toEqual(['hn']);
 		expect(unavailable).toEqual([]);
 		expect(signInRequired).toEqual(['reddit']);
+	});
+
+	it('reports a source that lacks host access as permission-required, not unavailable', async () => {
+		hnMock.mockResolvedValueOnce([HN_RESULT]);
+		redditMock.mockRejectedValueOnce(new PermissionRequiredError('reddit'));
+		lobstersMock.mockResolvedValueOnce([]);
+
+		const result = await discoverDiscussions('https://example.com');
+
+		expect(result.unavailable).toEqual([]);
+		expect(result.signInRequired).toEqual([]);
+		expect(result.permissionRequired).toEqual(['reddit']);
+	});
+
+	it('does not cache when a source needs permission, so granting it takes effect on the next scan', async () => {
+		hnMock.mockResolvedValue([]);
+		redditMock.mockRejectedValueOnce(new PermissionRequiredError('reddit'));
+		lobstersMock.mockResolvedValue([]);
+
+		await discoverDiscussions('https://example.com/granted');
+		redditMock.mockResolvedValueOnce([REDDIT_RESULT]);
+		const second = await discoverDiscussions('https://example.com/granted');
+
+		expect(second.permissionRequired).toEqual([]);
+		expect(second.discussions.map((d) => d.platform)).toEqual(['reddit']);
 	});
 
 	it('does not cache when a source needs sign-in, so signing in takes effect on the next scan', async () => {

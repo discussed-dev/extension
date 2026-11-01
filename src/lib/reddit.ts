@@ -1,4 +1,5 @@
-import { SignInRequiredError } from './errors';
+import { PermissionRequiredError, SignInRequiredError } from './errors';
+import { hasRedditSearchAccess } from './reddit-access';
 import type { Discussion } from './types';
 import { normalizeUrl } from './url';
 
@@ -20,7 +21,7 @@ interface RedditListing {
 	};
 }
 
-const REDDIT_SEARCH = 'https://www.reddit.com/search.json';
+const REDDIT_SEARCH = 'https://old.reddit.com/search.json';
 
 export interface RedditSearchOptions {
 	exactMatch?: boolean;
@@ -40,6 +41,8 @@ export async function searchReddit(
 	url: string,
 	options: RedditSearchOptions = {},
 ): Promise<Discussion[]> {
+	if (!(await hasRedditSearchAccess())) throw new PermissionRequiredError('reddit');
+
 	const params = new URLSearchParams({
 		q: `url:${url}`,
 		sort: 'top',
@@ -47,9 +50,10 @@ export async function searchReddit(
 	});
 
 	const response = await fetch(`${REDDIT_SEARCH}?${params}`, {
+		credentials: 'include',
 		headers: { 'User-Agent': 'web:discussed:v0.1.0 (https://discussed.dev)' },
 	});
-	// Since 2026-05 Reddit answers logged-out JSON requests with 403; the user's session cookie passes.
+	// Reddit answers logged-out JSON requests with 403; the user's session cookie passes.
 	if (response.status === 403) throw new SignInRequiredError('reddit');
 	if (!response.ok) throw new Error(`Reddit search failed: ${response.status}`);
 

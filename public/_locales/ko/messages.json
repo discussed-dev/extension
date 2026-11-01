@@ -457,6 +457,8 @@
 	"redditSignInRequired": { "message": "Reddit 토론을 보려면 Reddit에 로그인하세요." },
 	"redditSignIn": { "message": "로그인" },
 	"redditSearch": { "message": "Reddit에서 검색" },
+	"redditAccessRequired": { "message": "Reddit 토론을 보려면 old.reddit.com 접근을 허용하세요." },
+	"redditGrantAccess": { "message": "접근 허용" },
 	"citationSource": {
 		"message": "출처 $INDEX$",
 		"placeholders": { "INDEX": { "content": "$1" } }

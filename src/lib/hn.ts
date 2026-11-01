@@ -21,7 +21,8 @@ async function queryAlgolia(url: string): Promise<Discussion[]> {
 	const params = new URLSearchParams({
 		query: url,
 		restrictSearchableAttributes: 'url',
-		hitsPerPage: '20',
+		tags: 'story',
+		hitsPerPage: '100',
 	});
 
 	const response = await fetch(`${ALGOLIA_SEARCH}?${params}`);

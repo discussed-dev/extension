@@ -1,6 +1,8 @@
-import { SignInRequiredError } from './errors';
+import { searchRedditArchive } from './arctic-shift';
+import { PermissionRequiredError, SignInRequiredError } from './errors';
+import { hasRedditSearchAccess } from './reddit-access';
+import { type RedditSearchOptions, postMatchesTarget } from './reddit-match';
 import type { Discussion } from './types';
-import { normalizeUrl } from './url';
 
 interface RedditPost {
 	name: string;
@@ -20,26 +22,30 @@ interface RedditListing {
 	};
 }
 
-const REDDIT_SEARCH = 'https://www.reddit.com/search.json';
+const REDDIT_SEARCH = 'https://old.reddit.com/search.json';
 
-export interface RedditSearchOptions {
-	exactMatch?: boolean;
-}
-
-function stripWww(hostname: string): string {
-	return hostname.replace(/^www\./, '');
-}
-
-function hostnamesMatch(a: string, b: string): boolean {
-	const ha = stripWww(a);
-	const hb = stripWww(b);
-	return ha === hb || ha.endsWith(`.${hb}`) || hb.endsWith(`.${ha}`);
-}
+export type { RedditSearchOptions };
 
 export async function searchReddit(
 	url: string,
 	options: RedditSearchOptions = {},
 ): Promise<Discussion[]> {
+	// The same grant covers old.reddit.com and the archive, so without it neither can answer.
+	if (!(await hasRedditSearchAccess())) throw new PermissionRequiredError('reddit');
+
+	try {
+		return await searchLive(url, options);
+	} catch (liveError) {
+		try {
+			return await searchRedditArchive(url, options);
+		} catch {
+			// Report Reddit's own failure: it is the one the user can act on (e.g. sign in).
+			throw liveError;
+		}
+	}
+}
+
+async function searchLive(url: string, options: RedditSearchOptions): Promise<Discussion[]> {
 	const params = new URLSearchParams({
 		q: `url:${url}`,
 		sort: 'top',
@@ -47,31 +53,17 @@ export async function searchReddit(
 	});
 
 	const response = await fetch(`${REDDIT_SEARCH}?${params}`, {
+		credentials: 'include',
 		headers: { 'User-Agent': 'web:discussed:v0.1.0 (https://discussed.dev)' },
 	});
-	// Since 2026-05 Reddit answers logged-out JSON requests with 403; the user's session cookie passes.
+	// Reddit answers logged-out JSON requests with 403; the user's session cookie passes.
 	if (response.status === 403) throw new SignInRequiredError('reddit');
 	if (!response.ok) throw new Error(`Reddit search failed: ${response.status}`);
 
 	const data: RedditListing = await response.json();
-	const searchHost = new URL(url).hostname;
 
 	return data.data.children
-		.filter(({ data: post }) => {
-			if (post.url == null) return false;
-			if (options.exactMatch) {
-				try {
-					return normalizeUrl(post.url) === normalizeUrl(url);
-				} catch {
-					return false;
-				}
-			}
-			try {
-				return hostnamesMatch(new URL(post.url).hostname, searchHost);
-			} catch {
-				return false;
-			}
-		})
+		.filter(({ data: post }) => postMatchesTarget(post.url, url, options))
 		.map(({ data: post }) => ({
 			platform: 'reddit' as const,
 			title: post.title,

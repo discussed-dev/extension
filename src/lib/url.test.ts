@@ -131,6 +131,22 @@ describe('normalizeUrl', () => {
 			).toBe('https://example.com/page?q=test');
 		});
 
+		it('strips taid when its value is a 24-digit hex share id', () => {
+			expect(
+				normalizeUrl('https://example.com/page?id=42&taid=0123456789abcdef01234567', {
+					keepQueryString: true,
+				}),
+			).toBe('https://example.com/page?id=42');
+		});
+
+		it('keeps taid when its value does not look like a tracker id', () => {
+			expect(
+				normalizeUrl('https://example.com/page?taid=42', {
+					keepQueryString: true,
+				}),
+			).toBe('https://example.com/page?taid=42');
+		});
+
 		it('strips all tracking params leaving clean URL', () => {
 			expect(
 				normalizeUrl('https://example.com/page?utm_source=x&fbclid=y', {

@@ -80,10 +80,21 @@ const TRACKING_PARAMS = new Set([
 
 const TRACKING_PREFIX = 'utm_';
 
+/** Ambiguous parameter names stripped only when the value has the tracker's shape. */
+const SHAPED_TRACKING_PARAMS: ReadonlyMap<string, RegExp> = new Map([
+	// trueAnthem share id on news links posted to social media
+	['taid', /^[0-9a-f]{24}$/i],
+]);
+
+function isTrackingParam(key: string, value: string): boolean {
+	if (TRACKING_PARAMS.has(key) || key.startsWith(TRACKING_PREFIX)) return true;
+	return SHAPED_TRACKING_PARAMS.get(key)?.test(value) ?? false;
+}
+
 function stripTrackingParams(url: URL): void {
 	const toDelete: string[] = [];
-	for (const key of url.searchParams.keys()) {
-		if (TRACKING_PARAMS.has(key) || key.startsWith(TRACKING_PREFIX)) {
+	for (const [key, value] of url.searchParams) {
+		if (isTrackingParam(key, value)) {
 			toDelete.push(key);
 		}
 	}

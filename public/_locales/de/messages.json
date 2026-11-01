@@ -459,6 +459,10 @@
 	},
 	"redditSignIn": { "message": "Anmelden" },
 	"redditSearch": { "message": "Auf Reddit suchen" },
+	"redditAccessRequired": {
+		"message": "Erlaube den Zugriff auf old.reddit.com, um Reddit-Diskussionen zu sehen."
+	},
+	"redditGrantAccess": { "message": "Zugriff erlauben" },
 	"citationSource": {
 		"message": "Quelle $INDEX$",
 		"placeholders": { "INDEX": { "content": "$1" } }

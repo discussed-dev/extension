@@ -459,6 +459,10 @@
 	},
 	"redditSignIn": { "message": "ログイン" },
 	"redditSearch": { "message": "Reddit で検索" },
+	"redditAccessRequired": {
+		"message": "Reddit のディスカッションを表示するには old.reddit.com へのアクセスを許可してください。"
+	},
+	"redditGrantAccess": { "message": "アクセスを許可" },
 	"citationSource": {
 		"message": "出典 $INDEX$",
 		"placeholders": { "INDEX": { "content": "$1" } }

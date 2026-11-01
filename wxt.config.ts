@@ -18,6 +18,11 @@ export default defineConfig({
 				description: 'Open Discussed popup',
 			},
 		},
+		// Granted at runtime from the popup; keep in sync with src/lib/reddit-access.ts
+		optional_host_permissions: [
+			'https://old.reddit.com/*',
+			'https://arctic-shift.photon-reddit.com/*',
+		],
 		host_permissions: [
 			'https://hn.algolia.com/*',
 			'https://www.reddit.com/*',
@@ -30,10 +35,23 @@ export default defineConfig({
 			gecko: {
 				id: 'discussed@discussed.dev',
 				// @ts-expect-error -- AMO's data_collection_permissions is not yet in WXT's manifest types
+				// Mozilla counts any data handled outside the browser, third parties included:
+				// page URLs go to the discussion APIs, page text to the user's LLM on Summarize.
 				data_collection_permissions: {
-					required: ['none'],
+					required: ['browsingActivity', 'websiteContent'],
 				},
 			},
+		},
+	},
+	hooks: {
+		// WXT drops optional_host_permissions for MV2 (Firefox); MV2 lists optional hosts in optional_permissions.
+		'build:manifestGenerated': (_wxt, manifest) => {
+			if (manifest.manifest_version !== 2) return;
+			manifest.optional_permissions = [
+				...(manifest.optional_permissions ?? []),
+				'https://old.reddit.com/*',
+				'https://arctic-shift.photon-reddit.com/*',
+			];
 		},
 	},
 	vite: () => ({

@@ -44,6 +44,7 @@ let lastPageContent = $state<PageContent | undefined>(undefined);
 let resolved = $state<ResolvedDiscussion | null>(null);
 let unavailable = $state<Platform[]>([]);
 let signInRequired = $state<Platform[]>([]);
+let permissionRequired = $state<Platform[]>([]);
 
 async function load() {
 	loading = true;
@@ -63,6 +64,7 @@ async function load() {
 			discussions = [];
 			unavailable = [];
 			signInRequired = [];
+			permissionRequired = [];
 			if (currentTabId != null) {
 				await setToolbarBadge(browser, { tabId: currentTabId, text: '' });
 			}
@@ -76,6 +78,7 @@ async function load() {
 			discussions = [];
 			unavailable = [];
 			signInRequired = [];
+			permissionRequired = [];
 			return;
 		}
 		const targetUrl = resolveResult?.linkedUrl ?? tab.url;
@@ -83,9 +86,11 @@ async function load() {
 			discussions: allDiscussions,
 			unavailable: sourcesDown,
 			signInRequired: sourcesNeedingSignIn,
+			permissionRequired: sourcesNeedingPermission,
 		} = await discoverDiscussions(targetUrl);
 		unavailable = sourcesDown;
 		signInRequired = sourcesNeedingSignIn;
+		permissionRequired = sourcesNeedingPermission;
 
 		discussions = resolveResult
 			? allDiscussions.filter(
@@ -126,6 +131,7 @@ async function refresh() {
 			discussions = [];
 			unavailable = [];
 			signInRequired = [];
+			permissionRequired = [];
 			await setToolbarBadge(browser, { tabId: currentTabId, text: '' });
 			return;
 		}
@@ -137,6 +143,7 @@ async function refresh() {
 			discussions = [];
 			unavailable = [];
 			signInRequired = [];
+			permissionRequired = [];
 			return;
 		}
 		const targetUrl = resolveResult?.linkedUrl ?? currentUrl;
@@ -144,9 +151,11 @@ async function refresh() {
 			discussions: allDiscussions,
 			unavailable: sourcesDown,
 			signInRequired: sourcesNeedingSignIn,
+			permissionRequired: sourcesNeedingPermission,
 		} = await discoverDiscussions(targetUrl, { force: true });
 		unavailable = sourcesDown;
 		signInRequired = sourcesNeedingSignIn;
+		permissionRequired = sourcesNeedingPermission;
 
 		discussions = resolveResult
 			? allDiscussions.filter(
@@ -484,8 +493,12 @@ load();
         </div>
       </section>
     {:else if discussions.length === 0}
-      {#if signInRequired.includes('reddit')}
-        <RedditSignInNotice url={redditSearchUrl} />
+      {#if permissionRequired.includes('reddit') || signInRequired.includes('reddit')}
+        <RedditSignInNotice
+          url={redditSearchUrl}
+          needsPermission={permissionRequired.includes('reddit')}
+          onGranted={refresh}
+        />
       {/if}
       <section class="px-4 py-5">
         <div>
@@ -538,8 +551,12 @@ load();
           <span>{t('sourceUnavailable', unavailableLabel)}</span>
         </div>
       {/if}
-      {#if signInRequired.includes('reddit')}
-        <RedditSignInNotice url={redditSearchUrl} />
+      {#if permissionRequired.includes('reddit') || signInRequired.includes('reddit')}
+        <RedditSignInNotice
+          url={redditSearchUrl}
+          needsPermission={permissionRequired.includes('reddit')}
+          onGranted={refresh}
+        />
       {/if}
       <div class="max-h-[24rem] min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-3">
         {#each groupedDiscussions as group (group.platform)}

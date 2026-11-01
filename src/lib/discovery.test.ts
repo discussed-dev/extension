@@ -8,7 +8,7 @@ vi.mock('./reddit', () => ({ searchReddit: vi.fn() }));
 vi.mock('./lobsters', () => ({ searchLobsters: vi.fn() }));
 
 import { discoverDiscussions } from './discovery';
-import { SignInRequiredError } from './errors';
+import { PermissionRequiredError, SignInRequiredError } from './errors';
 import { searchHn } from './hn';
 import { searchLobsters } from './lobsters';
 import { searchReddit } from './reddit';
@@ -73,6 +73,34 @@ describe('discoverDiscussions', () => {
 		expect(unavailable).toEqual([]);
 	});
 
+	it('shares one in-flight search between concurrent calls for the same URL', async () => {
+		hnMock.mockResolvedValue([HN_RESULT]);
+		redditMock.mockResolvedValue([]);
+		lobstersMock.mockResolvedValue([]);
+
+		const [a, b] = await Promise.all([
+			discoverDiscussions('https://example.com/shared'),
+			discoverDiscussions('https://www.example.com/shared/'),
+		]);
+
+		expect(hnMock).toHaveBeenCalledTimes(1);
+		expect(a.discussions).toEqual([HN_RESULT]);
+		expect(b.discussions).toEqual([HN_RESULT]);
+	});
+
+	it('starts a fresh search for force even while one is in flight', async () => {
+		hnMock.mockResolvedValue([]);
+		redditMock.mockResolvedValue([]);
+		lobstersMock.mockResolvedValue([]);
+
+		await Promise.all([
+			discoverDiscussions('https://example.com/forced'),
+			discoverDiscussions('https://example.com/forced', { force: true }),
+		]);
+
+		expect(hnMock).toHaveBeenCalledTimes(2);
+	});
+
 	it('passes normalized URL to platform searches', async () => {
 		hnMock.mockResolvedValueOnce([]);
 		redditMock.mockResolvedValueOnce([]);
@@ -135,6 +163,31 @@ describe('discoverDiscussions', () => {
 		expect(discussions.map((d) => d.platform)).toEqual(['hn']);
 		expect(unavailable).toEqual([]);
 		expect(signInRequired).toEqual(['reddit']);
+	});
+
+	it('reports a source that lacks host access as permission-required, not unavailable', async () => {
+		hnMock.mockResolvedValueOnce([HN_RESULT]);
+		redditMock.mockRejectedValueOnce(new PermissionRequiredError('reddit'));
+		lobstersMock.mockResolvedValueOnce([]);
+
+		const result = await discoverDiscussions('https://example.com');
+
+		expect(result.unavailable).toEqual([]);
+		expect(result.signInRequired).toEqual([]);
+		expect(result.permissionRequired).toEqual(['reddit']);
+	});
+
+	it('does not cache when a source needs permission, so granting it takes effect on the next scan', async () => {
+		hnMock.mockResolvedValue([]);
+		redditMock.mockRejectedValueOnce(new PermissionRequiredError('reddit'));
+		lobstersMock.mockResolvedValue([]);
+
+		await discoverDiscussions('https://example.com/granted');
+		redditMock.mockResolvedValueOnce([REDDIT_RESULT]);
+		const second = await discoverDiscussions('https://example.com/granted');
+
+		expect(second.permissionRequired).toEqual([]);
+		expect(second.discussions.map((d) => d.platform)).toEqual(['reddit']);
 	});
 
 	it('does not cache when a source needs sign-in, so signing in takes effect on the next scan', async () => {

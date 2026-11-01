@@ -102,11 +102,20 @@ When asked to release or bump version:
 2. `bun run test` — all tests must pass
 3. `bun run lint` — must be clean
 4. For minor/major bumps: run the LLM Model Lineup Freshness check above
-5. Bump `version` in `package.json` (patch/minor/major as specified)
-6. `bun run build` — production build must succeed
-7. Commit: `Bump version to X.Y.Z`
-8. `git tag vX.Y.Z`
-9. `git push && git push --tags`
+5. Translation review (see below), if `git diff vPREV..HEAD -- public/_locales` is non-empty
+6. Bump `version` in `package.json` (patch/minor/major as specified)
+7. `bun run build` — production build must succeed
+8. Commit: `Bump version to X.Y.Z`
+9. `git tag vX.Y.Z`
+10. `git push && git push --tags`
+
+### Translation review
+
+`i18n.test.ts` checks only structure (locales present, key parity, placeholders, no empty strings), not whether a translation is right. Before each release that changes `public/_locales`:
+
+1. Hand every added or changed entry since the previous tag to an independent agent (not the one that wrote the strings). For each entry and locale it back-translates to English and compares with `en`, checks terminology against the locale's existing strings (the same English term must keep the same translation), and flags strings much longer than `en`, mainly de and fr, that may break the popup layout.
+2. It returns one table per locale: key, current string, back-translation, issue, suggested fix. Apply the fixes for the non-Chinese locales after checking them.
+3. Zhi reviews the zh_CN rows before the tag is pushed.
 
 The tag push triggers `.github/workflows/release.yml`, which auto-creates the GitHub Release and submits to stores (see below). No manual `gh release create` needed.
 

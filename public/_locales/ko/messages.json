@@ -465,5 +465,6 @@
 	},
 	"openComment": { "message": "댓글 열기" },
 	"citationPageComment": { "message": "페이지 댓글" },
-	"regenerateFailed": { "message": "다시 생성하지 못했습니다. 이전 요약을 표시합니다." }
+	"regenerateFailed": { "message": "다시 생성하지 못했습니다. 이전 요약을 표시합니다." },
+	"refreshFailed": { "message": "새로 고치지 못했습니다. 이전 결과를 표시합니다." }
 }

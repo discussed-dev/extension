@@ -469,5 +469,6 @@
 	},
 	"openComment": { "message": "Abrir comentario" },
 	"citationPageComment": { "message": "Comentario de la página" },
-	"regenerateFailed": { "message": "No se pudo regenerar. Se muestra el resumen anterior." }
+	"regenerateFailed": { "message": "No se pudo regenerar. Se muestra el resumen anterior." },
+	"refreshFailed": { "message": "No se pudo actualizar. Se muestran los resultados anteriores." }
 }

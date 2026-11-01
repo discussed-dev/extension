@@ -29,6 +29,7 @@ let discussions = $state<Discussion[]>([]);
 let loading = $state(true);
 let refreshing = $state(false);
 let loadError = $state(false);
+let refreshError = $state(false);
 let blocked = $state(false);
 let currentUrl = $state('');
 let currentTitle = $state('');
@@ -49,6 +50,7 @@ let permissionRequired = $state<Platform[]>([]);
 async function load() {
 	loading = true;
 	loadError = false;
+	refreshError = false;
 	try {
 		const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
 		if (!tab?.url) return;
@@ -122,6 +124,7 @@ async function refresh() {
 	if (!currentUrl || currentTabId == null) return;
 	refreshing = true;
 	loadError = false;
+	refreshError = false;
 	try {
 		const currentSettings = userSettings ?? (await settings.getValue());
 		userSettings = currentSettings;
@@ -172,6 +175,7 @@ async function refresh() {
 		);
 	} catch (e) {
 		console.error('[discussed] popup refresh error:', e);
+		refreshError = true;
 	} finally {
 		refreshing = false;
 	}
@@ -441,6 +445,14 @@ load();
         </button>
       </div>
     </header>
+
+    <!-- Always mounted so the message is announced when it appears; whatever the
+         previous scan found stays on screen below it. -->
+    <div role="status" aria-live="polite">
+      {#if refreshError}
+        <p class="border-b border-red-200 bg-red-50 px-4 py-2 text-xs text-red-700">{t('refreshFailed')}</p>
+      {/if}
+    </div>
 
     {#if loading}
       <!-- Skeleton shaped like the list it precedes: a group label and two rows. -->

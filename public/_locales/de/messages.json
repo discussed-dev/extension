@@ -471,5 +471,8 @@
 	"citationPageComment": { "message": "Seitenkommentar" },
 	"regenerateFailed": {
 		"message": "Neu generieren fehlgeschlagen. Die vorherige Zusammenfassung wird angezeigt."
+	},
+	"refreshFailed": {
+		"message": "Aktualisieren fehlgeschlagen. Die vorherigen Ergebnisse werden angezeigt."
 	}
 }

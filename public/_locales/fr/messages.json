@@ -469,5 +469,6 @@
 	},
 	"openComment": { "message": "Ouvrir le commentaire" },
 	"citationPageComment": { "message": "Commentaire de la page" },
-	"regenerateFailed": { "message": "Impossible de régénérer. Le résumé précédent est affiché." }
+	"regenerateFailed": { "message": "Impossible de régénérer. Le résumé précédent est affiché." },
+	"refreshFailed": { "message": "Impossible d'actualiser. Les résultats précédents sont affichés." }
 }

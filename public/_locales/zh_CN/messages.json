@@ -465,5 +465,6 @@
 	},
 	"openComment": { "message": "打开评论" },
 	"citationPageComment": { "message": "页面评论" },
-	"regenerateFailed": { "message": "重新生成失败，仍显示之前的摘要。" }
+	"regenerateFailed": { "message": "重新生成失败，仍显示之前的摘要。" },
+	"refreshFailed": { "message": "刷新失败，仍显示之前的结果。" }
 }

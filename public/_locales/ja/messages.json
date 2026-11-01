@@ -469,5 +469,6 @@
 	},
 	"openComment": { "message": "コメントを開く" },
 	"citationPageComment": { "message": "ページのコメント" },
-	"regenerateFailed": { "message": "再生成できませんでした。以前の要約を表示しています。" }
+	"regenerateFailed": { "message": "再生成できませんでした。以前の要約を表示しています。" },
+	"refreshFailed": { "message": "更新できませんでした。以前の結果を表示しています。" }
 }

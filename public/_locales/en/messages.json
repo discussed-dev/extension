@@ -467,5 +467,6 @@
 	},
 	"openComment": { "message": "Open comment" },
 	"citationPageComment": { "message": "Page comment" },
-	"regenerateFailed": { "message": "Couldn't regenerate. Showing the previous summary." }
+	"regenerateFailed": { "message": "Couldn't regenerate. Showing the previous summary." },
+	"refreshFailed": { "message": "Couldn't refresh. Showing the earlier results." }
 }

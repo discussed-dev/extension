@@ -103,11 +103,21 @@ When asked to release or bump version:
 3. `bun run lint` — must be clean
 4. For minor/major bumps: run the LLM Model Lineup Freshness check above
 5. Translation review (see below), if `git diff vPREV..HEAD -- public/_locales` is non-empty
-6. Bump `version` in `package.json` (patch/minor/major as specified)
-7. `bun run build` — production build must succeed
-8. Commit: `Bump version to X.Y.Z`
-9. `git tag vX.Y.Z`
-10. `git push && git push --tags`
+6. Changelog entry (see below); Zhi approves its text
+7. Bump `version` in `package.json` (patch/minor/major as specified)
+8. `bun run build` — production build must succeed
+9. Commit: `Bump version to X.Y.Z` (with the changelog entry)
+10. `git tag vX.Y.Z`
+11. `git push && git push --tags`
+
+### Changelog
+
+`CHANGELOG.md` is user-facing: it becomes the GitHub Release body and is published at discussed.dev/changelog. `scripts/changelog.test.ts` fails when `package.json` names a version with no entry, and `release.yml` fails before building when the tag has none.
+
+- Heading `## X.Y.Z (YYYY-MM-DD)` with the release date, newest first.
+- A one-line summary of what users notice (a small patch may skip it), then optional `### New`, `### Improved`, `### Fixed` lists.
+- Write for users: what changed in the popup, settings, results or privacy. Leave out refactors, tests, CI, release tooling and docs.
+- Name a permission change and say why it is needed.
 
 ### Translation review
 
@@ -125,6 +135,7 @@ Tag push (`v*`) → `.github/workflows/release.yml` builds Chrome + Firefox zips
 
 - **Chrome Web Store** — secrets `CWS_EXTENSION_ID`, `CWS_CLIENT_ID`, `CWS_CLIENT_SECRET`, `CWS_REFRESH_TOKEN`
 - **Firefox AMO** — secrets `AMO_JWT_ISSUER`, `AMO_JWT_SECRET`; listed channel; fixed extension ID `discussed@discussed.dev`
+- **discussed.dev** — secret `WEBSITE_DEPLOY_HOOK` (a Cloudflare Pages deploy hook URL) rebuilds the site so `/changelog` picks up the new entry; the step is skipped when the secret is unset
 
 Both submissions auto-submit for review. `continue-on-error: true` ensures one store's failure won't block the other or the GitHub Release.
 

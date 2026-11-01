@@ -136,19 +136,34 @@ export function isBlacklisted(
 	mode: 'blacklist' | 'whitelist',
 ): boolean {
 	if (!blacklist.trim()) return false;
-	const domains = blacklist
-		.split('\n')
-		.map((d) => d.trim().toLowerCase())
-		.filter(Boolean);
-	if (domains.length === 0) return false;
-
 	try {
-		const hostname = new URL(url).hostname.toLowerCase();
-		const matched = domains.some((d) => hostname === d || hostname.endsWith(`.${d}`));
-		return mode === 'blacklist' ? matched : !matched;
+		new URL(url);
 	} catch {
 		return false;
 	}
+	const matched = matchingDomainRules(url, blacklist).length > 0;
+	return mode === 'blacklist' ? matched : !matched;
+}
+
+/**
+ * The domain-list entries (trimmed, as written) that match `url`: the exact
+ * host or any parent domain. Unblocking a page must remove all of these, since
+ * a subdomain inherits its parent's rule.
+ */
+export function matchingDomainRules(url: string, list: string): string[] {
+	let hostname: string;
+	try {
+		hostname = new URL(url).hostname.toLowerCase();
+	} catch {
+		return [];
+	}
+	return list
+		.split('\n')
+		.map((d) => d.trim())
+		.filter((d) => {
+			const rule = d.toLowerCase();
+			return rule !== '' && (hostname === rule || hostname.endsWith(`.${rule}`));
+		});
 }
 
 export function normalizeUrl(raw: string, options: NormalizeUrlOptions = {}): string {

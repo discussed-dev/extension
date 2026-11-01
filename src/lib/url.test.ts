@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isBlacklisted, normalizeUrl, shouldSkipUrl } from './url';
+import { isBlacklisted, matchingDomainRules, normalizeUrl, shouldSkipUrl } from './url';
 
 describe('normalizeUrl', () => {
 	describe('query string removal', () => {
@@ -288,6 +288,42 @@ describe('isBlacklisted', () => {
 
 	it('returns false for invalid URL', () => {
 		expect(isBlacklisted('not-a-url', 'example.com', 'blacklist')).toBe(false);
+	});
+});
+
+describe('matchingDomainRules', () => {
+	it('returns an exact host rule', () => {
+		expect(matchingDomainRules('https://example.com/page', 'example.com')).toEqual(['example.com']);
+	});
+
+	it('returns the parent-domain rule a subdomain inherits', () => {
+		expect(matchingDomainRules('https://blog.example.com/post', 'example.com')).toEqual([
+			'example.com',
+		]);
+	});
+
+	it('returns every rule that matches, as written in the list', () => {
+		const list = 'other.org\n  Example.com \nblog.example.com';
+		expect(matchingDomainRules('https://blog.example.com/post', list)).toEqual([
+			'Example.com',
+			'blog.example.com',
+		]);
+	});
+
+	it('matches against the full hostname, www included', () => {
+		expect(matchingDomainRules('https://www.example.com', 'www.example.com')).toEqual([
+			'www.example.com',
+		]);
+		expect(matchingDomainRules('https://www.example.com', 'example.com')).toEqual(['example.com']);
+	});
+
+	it('does not match a suffix that is not a parent domain', () => {
+		expect(matchingDomainRules('https://notexample.com', 'example.com')).toEqual([]);
+	});
+
+	it('returns nothing for an empty list or an invalid URL', () => {
+		expect(matchingDomainRules('https://example.com', '')).toEqual([]);
+		expect(matchingDomainRules('not-a-url', 'example.com')).toEqual([]);
 	});
 });
 

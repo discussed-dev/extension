@@ -9,7 +9,7 @@ import { type Settings, settings } from '@/lib/settings';
 import { type SummaryPhase, type SummaryResult, summarizeDiscussions } from '@/lib/summarize';
 import { setToolbarBadge } from '@/lib/toolbar-action';
 import type { Discussion, Platform } from '@/lib/types';
-import { isBlacklisted, normalizeUrl } from '@/lib/url';
+import { isBlacklisted, matchingDomainRules, normalizeUrl } from '@/lib/url';
 import DiscussionRow from './DiscussionRow.svelte';
 import ExternalLinks from './ExternalLinks.svelte';
 import PopupBrand from './PopupBrand.svelte';
@@ -29,6 +29,7 @@ let discussions = $state<Discussion[]>([]);
 let loading = $state(true);
 let refreshing = $state(false);
 let loadError = $state(false);
+let refreshError = $state(false);
 let blocked = $state(false);
 let currentUrl = $state('');
 let currentTitle = $state('');
@@ -49,6 +50,7 @@ let permissionRequired = $state<Platform[]>([]);
 async function load() {
 	loading = true;
 	loadError = false;
+	refreshError = false;
 	try {
 		const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
 		if (!tab?.url) return;
@@ -122,6 +124,7 @@ async function refresh() {
 	if (!currentUrl || currentTabId == null) return;
 	refreshing = true;
 	loadError = false;
+	refreshError = false;
 	try {
 		const currentSettings = userSettings ?? (await settings.getValue());
 		userSettings = currentSettings;
@@ -172,6 +175,7 @@ async function refresh() {
 		);
 	} catch (e) {
 		console.error('[discussed] popup refresh error:', e);
+		refreshError = true;
 	} finally {
 		refreshing = false;
 	}
@@ -185,20 +189,18 @@ async function toggleBlock() {
 		.map((d) => d.trim())
 		.filter(Boolean);
 
-	const isCurrentlyListed = domains.some((d) => d.toLowerCase() === host.toLowerCase());
-
 	if (userSettings.blacklistMode === 'whitelist') {
+		const isCurrentlyListed = domains.some((d) => d.toLowerCase() === host.toLowerCase());
 		if (!isCurrentlyListed) {
 			domains.push(host);
 		}
+		userSettings.blacklist = domains.join('\n');
 	} else {
-		if (isCurrentlyListed) {
-			const idx = domains.findIndex((d) => d.toLowerCase() === host.toLowerCase());
-			domains.splice(idx, 1);
-		}
+		// A subdomain inherits its parent's rule, so remove whichever rules match, not just the host.
+		const rules = matchingDomainRules(currentUrl, userSettings.blacklist);
+		userSettings.blacklist = domains.filter((d) => !rules.includes(d)).join('\n');
 	}
 
-	userSettings.blacklist = domains.join('\n');
 	await settings.setValue(userSettings);
 	blocked = false;
 	await refresh();
@@ -295,6 +297,12 @@ const currentHost = $derived.by(() => {
 	}
 });
 
+// The blacklist rules blocking this page: the host itself or a parent domain.
+const blockingRules = $derived.by(() => {
+	if (!currentUrl || !userSettings || userSettings.blacklistMode !== 'blacklist') return '';
+	return matchingDomainRules(currentUrl, userSettings.blacklist).join(', ');
+});
+
 const resolvedHost = $derived.by(() => {
 	if (!resolved) return '';
 	try {
@@ -386,6 +394,7 @@ load();
     onBack={() => { view = 'overview'; }}
     onRegenerate={() => doSummarize(true)}
     regenerating={summarizing}
+    regenerateError={summaryError}
     hasArticleContext={!!lastPageContent?.articleText}
     hasPageComments={!!lastPageContent?.comments?.length}
     platforms={[...new Set(discussions.map(d => d.platform))]}
@@ -437,6 +446,14 @@ load();
       </div>
     </header>
 
+    <!-- Always mounted so the message is announced when it appears; whatever the
+         previous scan found stays on screen below it. -->
+    <div role="status" aria-live="polite">
+      {#if refreshError}
+        <p class="border-b border-red-200 bg-red-50 px-4 py-2 text-xs text-red-700">{t('refreshFailed')}</p>
+      {/if}
+    </div>
+
     {#if loading}
       <!-- Skeleton shaped like the list it precedes: a group label and two rows. -->
       <div class="px-4 py-3" role="status" aria-live="polite">
@@ -479,7 +496,7 @@ load();
           <p class="mt-2 text-sm leading-6 text-stone-600">
             {userSettings?.blacklistMode === 'whitelist'
               ? t('domainFilteredWhitelistHint', currentHost)
-              : t('domainFilteredBlacklistHint', currentHost)}
+              : t('domainFilteredBlacklistHint', blockingRules || currentHost)}
           </p>
           <div class="mt-4 flex flex-wrap gap-2">
             <button
@@ -487,7 +504,7 @@ load();
               onclick={toggleBlock}
               class="inline-flex min-h-9 cursor-pointer items-center justify-center rounded-md bg-stone-900 px-4 text-sm font-medium text-white transition-colors hover:bg-stone-800"
             >
-              {t('unblockDomain', currentHost)}
+              {t('unblockDomain', blockingRules || currentHost)}
             </button>
           </div>
         </div>

@@ -47,6 +47,11 @@ body {
 		--color-red-50: #2b1a1a;
 		--color-red-200: #4d2626;
 		--color-red-700: #f09a9a;
+		/* Summary links: light sky text (about 8.6:1 on the summary surfaces),
+		   lighter on hover, dimmer underline. */
+		--color-sky-300: #3a6f93;
+		--color-sky-700: #7cc4f0;
+		--color-sky-900: #b3defa;
 	}
 
 	html,

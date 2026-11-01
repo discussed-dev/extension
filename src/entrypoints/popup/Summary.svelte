@@ -30,6 +30,8 @@ interface Props {
 	onBack: () => void;
 	onRegenerate: () => void;
 	regenerating: boolean;
+	/** Set when a regenerate failed; the previous summary stays on screen. */
+	regenerateError?: string;
 	hasArticleContext?: boolean;
 	hasPageComments?: boolean;
 	platforms?: Array<'hn' | 'reddit' | 'lobsters'>;
@@ -48,6 +50,7 @@ let {
 	onBack,
 	onRegenerate,
 	regenerating,
+	regenerateError,
 	hasArticleContext,
 	hasPageComments,
 	platforms,
@@ -100,9 +103,15 @@ const exportInput = $derived({
 	discussions,
 });
 
+// Only when the menu was open: the main Copy button shares these actions, and
+// moving focus from it to the chevron would be wrong.
+function closeExportMenuIfOpen() {
+	if (showExportMenu) closeExportMenu();
+}
+
 function markCopied() {
 	copied = true;
-	showExportMenu = false;
+	closeExportMenuIfOpen();
 	setTimeout(() => {
 		copied = false;
 	}, 2000);
@@ -124,7 +133,7 @@ function openInObsidian() {
 	const content = formatMarkdownExport(exportInput);
 	const uri = buildObsidianUri(obsidianVault, title, content);
 	window.open(uri, '_blank');
-	showExportMenu = false;
+	closeExportMenuIfOpen();
 }
 
 const blocks = $derived(
@@ -171,6 +180,8 @@ const supportingBlocks = $derived(
     <div class="flex shrink-0 gap-2">
       <!-- Split export button -->
       <div class="relative flex">
+        <!-- Always mounted so the change is announced; the button's own text change is not. -->
+        <span class="sr-only" role="status" aria-live="polite">{copied ? t('copied') : ''}</span>
         <button
           type="button"
           onclick={copyAsMarkdown}
@@ -248,6 +259,11 @@ const supportingBlocks = $derived(
   </div>
 
   <div class="max-h-[28rem] space-y-3 overflow-y-auto px-4 py-3">
+    {#if regenerateError}
+      <p class="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
+        {t('regenerateFailed')} {regenerateError}
+      </p>
+    {/if}
     <section class="rounded-md border border-stone-200 bg-stone-50 px-4 py-3">
       <p class="text-2xs font-semibold uppercase tracking-[0.18em] text-stone-500">{t('verdict')}</p>
       <!-- Kept on one line: whitespace between the each/if tags becomes a text

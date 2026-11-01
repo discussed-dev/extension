@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { fakeBrowser } from 'wxt/testing/fake-browser';
-import { settings } from './settings';
+import { NUMERIC_LIMITS, isIntegerInRange, settings } from './settings';
 
 describe('settings', () => {
 	beforeEach(() => {
@@ -55,5 +55,48 @@ describe('settings', () => {
 		const syncRaw = await fakeBrowser.storage.sync.get('discussed:settings');
 		const synced = syncRaw['discussed:settings'] as Record<string, unknown>;
 		expect('apiKey' in synced).toBe(false);
+	});
+});
+
+describe('isIntegerInRange', () => {
+	const limits = { min: 10, max: 100 };
+
+	it('accepts integers inside the range, boundaries included', () => {
+		expect(isIntegerInRange(10, limits)).toBe(true);
+		expect(isIntegerInRange(75, limits)).toBe(true);
+		expect(isIntegerInRange(100, limits)).toBe(true);
+	});
+
+	it('rejects values outside the range', () => {
+		expect(isIntegerInRange(9, limits)).toBe(false);
+		expect(isIntegerInRange(101, limits)).toBe(false);
+		expect(isIntegerInRange(-50, limits)).toBe(false);
+	});
+
+	it('rejects non-integers', () => {
+		expect(isIntegerInRange(12.5, limits)).toBe(false);
+		expect(isIntegerInRange(Number.NaN, limits)).toBe(false);
+		expect(isIntegerInRange(Number.POSITIVE_INFINITY, limits)).toBe(false);
+	});
+
+	it('rejects blank input, which a number field binds as undefined or null', () => {
+		expect(isIntegerInRange(undefined, limits)).toBe(false);
+		expect(isIntegerInRange(null, limits)).toBe(false);
+		expect(isIntegerInRange('', limits)).toBe(false);
+	});
+
+	it('rejects numeric strings rather than coercing them', () => {
+		expect(isIntegerInRange('50', limits)).toBe(false);
+	});
+
+	it('accepts the shipped defaults for every limited setting', async () => {
+		fakeBrowser.reset();
+		const defaults = await settings.getValue();
+		expect(
+			isIntegerInRange(defaults.maxCommentsForSummary, NUMERIC_LIMITS.maxCommentsForSummary),
+		).toBe(true);
+		expect(
+			isIntegerInRange(defaults.cacheDurationMinutes, NUMERIC_LIMITS.cacheDurationMinutes),
+		).toBe(true);
 	});
 });

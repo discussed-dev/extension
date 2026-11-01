@@ -3,7 +3,7 @@
 		"message": "Discussed"
 	},
 	"extensionDescription": {
-		"message": "Descubre automáticamente debates de la comunidad sobre la página actual y resúmelos con IA"
+		"message": "Descubre automáticamente discusiones de la comunidad sobre la página actual y resúmelas con IA"
 	},
 	"summary": {
 		"message": "Resumen"
@@ -65,7 +65,7 @@
 		"message": "Veredicto"
 	},
 	"configureApiKey": {
-		"message": "Configura una clave API en ajustes para activar"
+		"message": "Añade tu propia clave API en Ajustes. Se queda en tu navegador: nunca la vemos."
 	},
 	"save": {
 		"message": "Guardar ajustes"
@@ -104,7 +104,7 @@
 		"message": "Abrir en Obsidian"
 	},
 	"obsidianVault": {
-		"message": "Nombre del vault de Obsidian"
+		"message": "Nombre de la bóveda de Obsidian"
 	},
 	"obsidianVaultHint": {
 		"message": "Opcional. Necesario para \"Abrir en Obsidian\"."
@@ -179,7 +179,7 @@
 		"message": "Actualizar escaneo de discusiones"
 	},
 	"backToOverview": {
-		"message": "Volver al resumen general"
+		"message": "Volver a la vista general"
 	},
 	"moreExportOptions": {
 		"message": "Más opciones de exportación"
@@ -468,5 +468,15 @@
 		"placeholders": { "INDEX": { "content": "$1" } }
 	},
 	"openComment": { "message": "Abrir comentario" },
-	"citationPageComment": { "message": "Comentario de la página" }
+	"citationPageComment": { "message": "Comentario de la página" },
+	"regenerateFailed": { "message": "No se pudo regenerar. Se muestra el resumen anterior." },
+	"refreshFailed": { "message": "No se pudo actualizar. Se muestran los resultados anteriores." },
+	"providerOllamaLocal": { "message": "Ollama (local)" },
+	"providerCustomOpenai": { "message": "Personalizado (compatible con OpenAI)" },
+	"obsidianVaultPlaceholder": { "message": "Mi bóveda" },
+	"numberOutOfRange": {
+		"message": "Introduce un número entero entre $MIN$ y $MAX$.",
+		"placeholders": { "MIN": { "content": "$1" }, "MAX": { "content": "$2" } }
+	},
+	"settingsNotSaved": { "message": "No se ha guardado. Corrige los campos resaltados." }
 }

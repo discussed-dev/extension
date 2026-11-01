@@ -1,3 +1,4 @@
+import type { I18nKey } from './i18n';
 import type { LlmProvider } from './llm';
 
 export interface Settings {
@@ -73,8 +74,34 @@ const DEFAULTS: Settings = {
 	obsidianVault: '',
 };
 
+export interface IntegerLimits {
+	min: number;
+	max: number;
+}
+
+/** Bounds for the numeric settings; the options inputs use the same values for min/max. */
+export const NUMERIC_LIMITS = {
+	maxCommentsForSummary: { min: 10, max: 100 },
+	cacheDurationMinutes: { min: 1, max: 1440 },
+} as const satisfies Record<string, IntegerLimits>;
+
+/**
+ * Whether a numeric setting is safe to persist. Takes `unknown` because a
+ * number input bound with bind:value yields undefined/null when blank.
+ */
+export function isIntegerInRange(value: unknown, limits: IntegerLimits): value is number {
+	return (
+		typeof value === 'number' &&
+		Number.isInteger(value) &&
+		value >= limits.min &&
+		value <= limits.max
+	);
+}
+
 export interface ProviderConfig {
 	label: string;
+	/** Set when the label has descriptive words to translate; resolved with t() at render time. */
+	labelKey?: I18nKey;
 	apiFormat: LlmProvider;
 	baseUrl?: string;
 	keyPlaceholder: string;
@@ -171,6 +198,7 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 	},
 	ollama: {
 		label: 'Ollama (local)',
+		labelKey: 'providerOllamaLocal',
 		apiFormat: 'openai',
 		baseUrl: 'http://localhost:11434/v1',
 		keyPlaceholder: 'ollama',
@@ -182,6 +210,7 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 	},
 	custom: {
 		label: 'Custom (OpenAI-compatible)',
+		labelKey: 'providerCustomOpenai',
 		apiFormat: 'openai',
 		keyPlaceholder: 'your-api-key',
 		models: [],

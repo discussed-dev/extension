@@ -12,7 +12,7 @@
 		"message": "设置"
 	},
 	"searching": {
-		"message": "正在扫描讨论源..."
+		"message": "正在扫描讨论来源..."
 	},
 	"searchingHint": {
 		"message": "正在检查 Hacker News、Reddit 和 Lobsters。"
@@ -21,7 +21,7 @@
 		"message": "暂未发现相关讨论"
 	},
 	"noDiscussionsHint": {
-		"message": "Discussed 未找到 $HOST$ 的匹配讨论。试试重新扫描，或搜索内置来源以外的地方。",
+		"message": "Discussed 未找到与 $HOST$ 匹配的讨论帖。可以重新扫描，或到内置来源之外搜索。",
 		"placeholders": {
 			"HOST": {
 				"content": "$1"
@@ -50,7 +50,7 @@
 		"message": "重新生成"
 	},
 	"generating": {
-		"message": "生成中..."
+		"message": "正在生成..."
 	},
 	"copy": {
 		"message": "复制"
@@ -59,10 +59,10 @@
 		"message": "已复制！"
 	},
 	"searchElsewhere": {
-		"message": "其他搜索"
+		"message": "在别处搜索"
 	},
 	"verdict": {
-		"message": "总结"
+		"message": "结论"
 	},
 	"configureApiKey": {
 		"message": "在设置中添加你自己的 API 密钥。密钥仅存储在你的浏览器中，我们绝不会读取。"
@@ -107,7 +107,7 @@
 		"message": "Obsidian 仓库名称"
 	},
 	"obsidianVaultHint": {
-		"message": "可选。使用「在 Obsidian 中打开」功能时必填。"
+		"message": "可选。使用“在 Obsidian 中打开”功能时必填。"
 	},
 	"exportSection": {
 		"message": "导出"
@@ -208,7 +208,7 @@
 		"message": "刚刚"
 	},
 	"timeMinutes": {
-		"message": "$N$分",
+		"message": "$N$分钟",
 		"placeholders": {
 			"N": {
 				"content": "$1"
@@ -216,7 +216,7 @@
 		}
 	},
 	"timeHours": {
-		"message": "$N$时",
+		"message": "$N$小时",
 		"placeholders": {
 			"N": {
 				"content": "$1"
@@ -232,7 +232,7 @@
 		}
 	},
 	"timeMonths": {
-		"message": "$N$月",
+		"message": "$N$个月",
 		"placeholders": {
 			"N": {
 				"content": "$1"
@@ -296,7 +296,7 @@
 		"message": "预设"
 	},
 	"advancedControls": {
-		"message": "高级选项"
+		"message": "高级设置"
 	},
 	"showAdvancedSettings": {
 		"message": "显示高级设置"
@@ -377,7 +377,7 @@
 		"message": "每行一个域名。这些域名将被跳过。"
 	},
 	"settingsSavedDetail": {
-		"message": "设置已保存。新的扫描会立即使用这些偏好。"
+		"message": "设置已保存，新的扫描将立即生效。"
 	},
 	"apiSettingsSaved": {
 		"message": "API 设置已保存。"
@@ -389,7 +389,7 @@
 		"message": "正在检查 API 密钥..."
 	},
 	"apiKeyWorks": {
-		"message": "API 密钥有效。摘要可以使用此提供商。"
+		"message": "API 密钥有效，可使用此提供商生成摘要。"
 	},
 	"couldNotReachProvider": {
 		"message": "无法连接提供商：$ERROR$",
@@ -464,5 +464,15 @@
 		"placeholders": { "INDEX": { "content": "$1" } }
 	},
 	"openComment": { "message": "打开评论" },
-	"citationPageComment": { "message": "页面评论" }
+	"citationPageComment": { "message": "页面评论" },
+	"regenerateFailed": { "message": "重新生成失败，仍显示之前的摘要。" },
+	"refreshFailed": { "message": "刷新失败，仍显示之前的结果。" },
+	"providerOllamaLocal": { "message": "Ollama（本地）" },
+	"providerCustomOpenai": { "message": "自定义（兼容 OpenAI）" },
+	"obsidianVaultPlaceholder": { "message": "我的仓库" },
+	"numberOutOfRange": {
+		"message": "请输入 $MIN$ 到 $MAX$ 之间的整数。",
+		"placeholders": { "MIN": { "content": "$1" }, "MAX": { "content": "$2" } }
+	},
+	"settingsNotSaved": { "message": "未保存。请修正标出的字段。" }
 }

@@ -65,7 +65,7 @@
 		"message": "Verdict"
 	},
 	"configureApiKey": {
-		"message": "Configurez une clé API dans les paramètres pour activer"
+		"message": "Ajoutez votre propre clé API dans les Paramètres. Elle reste dans votre navigateur : nous ne la voyons jamais."
 	},
 	"save": {
 		"message": "Enregistrer les paramètres"
@@ -248,7 +248,7 @@
 		}
 	},
 	"coreControls": {
-		"message": "Réglages principaux"
+		"message": "Paramètres principaux"
 	},
 	"sourceHintHn": {
 		"message": "Consultez les fils HN pour cette page."
@@ -296,7 +296,7 @@
 		"message": "Préréglages"
 	},
 	"advancedControls": {
-		"message": "Réglages avancés"
+		"message": "Paramètres avancés"
 	},
 	"showAdvancedSettings": {
 		"message": "Afficher les paramètres avancés"
@@ -468,5 +468,17 @@
 		"placeholders": { "INDEX": { "content": "$1" } }
 	},
 	"openComment": { "message": "Ouvrir le commentaire" },
-	"citationPageComment": { "message": "Commentaire de la page" }
+	"citationPageComment": { "message": "Commentaire de la page" },
+	"regenerateFailed": { "message": "Impossible de régénérer. Le résumé précédent est affiché." },
+	"refreshFailed": {
+		"message": "Impossible d'actualiser. Les résultats précédents sont affichés."
+	},
+	"providerOllamaLocal": { "message": "Ollama (local)" },
+	"providerCustomOpenai": { "message": "Personnalisé (compatible OpenAI)" },
+	"obsidianVaultPlaceholder": { "message": "Mon coffre" },
+	"numberOutOfRange": {
+		"message": "Saisissez un nombre entier entre $MIN$ et $MAX$.",
+		"placeholders": { "MIN": { "content": "$1" }, "MAX": { "content": "$2" } }
+	},
+	"settingsNotSaved": { "message": "Non enregistré. Corrigez les champs signalés." }
 }

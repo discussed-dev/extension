@@ -2,20 +2,30 @@
 import BrandMark from '@/components/BrandMark.svelte';
 import { t } from '@/lib/i18n';
 import { type LlmProvider, needsMaxCompletionTokens } from '@/lib/llm';
-import { PROVIDERS, type Settings, settings } from '@/lib/settings';
+import {
+	NUMERIC_LIMITS,
+	PROVIDERS,
+	type Settings,
+	isIntegerInRange,
+	settings,
+} from '@/lib/settings';
+import { tick } from 'svelte';
 
 type StatusTone = 'neutral' | 'success' | 'error';
 
 const version = browser.runtime.getManifest().version;
 
+// Each language in its own name (endonym), the usual convention for a language
+// picker: a reader finds their language whatever the UI locale, and the names
+// need no translation. Values are persisted and fed to the prompt; keep them.
 const LANGUAGE_OPTIONS = [
-	{ value: 'en', label: 'English' },
-	{ value: 'Chinese', label: 'Chinese (中文)' },
-	{ value: 'Spanish', label: 'Spanish (Español)' },
-	{ value: 'Japanese', label: 'Japanese (日本語)' },
-	{ value: 'Korean', label: 'Korean (한국어)' },
-	{ value: 'French', label: 'French (Français)' },
-	{ value: 'German', label: 'German (Deutsch)' },
+	{ value: 'en', lang: 'en', label: 'English' },
+	{ value: 'Chinese', lang: 'zh', label: '中文' },
+	{ value: 'Spanish', lang: 'es', label: 'Español' },
+	{ value: 'Japanese', lang: 'ja', label: '日本語' },
+	{ value: 'Korean', lang: 'ko', label: '한국어' },
+	{ value: 'French', lang: 'fr', label: 'Français' },
+	{ value: 'German', lang: 'de', label: 'Deutsch' },
 ];
 
 let current = $state<Settings | null>(null);
@@ -24,6 +34,17 @@ let saveMessage = $state('');
 let testResult = $state('');
 let testTone = $state<StatusTone>('neutral');
 let saveTimeout: ReturnType<typeof setTimeout> | undefined;
+let maxCommentsInput = $state<HTMLInputElement | null>(null);
+let cacheDurationInput = $state<HTMLInputElement | null>(null);
+
+const maxCommentsLimits = NUMERIC_LIMITS.maxCommentsForSummary;
+const cacheDurationLimits = NUMERIC_LIMITS.cacheDurationMinutes;
+const maxCommentsInvalid = $derived(
+	!!current && !isIntegerInRange(current.maxCommentsForSummary, maxCommentsLimits),
+);
+const cacheDurationInvalid = $derived(
+	!!current && !isIntegerInRange(current.cacheDurationMinutes, cacheDurationLimits),
+);
 
 const providerConfig = $derived(current ? PROVIDERS[current.selectedProvider] : null);
 const providerEntries = Object.entries(PROVIDERS);
@@ -51,14 +72,36 @@ function setTestStatus(message: string, tone: StatusTone = 'neutral') {
 	testTone = tone;
 }
 
+/**
+ * Blocks a save while a numeric field is invalid, so a bad value is never
+ * persisted. With `focus`, moves to the first invalid field, opening the
+ * advanced section if that field lives there.
+ */
+async function blockInvalidSave(focus: boolean): Promise<boolean> {
+	if (!maxCommentsInvalid && !cacheDurationInvalid) return false;
+	setSaveStatus(t('settingsNotSaved'));
+	if (!focus) return true;
+	if (maxCommentsInvalid) {
+		maxCommentsInput?.focus();
+	} else {
+		showAdvanced = true;
+		await tick();
+		cacheDurationInput?.focus();
+	}
+	return true;
+}
+
 async function save() {
 	if (!current) return;
+	if (await blockInvalidSave(true)) return;
 	await settings.setValue(current);
 	setSaveStatus(t('settingsSavedDetail'));
 }
 
 async function saveAfterTest() {
 	if (!current) return;
+	// Leave focus on the key test the user just ran; the field errors stay visible.
+	if (await blockInvalidSave(false)) return;
 	await settings.setValue(current);
 	setSaveStatus(t('apiSettingsSaved'));
 }
@@ -269,7 +312,7 @@ load();
               class="mt-2 min-h-10 w-full rounded-md border border-stone-300 bg-white px-4 text-sm text-stone-900"
             >
               {#each providerEntries as [key, config]}
-                <option value={key}>{config.label}</option>
+                <option value={key}>{config.labelKey ? t(config.labelKey) : config.label}</option>
               {/each}
             </select>
           </label>
@@ -338,22 +381,33 @@ load();
             <p class="mt-1 text-xs text-stone-500">{t('modelHint')}</p>
           </div>
 
-          <label class="block">
-            <span class="block text-sm font-medium text-stone-900">{t('maxCommentsPerSummary')}</span>
-            <input
-              type="number"
-              bind:value={current.maxCommentsForSummary}
-              min="10"
-              max="100"
-              class="mt-2 min-h-10 w-full rounded-md border border-stone-300 bg-white px-4 text-sm text-stone-900"
-            />
-          </label>
+          <div>
+            <label class="block">
+              <span class="block text-sm font-medium text-stone-900">{t('maxCommentsPerSummary')}</span>
+              <input
+                type="number"
+                bind:this={maxCommentsInput}
+                bind:value={current.maxCommentsForSummary}
+                min={maxCommentsLimits.min}
+                max={maxCommentsLimits.max}
+                step="1"
+                aria-invalid={maxCommentsInvalid}
+                aria-describedby={maxCommentsInvalid ? 'max-comments-error' : undefined}
+                class="mt-2 min-h-10 w-full rounded-md border border-stone-300 bg-white px-4 text-sm text-stone-900 aria-invalid:border-red-700"
+              />
+            </label>
+            {#if maxCommentsInvalid}
+              <p id="max-comments-error" class="mt-1 text-xs text-red-700">
+                {t('numberOutOfRange', String(maxCommentsLimits.min), String(maxCommentsLimits.max))}
+              </p>
+            {/if}
+          </div>
 
           <label class="block">
             <span class="block text-sm font-medium text-stone-900">{t('summaryLanguage')}</span>
             <select bind:value={current.summaryLanguage} class="mt-2 min-h-10 w-full rounded-md border border-stone-300 bg-white px-4 text-sm text-stone-900">
               {#each LANGUAGE_OPTIONS as option}
-                <option value={option.value}>{option.label}</option>
+                <option value={option.value} lang={option.lang}>{option.label}</option>
               {/each}
             </select>
           </label>
@@ -372,7 +426,7 @@ load();
           <input
             type="text"
             bind:value={current.obsidianVault}
-            placeholder="My Vault"
+            placeholder={t('obsidianVaultPlaceholder')}
             class="mt-2 min-h-10 w-full rounded-md border border-stone-300 bg-white px-4 text-sm text-stone-900"
           />
         </label>
@@ -458,17 +512,28 @@ load();
                 </select>
               </label>
 
-              <label class="block">
-                <span class="block text-sm font-medium text-stone-900">{t('cacheDurationLabel')}</span>
-                <span class="mt-0.5 block text-xs leading-5 text-stone-600">{t('cacheDurationHint')}</span>
-                <input
-                  type="number"
-                  bind:value={current.cacheDurationMinutes}
-                  min="1"
-                  max="1440"
-                  class="mt-2 min-h-10 w-full rounded-md border border-stone-300 bg-white px-4 text-sm text-stone-900"
-                />
-              </label>
+              <div>
+                <label class="block">
+                  <span class="block text-sm font-medium text-stone-900">{t('cacheDurationLabel')}</span>
+                  <span class="mt-0.5 block text-xs leading-5 text-stone-600">{t('cacheDurationHint')}</span>
+                  <input
+                    type="number"
+                    bind:this={cacheDurationInput}
+                    bind:value={current.cacheDurationMinutes}
+                    min={cacheDurationLimits.min}
+                    max={cacheDurationLimits.max}
+                    step="1"
+                    aria-invalid={cacheDurationInvalid}
+                    aria-describedby={cacheDurationInvalid ? 'cache-duration-error' : undefined}
+                    class="mt-2 min-h-10 w-full rounded-md border border-stone-300 bg-white px-4 text-sm text-stone-900 aria-invalid:border-red-700"
+                  />
+                </label>
+                {#if cacheDurationInvalid}
+                  <p id="cache-duration-error" class="mt-1 text-xs text-red-700">
+                    {t('numberOutOfRange', String(cacheDurationLimits.min), String(cacheDurationLimits.max))}
+                  </p>
+                {/if}
+              </div>
             </div>
           </section>
 

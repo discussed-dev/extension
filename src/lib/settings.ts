@@ -231,10 +231,11 @@ export const settings = {
 		const stored = syncResult[STORAGE_KEY] as Partial<Settings> | undefined;
 		let apiKey = (localResult[API_KEY_STORAGE_KEY] as string | undefined) ?? '';
 
-		// One-time migration: older versions synced the key inside the settings
-		// object. Move it to local storage and strip it from sync.
-		if (!apiKey && stored?.apiKey) {
-			apiKey = stored.apiKey;
+		// Older versions synced the key inside the settings object. Strip it from
+		// sync whenever it appears; move it to local storage only if local has none,
+		// since a local key is newer than a synced one.
+		if (stored && 'apiKey' in stored) {
+			if (!apiKey) apiKey = stored.apiKey ?? '';
 			await this.setValue({ ...DEFAULTS, ...stored, apiKey });
 		}
 

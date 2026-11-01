@@ -73,6 +73,34 @@ describe('discoverDiscussions', () => {
 		expect(unavailable).toEqual([]);
 	});
 
+	it('shares one in-flight search between concurrent calls for the same URL', async () => {
+		hnMock.mockResolvedValue([HN_RESULT]);
+		redditMock.mockResolvedValue([]);
+		lobstersMock.mockResolvedValue([]);
+
+		const [a, b] = await Promise.all([
+			discoverDiscussions('https://example.com/shared'),
+			discoverDiscussions('https://www.example.com/shared/'),
+		]);
+
+		expect(hnMock).toHaveBeenCalledTimes(1);
+		expect(a.discussions).toEqual([HN_RESULT]);
+		expect(b.discussions).toEqual([HN_RESULT]);
+	});
+
+	it('starts a fresh search for force even while one is in flight', async () => {
+		hnMock.mockResolvedValue([]);
+		redditMock.mockResolvedValue([]);
+		lobstersMock.mockResolvedValue([]);
+
+		await Promise.all([
+			discoverDiscussions('https://example.com/forced'),
+			discoverDiscussions('https://example.com/forced', { force: true }),
+		]);
+
+		expect(hnMock).toHaveBeenCalledTimes(2);
+	});
+
 	it('passes normalized URL to platform searches', async () => {
 		hnMock.mockResolvedValueOnce([]);
 		redditMock.mockResolvedValueOnce([]);

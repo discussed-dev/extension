@@ -3,7 +3,7 @@ import { SignInRequiredError } from './errors';
 import { searchHn } from './hn';
 import { searchLobsters } from './lobsters';
 import { searchReddit } from './reddit';
-import { settings } from './settings';
+import { type Settings, settings } from './settings';
 import type { Discussion, Platform } from './types';
 import { normalizeUrl, shouldSkipUrl } from './url';
 
@@ -66,11 +66,29 @@ export async function discoverDiscussions(
 	const cacheTtlMs = userSettings.cacheDurationMinutes * 60 * 1000;
 	const cacheKey = `discussions:${url}`;
 
-	if (!options.force) {
-		const cached = await cacheGet<Discussion[]>(cacheKey);
-		if (cached) return { discussions: cached, unavailable: [], signInRequired: [] };
-	}
+	if (options.force) return searchAll(url, userSettings, cacheKey, cacheTtlMs);
 
+	const cached = await cacheGet<Discussion[]>(cacheKey);
+	if (cached) return { discussions: cached, unavailable: [], signInRequired: [] };
+
+	// Tab events and the popup often ask for the same page at once; share one network sweep.
+	const existing = inFlight.get(cacheKey);
+	if (existing) return existing;
+	const task = searchAll(url, userSettings, cacheKey, cacheTtlMs).finally(() =>
+		inFlight.delete(cacheKey),
+	);
+	inFlight.set(cacheKey, task);
+	return task;
+}
+
+const inFlight = new Map<string, Promise<DiscoveryResult>>();
+
+async function searchAll(
+	url: string,
+	userSettings: Settings,
+	cacheKey: string,
+	cacheTtlMs: number,
+): Promise<DiscoveryResult> {
 	const searches: Array<{ platform: Platform; promise: Promise<Discussion[]> }> = [];
 	if (userSettings.enableHn)
 		searches.push({ platform: 'hn', promise: withTimeout(searchHn(url), SOURCE_TIMEOUT_MS) });

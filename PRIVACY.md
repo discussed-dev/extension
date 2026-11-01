@@ -1,6 +1,6 @@
 # Privacy Policy — Discussed Browser Extension
 
-**Last updated:** April 9, 2026
+**Last updated:** November 1, 2026
 
 ## What Discussed Does
 
@@ -16,6 +16,7 @@ When you browse the web with Discussed installed, the following data is processe
 
 ### Page URLs
 - The URL of the page you are viewing is sent to public APIs (HN Algolia, Reddit, Lobsters) to search for related discussions.
+- If Reddit refuses or cannot answer the search, the URL is sent to the Arctic Shift Reddit archive instead. This only happens after you allow access to Reddit from the popup.
 - URLs are normalized (query strings and fragments stripped) before searching.
 
 ### Discussion Data
@@ -43,6 +44,7 @@ Discussed communicates directly with these third-party services from your browse
 |---------|---------|---------------------|
 | HN Algolia API | Search Hacker News discussions | [algolia.com/policies/privacy](https://www.algolia.com/policies/privacy/) |
 | Reddit | Search Reddit discussions | [reddit.com/policies/privacy-policy](https://www.reddit.com/policies/privacy-policy) |
+| Arctic Shift | Fallback search of archived Reddit posts | [arctic-shift.photon-reddit.com](https://arctic-shift.photon-reddit.com/) |
 | Lobsters | Search Lobsters discussions | [lobste.rs/about](https://lobste.rs/about) |
 | Your chosen AI provider | Generate summaries (user-triggered only) | See your provider's privacy policy |
 
@@ -55,6 +57,7 @@ Discussed communicates directly with these third-party services from your browse
 | `scripting` | Inject content script to extract article text and page comments on demand |
 | `storage` | Cache discussion results, summaries, and settings locally |
 | Host permissions | Make API calls directly to discussion platforms and AI providers |
+| Optional: `old.reddit.com`, `arctic-shift.photon-reddit.com` | Search Reddit; requested only when you click Allow access in the popup |
 
 ## Data Retention
 

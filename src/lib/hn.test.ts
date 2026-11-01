@@ -57,6 +57,8 @@ describe('searchHn', () => {
 		expect(calledUrl.pathname).toBe('/api/v1/search');
 		expect(calledUrl.searchParams.get('query')).toBe('https://example.com/page');
 		expect(calledUrl.searchParams.get('restrictSearchableAttributes')).toBe('url');
+		expect(calledUrl.searchParams.get('tags')).toBe('story');
+		expect(calledUrl.searchParams.get('hitsPerPage')).toBe('100');
 	});
 
 	it('returns empty array on no hits', async () => {

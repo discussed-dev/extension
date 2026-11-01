@@ -3,7 +3,7 @@
 		"message": "Discussed"
 	},
 	"extensionDescription": {
-		"message": "現在のページに関するコミュニティの議論を自動検出し、AIで要約"
+		"message": "現在のページに関するコミュニティのディスカッションを自動検出し、AIで要約"
 	},
 	"summary": {
 		"message": "要約"
@@ -56,7 +56,7 @@
 		"message": "コピー"
 	},
 	"copied": {
-		"message": "コピーしました！"
+		"message": "コピー済み"
 	},
 	"searchElsewhere": {
 		"message": "他で検索"
@@ -65,7 +65,7 @@
 		"message": "結論"
 	},
 	"configureApiKey": {
-		"message": "設定でAPIキーを設定してください"
+		"message": "設定でご自身のAPIキーを追加してください。キーはブラウザ内にのみ保存され、Discussed が見ることはありません。"
 	},
 	"save": {
 		"message": "設定を保存"
@@ -104,7 +104,7 @@
 		"message": "Obsidianで開く"
 	},
 	"obsidianVault": {
-		"message": "Obsidianボールト名"
+		"message": "Obsidian 保管庫名"
 	},
 	"obsidianVaultHint": {
 		"message": "任意。「Obsidianで開く」機能に必要です。"
@@ -130,10 +130,10 @@
 		"message": "APIキーを追加"
 	},
 	"discussionReadyOne": {
-		"message": "1 件の議論を要約できます。"
+		"message": "1 件のディスカッションを要約できます。"
 	},
 	"discussionsReadyMany": {
-		"message": "$COUNT$ 件の議論を要約できます。",
+		"message": "$COUNT$ 件のディスカッションを要約できます。",
 		"placeholders": {
 			"COUNT": {
 				"content": "$1"
@@ -341,7 +341,7 @@
 		"message": "ツールバーのバッジに表示する内容を選択します。"
 	},
 	"badgeTotalDiscussions": {
-		"message": "議論の合計"
+		"message": "ディスカッションの合計"
 	},
 	"badgeTotalComments": {
 		"message": "コメントの合計"

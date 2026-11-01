@@ -65,7 +65,7 @@
 		"message": "Fazit"
 	},
 	"configureApiKey": {
-		"message": "Konfiguriere einen API-Schlüssel in den Einstellungen zum Aktivieren"
+		"message": "Füge in den Einstellungen deinen eigenen API-Schlüssel hinzu. Er bleibt in deinem Browser – wir sehen ihn nie."
 	},
 	"save": {
 		"message": "Einstellungen speichern"
@@ -104,7 +104,7 @@
 		"message": "In Obsidian öffnen"
 	},
 	"obsidianVault": {
-		"message": "Obsidian-Vault-Name"
+		"message": "Name des Obsidian-Tresors"
 	},
 	"obsidianVaultHint": {
 		"message": "Optional. Erforderlich für „In Obsidian öffnen\"."
@@ -160,7 +160,7 @@
 		}
 	},
 	"unblockDomain": {
-		"message": "Blockierung von $HOST$ aufheben",
+		"message": "$HOST$ entsperren",
 		"placeholders": {
 			"HOST": {
 				"content": "$1"
@@ -473,7 +473,7 @@
 		"message": "Neu generieren fehlgeschlagen. Die vorherige Zusammenfassung wird angezeigt."
 	},
 	"refreshFailed": {
-		"message": "Aktualisieren fehlgeschlagen. Die vorherigen Ergebnisse werden angezeigt."
+		"message": "Aktualisierung fehlgeschlagen – ältere Ergebnisse bleiben."
 	},
 	"providerOllamaLocal": { "message": "Ollama (lokal)" },
 	"providerCustomOpenai": { "message": "Benutzerdefiniert (OpenAI-kompatibel)" },

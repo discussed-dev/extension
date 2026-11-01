@@ -56,6 +56,25 @@ describe('settings', () => {
 		const synced = syncRaw['discussed:settings'] as Record<string, unknown>;
 		expect('apiKey' in synced).toBe(false);
 	});
+
+	it('strips a synced API key even when a local key already exists', async () => {
+		// 0.4.0 shipped without the 0.3.8 split and wrote a re-entered key back into sync
+		await fakeBrowser.storage.local.set({ 'discussed:apiKey': 'sk-local' });
+		await fakeBrowser.storage.sync.set({
+			'discussed:settings': { apiKey: 'sk-stale', enableHn: false },
+		});
+
+		const value = await settings.getValue();
+		expect(value.apiKey).toBe('sk-local');
+		expect(value.enableHn).toBe(false);
+
+		const syncRaw = await fakeBrowser.storage.sync.get('discussed:settings');
+		const synced = syncRaw['discussed:settings'] as Record<string, unknown>;
+		expect('apiKey' in synced).toBe(false);
+
+		const localRaw = await fakeBrowser.storage.local.get('discussed:apiKey');
+		expect(localRaw['discussed:apiKey']).toBe('sk-local');
+	});
 });
 
 describe('isIntegerInRange', () => {

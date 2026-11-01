@@ -468,5 +468,6 @@
 		"placeholders": { "INDEX": { "content": "$1" } }
 	},
 	"openComment": { "message": "Ouvrir le commentaire" },
-	"citationPageComment": { "message": "Commentaire de la page" }
+	"citationPageComment": { "message": "Commentaire de la page" },
+	"regenerateFailed": { "message": "Impossible de régénérer. Le résumé précédent est affiché." }
 }

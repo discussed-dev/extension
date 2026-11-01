@@ -30,6 +30,8 @@ interface Props {
 	onBack: () => void;
 	onRegenerate: () => void;
 	regenerating: boolean;
+	/** Set when a regenerate failed; the previous summary stays on screen. */
+	regenerateError?: string;
 	hasArticleContext?: boolean;
 	hasPageComments?: boolean;
 	platforms?: Array<'hn' | 'reddit' | 'lobsters'>;
@@ -48,6 +50,7 @@ let {
 	onBack,
 	onRegenerate,
 	regenerating,
+	regenerateError,
 	hasArticleContext,
 	hasPageComments,
 	platforms,
@@ -248,6 +251,11 @@ const supportingBlocks = $derived(
   </div>
 
   <div class="max-h-[28rem] space-y-3 overflow-y-auto px-4 py-3">
+    {#if regenerateError}
+      <p class="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
+        {t('regenerateFailed')} {regenerateError}
+      </p>
+    {/if}
     <section class="rounded-md border border-stone-200 bg-stone-50 px-4 py-3">
       <p class="text-2xs font-semibold uppercase tracking-[0.18em] text-stone-500">{t('verdict')}</p>
       <!-- Kept on one line: whitespace between the each/if tags becomes a text

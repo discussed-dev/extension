@@ -390,6 +390,7 @@ load();
     onBack={() => { view = 'overview'; }}
     onRegenerate={() => doSummarize(true)}
     regenerating={summarizing}
+    regenerateError={summaryError}
     hasArticleContext={!!lastPageContent?.articleText}
     hasPageComments={!!lastPageContent?.comments?.length}
     platforms={[...new Set(discussions.map(d => d.platform))]}

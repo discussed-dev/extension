@@ -464,5 +464,6 @@
 		"placeholders": { "INDEX": { "content": "$1" } }
 	},
 	"openComment": { "message": "댓글 열기" },
-	"citationPageComment": { "message": "페이지 댓글" }
+	"citationPageComment": { "message": "페이지 댓글" },
+	"regenerateFailed": { "message": "다시 생성하지 못했습니다. 이전 요약을 표시합니다." }
 }

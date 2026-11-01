@@ -468,5 +468,6 @@
 		"placeholders": { "INDEX": { "content": "$1" } }
 	},
 	"openComment": { "message": "コメントを開く" },
-	"citationPageComment": { "message": "ページのコメント" }
+	"citationPageComment": { "message": "ページのコメント" },
+	"regenerateFailed": { "message": "再生成できませんでした。以前の要約を表示しています。" }
 }

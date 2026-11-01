@@ -1,15 +1,10 @@
 # Changelog
 
-What changed for users in each release of Discussed. Each entry is also the GitHub Release notes and appears at [discussed.dev/changelog](https://discussed.dev/changelog).
+This file lists what changed for users in each release of Discussed. Each entry is also the GitHub Release notes for that version and appears at [discussed.dev/changelog](https://discussed.dev/changelog).
 
 ## 0.5.4 (2026-11-01)
 
 Reddit results work again.
-
-### New
-
-- Reddit searches go through old.reddit.com after you allow access once from the popup. Reddit started refusing the search Discussed used on October 20.
-- When Reddit refuses a search, Discussed checks a public archive of Reddit posts instead.
 
 ### Improved
 
@@ -17,9 +12,11 @@ Reddit results work again.
 - Share-tracking IDs that some news sites add to links are removed before searching.
 - Number fields in settings are checked before saving, with the problem shown next to the field.
 - Corrected translations in all six non-English languages. The settings page is now fully translated, and languages are listed by their own names.
+- In Firefox, the add-on now declares the data it sends: page addresses go to the discussion sites, and page text goes to your AI provider when you ask for a summary.
 
 ### Fixed
 
+- Reddit stopped answering the search Discussed used on October 20. Discussed now searches through old.reddit.com, and checks the Arctic Shift archive of Reddit posts when Reddit refuses a search. The popup asks once for permission to reach these two sites.
 - Unblock removes the rule that actually blocks the page, including a rule for a parent domain.
 - A failed Regenerate shows an error in the summary view.
 - A failed refresh says so and keeps the earlier results.
@@ -28,23 +25,24 @@ Reddit results work again.
 
 ## 0.5.3 (2026-10-03)
 
-Popup polish.
-
 ### Improved
 
 - The popup no longer has an outer border, and inner corners are rounded again.
 
 ## 0.5.2 (2026-10-03)
 
-Square corners across the popup.
+### Improved
+
+- The popup and settings page use square corners.
 
 ## 0.5.1 (2026-10-02)
 
-A redesigned popup and settings page.
+The popup and settings page are redesigned.
 
 ### Improved
 
 - Discussions are listed as compact rows and use more of the popup's height.
+- The summary view names the page it summarizes.
 - Loading shows a skeleton of the list, and summaries show what step they are on.
 - The settings header and Save button stay in view while you scroll.
 - Dark mode covers notices and status colors.
@@ -52,8 +50,7 @@ A redesigned popup and settings page.
 
 ### Fixed
 
-- Reddit is searched with the same cleaned-up URL as the other sources.
-- When Reddit blocks searches from signed-out visitors, the popup asks you to sign in.
+- When Reddit blocks searches from signed-out visitors, the popup asks you to sign in and links to a Reddit search for the page.
 
 ## 0.5.0 (2026-07-26)
 
@@ -70,11 +67,7 @@ Summaries cite the comments they draw on.
 
 ## 0.4.2 (2026-07-13)
 
-Dark mode.
-
-### New
-
-- The popup and settings page follow your system's dark mode.
+The popup and settings page follow your system's dark mode.
 
 ### Improved
 
@@ -86,10 +79,11 @@ Dark mode.
 
 ## 0.4.1 (2026-07-13)
 
-The popup opens at full size.
+Restores the 0.3.8 changes that 0.4.0 left out.
 
 ### Fixed
 
+- 0.4.0 was built without the changes from 0.3.8. This release brings them back: the API key is kept on this device again, most popup and settings text is translated again, and a lookup that failed on every source can be retried.
 - In Firefox, the popup opens at its full size instead of growing after it appears.
 - Pages declare their language, so screen readers pronounce text correctly.
 
@@ -104,8 +98,8 @@ New Hacker News stories show up right away, and the popup says when a source is 
 
 ### Improved
 
-- Hacker News discussions are found as soon as they are posted.
-- Summaries read up to eight threads and 75 comments by default.
+- Hacker News discussions are found as soon as they are posted. Discussed no longer downloads a weekly index of Hacker News links from GitHub, so it no longer needs access to api.github.com or unlimited storage.
+- On new installs, summaries read up to eight threads and 75 comments. Existing installs keep their settings.
 - The export menu and settings controls work with a keyboard and screen readers.
 - Updated the Anthropic model presets.
 
@@ -120,7 +114,8 @@ Your API key stays on this device.
 ### Improved
 
 - The API key is no longer synced through your browser account. If you use Discussed on several devices, enter the key once on each.
-- All popup and settings text is translated.
+- Most popup and settings text is translated.
+- Discussed asks for unlimited storage, so the Hacker News index it downloads fits next to cached results.
 
 ### Fixed
 
@@ -179,6 +174,11 @@ Summaries read the article and the page's own comments.
 - Comments on NYT, WSJ, Guardian and Substack pages are included in summaries.
 - Export a summary as Markdown, as plain text, or to Obsidian.
 - The summary shows which sources it used.
+- Discussed asks for the scripting permission, which it uses to read the article and its comments when you ask for a summary.
+
+### Improved
+
+- Updated the OpenAI and Google model presets.
 
 ## 0.2.0 (2026-04-08)
 
@@ -206,4 +206,4 @@ Summaries read the article and the page's own comments.
 
 ## 0.1.0 (2026-04-06)
 
-First release: discussions from Hacker News, Reddit and Lobsters for the page you are on, a count on the toolbar badge, and AI summaries on request with your own key from one of eight providers. Available in seven languages.
+The first release finds discussions of the page you are on from Hacker News, Reddit and Lobsters, shows their count on the toolbar badge, and summarizes them when you ask, using your own API key from one of eight providers or any OpenAI-compatible endpoint. It is partly translated into seven languages.

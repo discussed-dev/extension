@@ -115,7 +115,7 @@ When asked to release or bump version:
 `CHANGELOG.md` is user-facing: it becomes the GitHub Release body and is published at discussed.dev/changelog. `scripts/changelog.test.ts` fails when `package.json` names a version with no entry, and `release.yml` fails before building when the tag has none.
 
 - Heading `## X.Y.Z (YYYY-MM-DD)` with the release date, newest first.
-- A one-line summary of what users notice (a single-fix patch may skip it), then optional `### New`, `### Improved`, `### Fixed` lists.
+- A one-line summary of what users notice (a small patch may skip it), then optional `### New`, `### Improved`, `### Fixed` lists.
 - Write for users: what changed in the popup, settings, results or privacy. Leave out refactors, tests, CI, release tooling and docs.
 - Name a permission change and say why it is needed.
 

@@ -58,6 +58,18 @@ jobs:
             ${{ steps.assets.outputs.firefox_xpi }}
             ${{ steps.assets.outputs.sources_zip }}
 
+      # discussed.dev renders CHANGELOG.md at build time; a Cloudflare Pages deploy hook rebuilds it.
+      - name: Rebuild discussed.dev
+        continue-on-error: true
+        env:
+          DEPLOY_HOOK: ${{ secrets.WEBSITE_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$DEPLOY_HOOK" ]; then
+            echo "WEBSITE_DEPLOY_HOOK is not set; skipping the website rebuild"
+            exit 0
+          fi
+          curl -fsS -X POST "$DEPLOY_HOOK" > /dev/null
+
       - name: Submit to Chrome Web Store and Firefox AMO
         continue-on-error: true
         run: |

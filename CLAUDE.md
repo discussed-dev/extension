@@ -135,6 +135,7 @@ Tag push (`v*`) → `.github/workflows/release.yml` builds Chrome + Firefox zips
 
 - **Chrome Web Store** — secrets `CWS_EXTENSION_ID`, `CWS_CLIENT_ID`, `CWS_CLIENT_SECRET`, `CWS_REFRESH_TOKEN`
 - **Firefox AMO** — secrets `AMO_JWT_ISSUER`, `AMO_JWT_SECRET`; listed channel; fixed extension ID `discussed@discussed.dev`
+- **discussed.dev** — secret `WEBSITE_DEPLOY_HOOK` (a Cloudflare Pages deploy hook URL) rebuilds the site so `/changelog` picks up the new entry; the step is skipped when the secret is unset
 
 Both submissions auto-submit for review. `continue-on-error: true` ensures one store's failure won't block the other or the GitHub Release.
 

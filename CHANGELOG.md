@@ -2,6 +2,23 @@
 
 This file lists what changed for users in each release of Discussed. Each entry is also the GitHub Release notes for that version and appears at [discussed.dev/changelog](https://discussed.dev/changelog).
 
+## 0.5.5 (2026-11-08)
+
+Summaries focus on the discussion, and settings no longer offer AI models that their providers have shut down.
+
+### Improved
+
+- Summaries describe what people said and no longer restate the page. Chinese, Japanese and Korean summaries now have a length limit.
+- Hacker News summaries draw on the most-discussed comments, not only the earliest ones.
+- Summaries link only to the discussion threads. A link that is not a web address shows as plain text.
+
+### Fixed
+
+- Summaries with the default model, Claude Sonnet 5, could stop short or fail with "No text in Anthropic response".
+- Summaries with GPT-5.4 models now use a reasoning setting those models accept.
+- Models their providers have shut down are no longer offered: OpenAI o4-mini and GPT-4.1 Nano, all four Groq models, and xAI Grok 4 Fast. If you had chosen one, Discussed switches you to a replacement: o4-mini to GPT-5.4 Mini, GPT-4.1 Nano to GPT-5.4 Nano, Llama 3.1 8B to GPT-OSS 20B, the other Groq models to GPT-OSS 120B, and Grok 4 Fast to Grok 4.20 (non-reasoning).
+- An API key entered under 0.4.0 is removed from browser sync. The key stays on this device.
+
 ## 0.5.4 (2026-11-01)
 
 Reddit results work again.

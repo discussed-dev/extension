@@ -1,3 +1,4 @@
+import { cacheGet, cacheSet } from './cache';
 import { buildRef } from './grounding';
 
 export interface Comment {
@@ -19,8 +20,57 @@ interface HnItem {
 	id: number;
 	author?: string;
 	text?: string;
-	points?: number;
 	children?: HnItem[];
+}
+
+/**
+ * Algolia returns the comment tree oldest-first and with `points: null` on every
+ * comment, so neither its order nor its scores say which comments HN readers
+ * value. The official HN API lists a story's top-level comments (`kids`) in
+ * HN's ranked order; that order is used for the top level, and reply count
+ * stands in for a score at every level.
+ */
+const HN_API_TIMEOUT_MS = 3000;
+/** After a network-level failure (e.g. the host is blocked), skip the HN API for this long. */
+const HN_API_SKIP_MS = 10 * 60 * 1000;
+const HN_API_SKIP_KEY = 'hn-api-unreachable';
+
+async function fetchHnRanking(storyId: string): Promise<number[] | null> {
+	if (!/^\d+$/.test(storyId)) return null;
+	if (await cacheGet<boolean>(HN_API_SKIP_KEY)) return null;
+	let response: Response;
+	try {
+		response = await fetch(`https://hacker-news.firebaseio.com/v0/item/${storyId}.json`, {
+			signal: AbortSignal.timeout(HN_API_TIMEOUT_MS),
+		});
+	} catch {
+		await cacheSet(HN_API_SKIP_KEY, true, HN_API_SKIP_MS);
+		return null;
+	}
+	if (!response.ok) return null;
+	try {
+		const data: { kids?: unknown } = await response.json();
+		return Array.isArray(data.kids)
+			? data.kids.filter((k): k is number => typeof k === 'number')
+			: null;
+	} catch {
+		return null;
+	}
+}
+
+function countReplies(item: HnItem): number {
+	return (item.children ?? []).reduce((sum, child) => sum + 1 + countReplies(child), 0);
+}
+
+/** Ranked threads first in HN's order; the rest (and everything, without a ranking) by reply count. */
+function rankTopLevel(children: HnItem[], ranking: number[] | null): HnItem[] {
+	const position = new Map((ranking ?? []).map((id, index) => [id, index]));
+	return [...children].sort((a, b) => {
+		const pa = position.get(a.id) ?? Number.POSITIVE_INFINITY;
+		const pb = position.get(b.id) ?? Number.POSITIVE_INFINITY;
+		if (pa !== pb) return pa - pb;
+		return countReplies(b) - countReplies(a);
+	});
 }
 
 function flattenHnComments(item: HnItem, depth = 0): Comment[] {
@@ -33,7 +83,7 @@ function flattenHnComments(item: HnItem, depth = 0): Comment[] {
 			permalink: `https://news.ycombinator.com/item?id=${id}`,
 			author: item.author,
 			text: stripHtml(item.text),
-			score: item.points ?? 0,
+			score: countReplies(item),
 			depth,
 			platform: 'hn',
 		});
@@ -44,15 +94,24 @@ function flattenHnComments(item: HnItem, depth = 0): Comment[] {
 	return comments;
 }
 
-export async function fetchHnComments(storyId: string): Promise<Comment[]> {
+async function fetchHnTree(storyId: string): Promise<HnItem | null> {
 	try {
 		const response = await fetch(`https://hn.algolia.com/api/v1/items/${storyId}`);
-		if (!response.ok) return [];
-		const data: HnItem = await response.json();
-		return flattenHnComments(data);
+		if (!response.ok) return null;
+		return (await response.json()) as HnItem;
 	} catch {
-		return [];
+		return null;
 	}
+}
+
+export async function fetchHnComments(storyId: string): Promise<Comment[]> {
+	const [tree, ranking] = await Promise.all([
+		fetchHnTree(storyId),
+		// Ranking only improves order; a storage error must not cost the comments.
+		fetchHnRanking(storyId).catch(() => null),
+	]);
+	if (!tree) return [];
+	return flattenHnComments({ ...tree, children: rankTopLevel(tree.children ?? [], ranking) });
 }
 
 // --- Reddit ---

@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { fakeBrowser } from 'wxt/testing/fake-browser';
-import { NUMERIC_LIMITS, isIntegerInRange, settings } from './settings';
+import { NUMERIC_LIMITS, PROVIDERS, RETIRED_MODELS, isIntegerInRange, settings } from './settings';
 
 describe('settings', () => {
 	beforeEach(() => {
@@ -117,5 +117,55 @@ describe('isIntegerInRange', () => {
 		expect(
 			isIntegerInRange(defaults.cacheDurationMinutes, NUMERIC_LIMITS.cacheDurationMinutes),
 		).toBe(true);
+	});
+});
+
+describe('retired model migration', () => {
+	beforeEach(() => {
+		fakeBrowser.reset();
+	});
+
+	async function storeModel(selectedProvider: string, model: string): Promise<void> {
+		await fakeBrowser.storage.sync.set({ 'discussed:settings': { selectedProvider, model } });
+	}
+
+	it.each([
+		['openai', 'o4-mini', 'gpt-5.4-mini'],
+		['openai', 'gpt-4.1-nano', 'gpt-5.4-nano'],
+		['groq', 'llama-3.3-70b-versatile', 'openai/gpt-oss-120b'],
+		['groq', 'llama-3.1-8b-instant', 'openai/gpt-oss-20b'],
+		['groq', 'meta-llama/llama-4-maverick-17b-128e-instruct', 'openai/gpt-oss-120b'],
+		['groq', 'qwen/qwen3-32b', 'openai/gpt-oss-120b'],
+		['xai', 'grok-4-fast', 'grok-4.20-0309-non-reasoning'],
+	])('replaces %s %s with %s and saves it', async (provider, retired, replacement) => {
+		await storeModel(provider, retired);
+		expect((await settings.getValue()).model).toBe(replacement);
+
+		const raw = await fakeBrowser.storage.sync.get('discussed:settings');
+		expect((raw['discussed:settings'] as { model: string }).model).toBe(replacement);
+	});
+
+	it('leaves the same ID alone under another provider', async () => {
+		await storeModel('custom', 'llama-3.3-70b-versatile');
+		expect((await settings.getValue()).model).toBe('llama-3.3-70b-versatile');
+	});
+
+	it('leaves a current model alone', async () => {
+		await storeModel('openai', 'gpt-5.4');
+		expect((await settings.getValue()).model).toBe('gpt-5.4');
+	});
+
+	it('offers no retired model as a preset', () => {
+		for (const [provider, retired] of Object.entries(RETIRED_MODELS)) {
+			const presetIds = PROVIDERS[provider].models.map((m) => m.id);
+			for (const id of Object.keys(retired)) expect(presetIds).not.toContain(id);
+		}
+	});
+
+	it('maps every retired model to a preset of the same provider', () => {
+		for (const [provider, retired] of Object.entries(RETIRED_MODELS)) {
+			const presetIds = PROVIDERS[provider].models.map((m) => m.id);
+			for (const replacement of Object.values(retired)) expect(presetIds).toContain(replacement);
+		}
 	});
 });

@@ -125,13 +125,11 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 		baseUrl: 'https://api.openai.com/v1',
 		keyPlaceholder: 'sk-...',
 		models: [
-			{ id: 'gpt-5-nano', label: 'GPT-5 Nano', cost: '$' },
-			{ id: 'gpt-4.1-nano', label: 'GPT-4.1 Nano', cost: '$' },
-			{ id: 'gpt-5-mini', label: 'GPT-5 Mini', cost: '$' },
-			{ id: 'gpt-5.4-nano', label: 'GPT-5.4 Nano', cost: '$' },
-			{ id: 'gpt-4.1-mini', label: 'GPT-4.1 Mini', cost: '$' },
+			{ id: 'gpt-5-nano', label: 'GPT-5 Nano', cost: '$' }, // retires: 2026-12-11
+			{ id: 'gpt-5-mini', label: 'GPT-5 Mini', cost: '$' }, // retires: 2026-12-11
+			{ id: 'gpt-5.4-nano', label: 'GPT-5.4 Nano', cost: '$' }, // retires: 2027-04-01
+			{ id: 'gpt-4.1-mini', label: 'GPT-4.1 Mini', cost: '$' }, // retires: 2027-01-14
 			{ id: 'gpt-5.4-mini', label: 'GPT-5.4 Mini', cost: '$$' },
-			{ id: 'o4-mini', label: 'o4-mini', cost: '$$' },
 			{ id: 'gpt-5.4', label: 'GPT-5.4', cost: '$$$' },
 		],
 	},
@@ -164,14 +162,8 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 		baseUrl: 'https://api.groq.com/openai/v1',
 		keyPlaceholder: 'gsk_...',
 		models: [
-			{ id: 'llama-3.3-70b-versatile', label: 'Llama 3.3 70B', cost: '$' },
-			{ id: 'llama-3.1-8b-instant', label: 'Llama 3.1 8B', cost: '$' },
-			{
-				id: 'meta-llama/llama-4-maverick-17b-128e-instruct',
-				label: 'Llama 4 Maverick',
-				cost: '$$',
-			},
-			{ id: 'qwen/qwen3-32b', label: 'Qwen 3 32B', cost: '$' },
+			{ id: 'openai/gpt-oss-120b', label: 'GPT-OSS 120B', cost: '$' },
+			{ id: 'openai/gpt-oss-20b', label: 'GPT-OSS 20B', cost: '$' },
 		],
 	},
 	xai: {
@@ -180,8 +172,8 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 		baseUrl: 'https://api.x.ai/v1',
 		keyPlaceholder: 'xai-...',
 		models: [
-			{ id: 'grok-4-fast', label: 'Grok 4 Fast', cost: '$' },
-			{ id: 'grok-4.20', label: 'Grok 4.20', cost: '$$' },
+			{ id: 'grok-4.20-0309-non-reasoning', label: 'Grok 4.20 (non-reasoning)', cost: '$' },
+			{ id: 'grok-4.3', label: 'Grok 4.3', cost: '$' },
 		],
 	},
 	openrouter: {
@@ -217,6 +209,36 @@ export const PROVIDERS: Record<string, ProviderConfig> = {
 	},
 };
 
+/**
+ * Model IDs a provider has shut down, mapped to the preset that replaces them.
+ * The model field is free text, so removing a preset does not move users off a
+ * dead ID; getValue rewrites these on read. Keyed by provider so a custom
+ * endpoint that happens to serve a model with the same name is left alone.
+ */
+export const RETIRED_MODELS: Record<string, Record<string, string>> = {
+	openai: {
+		// Shut down 2026-10-23 (OpenAI deprecations page).
+		'o4-mini': 'gpt-5.4-mini',
+		'gpt-4.1-nano': 'gpt-5.4-nano',
+	},
+	groq: {
+		// Shut down for free and developer tiers by 2026-08-16 (Groq deprecations page).
+		'llama-3.3-70b-versatile': 'openai/gpt-oss-120b',
+		'llama-3.1-8b-instant': 'openai/gpt-oss-20b',
+		'meta-llama/llama-4-maverick-17b-128e-instruct': 'openai/gpt-oss-120b',
+		'qwen/qwen3-32b': 'openai/gpt-oss-120b',
+	},
+	xai: {
+		// No longer on the xAI models page; its variants were retired 2026-05-15.
+		'grok-4-fast': 'grok-4.20-0309-non-reasoning',
+	},
+};
+
+function replaceRetiredModel(value: Settings): Settings {
+	const replacement = RETIRED_MODELS[value.selectedProvider]?.[value.model];
+	return replacement ? { ...value, model: replacement } : value;
+}
+
 const STORAGE_KEY = 'discussed:settings';
 // The API key is a secret: it lives in storage.local so it never syncs
 // through the browser vendor's servers. Everything else stays in sync.
@@ -239,7 +261,10 @@ export const settings = {
 			await this.setValue({ ...DEFAULTS, ...stored, apiKey });
 		}
 
-		return { ...DEFAULTS, ...stored, apiKey };
+		const value: Settings = { ...DEFAULTS, ...stored, apiKey };
+		const migrated = replaceRetiredModel(value);
+		if (migrated !== value) await this.setValue(migrated);
+		return migrated;
 	},
 
 	async setValue(value: Settings): Promise<void> {

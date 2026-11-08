@@ -89,6 +89,12 @@ function truncateComment(text: string): string {
 	return text.length > MAX_COMMENT_LENGTH ? `${text.slice(0, MAX_COMMENT_LENGTH)}...` : text;
 }
 
+/** HN publishes no comment points, so an HN comment's score is its reply count (see comments.ts). */
+function scoreLabel(c: Comment): string {
+	if (c.platform === 'hn') return `${c.score} ${c.score === 1 ? 'reply' : 'replies'}`;
+	return `${c.score} pts`;
+}
+
 export function formatCommentsForPrompt(comments: Comment[]): string {
 	// Group by platform for structured input
 	const byPlatform = new Map<string, Comment[]>();
@@ -109,7 +115,7 @@ export function formatCommentsForPrompt(comments: Comment[]): string {
 		const label = PLATFORM_LABELS[platform] ?? platform;
 		// The ref prefix is what the model copies back as a citation marker.
 		const lines = group
-			.map((c) => `[${c.ref}] [${c.score} pts] ${c.author}: ${c.text}`)
+			.map((c) => `[${c.ref}] [${scoreLabel(c)}] ${c.author}: ${c.text}`)
 			.join('\n\n');
 		sections.push(`--- ${label} (${group.length} comments) ---\n\n${lines}`);
 	}

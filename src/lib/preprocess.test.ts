@@ -87,8 +87,16 @@ describe('formatCommentsForPrompt', () => {
 		const text = formatCommentsForPrompt(comments);
 		expect(text).toContain('--- Hacker News');
 		expect(text).toContain('--- Reddit');
-		expect(text).toContain('[42 pts] alice: Great!');
+		expect(text).toContain('[42 replies] alice: Great!');
 		expect(text).toContain('[10 pts] bob: Interesting');
+	});
+
+	it('labels HN scores as replies, since HN publishes no comment points', () => {
+		const text = formatCommentsForPrompt([
+			makeComment({ platform: 'hn', author: 'alice', score: 1, text: 'One reply' }),
+		]);
+		expect(text).toContain('[1 reply] alice: One reply');
+		expect(text).not.toContain('pts');
 	});
 
 	it('includes Lobsters section', () => {
@@ -103,7 +111,7 @@ describe('formatCommentsForPrompt', () => {
 			makeComment({ id: '1nooby', platform: 'lobsters', author: 'mxey', score: 15, text: 'Hmm' }),
 		];
 		const text = formatCommentsForPrompt(comments);
-		expect(text).toContain('[hn:44239571] [42 pts] alice: Great!');
+		expect(text).toContain('[hn:44239571] [42 replies] alice: Great!');
 		expect(text).toContain('[lo:1nooby] [15 pts] mxey: Hmm');
 	});
 });

@@ -20,9 +20,12 @@ export function renderMarkdown(text: string): string {
 		escapeHtml(text)
 			.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
 			.replace(
-				/\[([^\]]+)\]\(([^)]+)\)/g,
+				/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,
 				'<a href="$2" target="_blank" rel="noopener noreferrer" class="text-sky-700 underline decoration-sky-300 underline-offset-4 hover:text-sky-900">$1</a>',
 			)
+			// Summaries are model output over untrusted comments: any other scheme
+			// (javascript:, data:, relative) keeps its label and loses the link.
+			.replace(/\[([^\]]+)\]\(([^)]*)\)/g, '$1')
 			// `**foo [hn:1] bar**` splits into two text segments, so the pair above can
 			// no longer match. Drop what is left rather than showing literal asterisks.
 			.replaceAll('**', '')

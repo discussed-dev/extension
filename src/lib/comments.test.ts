@@ -1,37 +1,109 @@
 import { type Mock, beforeEach, describe, expect, it, vi } from 'vitest';
+import { fakeBrowser } from 'wxt/testing/fake-browser';
 import { fetchHnComments, fetchLobstersComments, fetchRedditComments } from './comments';
 
 const mockFetch = vi.fn() as Mock;
 vi.stubGlobal('fetch', mockFetch);
 
+const ALGOLIA = 'https://hn.algolia.com/';
+const FIREBASE = 'https://hacker-news.firebaseio.com/';
+
+type HnNode = { id: number; author?: string; text?: string; children?: HnNode[] };
+
+/** Route HN requests by host; `kids` undefined means the HN API request fails at the network level. */
+function mockHn(tree: HnNode, kids?: number[] | 'http-error') {
+	mockFetch.mockImplementation(async (url: string) => {
+		if (url.startsWith(ALGOLIA)) return { ok: true, json: async () => tree };
+		if (url.startsWith(FIREBASE)) {
+			if (kids === undefined) throw new TypeError('Failed to fetch');
+			if (kids === 'http-error') return { ok: false, status: 503 };
+			return { ok: true, json: async () => ({ id: tree.id, kids }) };
+		}
+		throw new Error(`unexpected url ${url}`);
+	});
+}
+
+const node = (id: number, children: HnNode[] = []): HnNode => ({
+	id,
+	author: `u${id}`,
+	text: `comment ${id}`,
+	children,
+});
+
+/** Algolia returns top-level comments oldest first: 2 (no replies), 3 (one reply), 4 (two replies). */
+const chronological: HnNode = {
+	id: 1,
+	children: [node(2), node(3, [node(30)]), node(4, [node(40, [node(41)])])],
+};
+
+function firebaseCalls(): number {
+	return mockFetch.mock.calls.filter(([url]) => String(url).startsWith(FIREBASE)).length;
+}
+
 describe('fetchHnComments', () => {
-	beforeEach(() => mockFetch.mockReset());
+	beforeEach(() => {
+		mockFetch.mockReset();
+		fakeBrowser.reset();
+	});
+
+	it('orders top-level threads by the HN ranking, not by time', async () => {
+		mockHn(chronological, [3, 2, 4]);
+		const comments = await fetchHnComments('1');
+		expect(comments.map((c) => c.id)).toEqual(['3', '30', '2', '4', '40', '41']);
+	});
+
+	it('scores each comment by the number of replies beneath it', async () => {
+		mockHn(chronological, [2, 3, 4]);
+		const scores = Object.fromEntries((await fetchHnComments('1')).map((c) => [c.id, c.score]));
+		expect(scores).toEqual({ '2': 0, '3': 1, '30': 0, '4': 2, '40': 1, '41': 0 });
+	});
+
+	it('puts threads missing from the HN ranking after the ranked ones', async () => {
+		mockHn(chronological, [4]);
+		const ids = (await fetchHnComments('1')).filter((c) => c.depth === 1).map((c) => c.id);
+		expect(ids).toEqual(['4', '3', '2']);
+	});
+
+	it('falls back to reply count when the HN API is unreachable, then skips it', async () => {
+		mockHn(chronological);
+		const ids = (await fetchHnComments('1')).filter((c) => c.depth === 1).map((c) => c.id);
+		expect(ids).toEqual(['4', '3', '2']);
+		expect(firebaseCalls()).toBe(1);
+
+		await fetchHnComments('1');
+		expect(firebaseCalls()).toBe(1);
+	});
+
+	it('falls back on an HTTP error without skipping the HN API next time', async () => {
+		mockHn(chronological, 'http-error');
+		const ids = (await fetchHnComments('1')).filter((c) => c.depth === 1).map((c) => c.id);
+		expect(ids).toEqual(['4', '3', '2']);
+
+		await fetchHnComments('1');
+		expect(firebaseCalls()).toBe(2);
+	});
+
+	it('does not query the HN API with a non-numeric story id', async () => {
+		mockHn(chronological, [2, 3, 4]);
+		await fetchHnComments('1/../x');
+		expect(firebaseCalls()).toBe(0);
+	});
 
 	it('flattens HN comment tree', async () => {
-		mockFetch.mockResolvedValueOnce({
-			ok: true,
-			json: () =>
-				Promise.resolve({
-					id: 1,
-					children: [
-						{
-							id: 2,
-							author: 'alice',
-							text: 'Great post!',
-							points: 10,
-							children: [
-								{
-									id: 3,
-									author: 'bob',
-									text: 'I agree',
-									points: 5,
-									children: [],
-								},
-							],
-						},
-					],
-				}),
-		});
+		mockHn(
+			{
+				id: 1,
+				children: [
+					{
+						id: 2,
+						author: 'alice',
+						text: 'Great post!',
+						children: [{ id: 3, author: 'bob', text: 'I agree', children: [] }],
+					},
+				],
+			},
+			[2],
+		);
 
 		const comments = await fetchHnComments('1');
 		expect(comments).toHaveLength(2);
@@ -40,14 +112,10 @@ describe('fetchHnComments', () => {
 	});
 
 	it('carries a ref and an item permalink', async () => {
-		mockFetch.mockResolvedValueOnce({
-			ok: true,
-			json: () =>
-				Promise.resolve({
-					id: 1,
-					children: [{ id: 44239571, author: 'alice', text: 'Great post!', points: 10 }],
-				}),
-		});
+		mockHn(
+			{ id: 1, children: [{ id: 44239571, author: 'alice', text: 'Great post!' }] },
+			[44239571],
+		);
 
 		const [comment] = await fetchHnComments('1');
 		expect(comment.ref).toBe('hn:44239571');
@@ -55,7 +123,11 @@ describe('fetchHnComments', () => {
 	});
 
 	it('returns empty on failure', async () => {
-		mockFetch.mockResolvedValueOnce({ ok: false, status: 500 });
+		mockFetch.mockImplementation(async (url: string) =>
+			url.startsWith(ALGOLIA)
+				? { ok: false, status: 500 }
+				: { ok: true, json: async () => ({ kids: [] }) },
+		);
 		expect(await fetchHnComments('1')).toEqual([]);
 	});
 });

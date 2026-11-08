@@ -103,6 +103,22 @@ function buildUserMessage(commentsText: string, options: SummarizeOptions): stri
 
 // --- Anthropic ---
 
+/**
+ * Claude 5 models think by default, and thinking tokens count toward
+ * `max_tokens`, so an unconfigured request can spend its budget before any
+ * summary text. Turn thinking off with the lowest value each model accepts;
+ * a wrong value is a 400. Opus 5.5 and Fable reject every off switch, Claude 4
+ * models already default to off, and unknown IDs get no field.
+ * Source: platform.claude.com/docs/en/build-with-claude/thinking (per-model table).
+ */
+export function anthropicThinking(
+	model: string,
+): { type: 'disabled' | 'between_tools' } | undefined {
+	if (/^claude-sonnet-5-5$/.test(model)) return { type: 'between_tools' };
+	if (/^claude-(sonnet-5|opus-5|haiku-5-5)$/.test(model)) return { type: 'disabled' };
+	return undefined;
+}
+
 async function summarizeAnthropic(
 	commentsText: string,
 	options: SummarizeOptions,
@@ -117,7 +133,9 @@ async function summarizeAnthropic(
 		},
 		body: JSON.stringify({
 			model: options.model,
-			max_tokens: 1024,
+			// Headroom for models whose thinking cannot be turned off; billing is per token used.
+			max_tokens: 4096,
+			thinking: anthropicThinking(options.model),
 			system: buildSystemPrompt(
 				options.language ?? 'en',
 				!!options.articleContext,
@@ -149,13 +167,14 @@ async function summarizeAnthropic(
 
 // --- OpenAI-compatible (OpenAI, Groq, Together, local, etc.) ---
 
-// GPT-5 family and o-series (o1/o3/o4) reject `max_tokens` and require
-// `max_completion_tokens` instead. Older models (gpt-4.1, gpt-4o, etc.) and
-// most non-OpenAI providers (Groq, DeepSeek, Ollama) still expect `max_tokens`.
-// OpenRouter prefixes vendor (e.g. `openai/gpt-5.4-mini`), so strip that first.
+// Reasoning models: GPT-5 and later, the o-series (o1/o3/o4), and the open-weight
+// gpt-oss models Groq serves. OpenAI's reasoning models reject `max_tokens`;
+// Groq documents only `max_completion_tokens` for gpt-oss. Older models (gpt-4.1,
+// gpt-4o, etc.) and most non-OpenAI providers (DeepSeek, Ollama) still expect
+// `max_tokens`. OpenRouter prefixes vendor (e.g. `openai/gpt-5.4-mini`), so strip that first.
 export function needsMaxCompletionTokens(model: string): boolean {
 	const name = model.split('/').pop() ?? model;
-	return /^(gpt-5|o\d)([.\-]|$)/.test(name);
+	return /^(gpt-([5-9]|\d{2,})|o\d|gpt-oss)([.\-]|$)/.test(name);
 }
 
 async function summarizeOpenai(
@@ -166,11 +185,12 @@ async function summarizeOpenai(
 
 	// Reasoning models: max_completion_tokens INCLUDES internal reasoning
 	// tokens. With effort=medium (default), 1024 was burned before any output
-	// could be emitted, returning empty content. Use 'minimal' effort
-	// (summarization doesn't need deep reasoning) plus a roomier ceiling.
+	// could be emitted, returning empty content. Use 'low' effort (summarization
+	// doesn't need deep reasoning) plus a roomier ceiling. 'minimal' is not
+	// accepted by gpt-5.4 and later; 'low' is accepted by GPT-5, the o-series and gpt-oss.
 	const reasoning = needsMaxCompletionTokens(options.model);
 	const extraParams = reasoning
-		? { max_completion_tokens: 4096, reasoning_effort: 'minimal' as const }
+		? { max_completion_tokens: 4096, reasoning_effort: 'low' as const }
 		: { max_tokens: 1024 };
 
 	const response = await fetch(`${baseUrl}/chat/completions`, {

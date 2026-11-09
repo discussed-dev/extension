@@ -2,6 +2,19 @@
 
 This file lists what changed for users in each release of Discussed. Each entry is also the GitHub Release notes for that version and appears at [discussed.dev/changelog](https://discussed.dev/changelog).
 
+## 0.5.6 (2026-11-09)
+
+Reddit results show current scores and comment counts again.
+
+### Improved
+
+- Every Reddit lookup now also sends the page address to the Arctic Shift archive, not only when Reddit refuses. The archive finds posts submitted under other spellings of the address.
+- When you open many pages in a few minutes, Discussed stops asking Reddit until Reddit's rate limit resets and shows archived results meanwhile. This keeps your own Reddit use within the limit.
+
+### Fixed
+
+- In early November Reddit started refusing the search Discussed used, even for signed-in users, so Reddit results came only from the Arctic Shift archive, with old scores and without the newest posts. Discussed now looks up the page's exact address on Reddit, so scores, comment counts and new posts are current.
+
 ## 0.5.5 (2026-11-08)
 
 Summaries focus on the discussion, and settings no longer offer AI models that their providers have shut down.

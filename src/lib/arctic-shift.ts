@@ -27,14 +27,14 @@ function prefixVariants(url: string): string[] {
 	return [bare.toString(), www.toString()];
 }
 
-async function queryPrefix(prefix: string): Promise<ArchivedPost[]> {
+async function queryPrefix(prefix: string, signal?: AbortSignal): Promise<ArchivedPost[]> {
 	const params = new URLSearchParams({
 		url: prefix,
 		url_exact: 'false',
 		limit: '100',
 		fields: FIELDS,
 	});
-	const response = await fetch(`${ARCHIVE_SEARCH}?${params}`);
+	const response = await fetch(`${ARCHIVE_SEARCH}?${params}`, { signal });
 	if (!response.ok) throw new Error(`Reddit archive search failed: ${response.status}`);
 	const body: { data: ArchivedPost[] | null } = await response.json();
 	return body.data ?? [];
@@ -43,10 +43,13 @@ async function queryPrefix(prefix: string): Promise<ArchivedPost[]> {
 export async function searchRedditArchive(
 	url: string,
 	options: RedditSearchOptions = {},
+	signal?: AbortSignal,
 ): Promise<Discussion[]> {
 	// Two requests in parallel stays within the archive's couple-per-second guidance and keeps
 	// the fallback inside discovery's per-source timeout (each request takes about a second).
-	const batches = await Promise.all(prefixVariants(url).map(queryPrefix));
+	const batches = await Promise.all(
+		prefixVariants(url).map((prefix) => queryPrefix(prefix, signal)),
+	);
 	const byId = new Map<string, ArchivedPost>();
 	for (const post of batches.flat()) byId.set(post.id, post);
 

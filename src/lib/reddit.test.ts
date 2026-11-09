@@ -142,7 +142,11 @@ describe('searchReddit', () => {
 		await expect(searchReddit('https://example.com', { exactMatch: true })).resolves.toEqual([
 			ARCHIVED,
 		]);
-		expect(archiveMock).toHaveBeenCalledWith('https://example.com', { exactMatch: true });
+		expect(archiveMock).toHaveBeenCalledWith(
+			'https://example.com',
+			{ exactMatch: true },
+			expect.any(AbortSignal),
+		);
 	});
 
 	it('uses the archive when Reddit cannot be reached', async () => {
@@ -178,6 +182,55 @@ describe('searchReddit', () => {
 
 		const results = await searchReddit('https://example.com');
 		expect(results.map((d) => d.externalId)).toEqual(['t3_abc123']);
+	});
+
+	it('keeps what other spellings found when one lookup is rate-limited', async () => {
+		mockFetch
+			.mockResolvedValueOnce({ ok: false, status: 429 })
+			.mockResolvedValue(redditResponse([POST]));
+
+		const results = await searchReddit('https://example.com/page');
+		expect(results.map((d) => d.externalId)).toEqual(['t3_abc123']);
+	});
+
+	it('returns live results without waiting out a hung archive', async () => {
+		vi.useFakeTimers();
+		try {
+			mockFetch.mockResolvedValue(redditResponse([POST]));
+			archiveMock.mockImplementationOnce(
+				(_url, _options, signal) =>
+					new Promise((_resolve, reject) => {
+						signal?.addEventListener('abort', () => reject(signal.reason));
+					}),
+			);
+
+			const pending = searchReddit('https://example.com');
+			await vi.advanceTimersByTimeAsync(3000);
+
+			await expect(pending).resolves.toHaveLength(1);
+		} finally {
+			vi.useRealTimers();
+		}
+	});
+
+	it('gives up on a hung Reddit lookup and keeps the archive results', async () => {
+		vi.useFakeTimers();
+		try {
+			mockFetch.mockImplementation(
+				(_url: string, init: RequestInit) =>
+					new Promise((_resolve, reject) => {
+						init.signal?.addEventListener('abort', () => reject(init.signal?.reason));
+					}),
+			);
+			archiveMock.mockResolvedValueOnce([ARCHIVED]);
+
+			const pending = searchReddit('https://example.com');
+			await vi.advanceTimersByTimeAsync(3000);
+
+			await expect(pending).resolves.toEqual([ARCHIVED]);
+		} finally {
+			vi.useRealTimers();
+		}
 	});
 
 	it('keeps the sign-in error when the archive also fails', async () => {

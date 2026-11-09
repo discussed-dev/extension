@@ -2,6 +2,7 @@ import { type Mock, beforeEach, describe, expect, it, vi } from 'vitest';
 import { PermissionRequiredError, SignInRequiredError } from './errors';
 import { searchReddit } from './reddit';
 import { hasRedditSearchAccess } from './reddit-access';
+import { redditRateGuard } from './reddit-rate';
 
 import { searchRedditArchive } from './arctic-shift';
 
@@ -13,9 +14,15 @@ const archiveMock = vi.mocked(searchRedditArchive);
 const mockFetch = vi.fn() as Mock;
 vi.stubGlobal('fetch', mockFetch);
 
-function redditResponse(posts: Record<string, unknown>[]) {
+function failure(status: number, headers: Record<string, string> = {}) {
+	return { ok: false, status, headers: new Headers(headers) };
+}
+
+function redditResponse(posts: Record<string, unknown>[], headers: Record<string, string> = {}) {
 	return {
 		ok: true,
+		status: 200,
+		headers: new Headers(headers),
 		json: () =>
 			Promise.resolve({
 				kind: 'Listing',
@@ -55,6 +62,7 @@ describe('searchReddit', () => {
 		accessMock.mockResolvedValue(true);
 		archiveMock.mockReset();
 		archiveMock.mockRejectedValue(new Error('archive down'));
+		redditRateGuard.reset();
 	});
 
 	it('returns discussions from Reddit', async () => {
@@ -128,7 +136,7 @@ describe('searchReddit', () => {
 	});
 
 	it('throws on fetch failure so the source is marked unavailable', async () => {
-		mockFetch.mockResolvedValue({ ok: false, status: 429 });
+		mockFetch.mockResolvedValue(failure(429));
 
 		const error = await searchReddit('https://example.com').catch((e: unknown) => e);
 		expect(error).toBeInstanceOf(Error);
@@ -136,7 +144,7 @@ describe('searchReddit', () => {
 	});
 
 	it('uses the archive when Reddit refuses the lookup', async () => {
-		mockFetch.mockResolvedValue({ ok: false, status: 403 });
+		mockFetch.mockResolvedValue(failure(403));
 		archiveMock.mockResolvedValueOnce([ARCHIVED]);
 
 		await expect(searchReddit('https://example.com', { exactMatch: true })).resolves.toEqual([
@@ -185,9 +193,7 @@ describe('searchReddit', () => {
 	});
 
 	it('keeps what other spellings found when one lookup is rate-limited', async () => {
-		mockFetch
-			.mockResolvedValueOnce({ ok: false, status: 429 })
-			.mockResolvedValue(redditResponse([POST]));
+		mockFetch.mockResolvedValueOnce(failure(429)).mockResolvedValue(redditResponse([POST]));
 
 		const results = await searchReddit('https://example.com/page');
 		expect(results.map((d) => d.externalId)).toEqual(['t3_abc123']);
@@ -233,8 +239,30 @@ describe('searchReddit', () => {
 		}
 	});
 
+	it('leaves Reddit alone and answers from the archive once its rate budget runs low', async () => {
+		mockFetch.mockResolvedValue(
+			redditResponse([POST], { 'x-ratelimit-remaining': '2.0', 'x-ratelimit-reset': '300' }),
+		);
+		await searchReddit('https://example.com/page');
+		mockFetch.mockClear();
+		archiveMock.mockResolvedValueOnce([ARCHIVED]);
+
+		await expect(searchReddit('https://example.com/other')).resolves.toEqual([ARCHIVED]);
+		expect(mockFetch).not.toHaveBeenCalled();
+	});
+
+	it('leaves Reddit alone after a 429', async () => {
+		mockFetch.mockResolvedValue(failure(429, { 'x-ratelimit-reset': '60' }));
+		await searchReddit('https://example.com/page').catch(() => undefined);
+		mockFetch.mockClear();
+		archiveMock.mockResolvedValueOnce([]);
+
+		await searchReddit('https://example.com/other');
+		expect(mockFetch).not.toHaveBeenCalled();
+	});
+
 	it('keeps the sign-in error when the archive also fails', async () => {
-		mockFetch.mockResolvedValue({ ok: false, status: 403 });
+		mockFetch.mockResolvedValue(failure(403));
 
 		await expect(searchReddit('https://example.com')).rejects.toBeInstanceOf(SignInRequiredError);
 	});
@@ -260,7 +288,7 @@ describe('searchReddit', () => {
 	});
 
 	it('throws SignInRequiredError on 403 (Reddit blocks logged-out JSON access)', async () => {
-		mockFetch.mockResolvedValue({ ok: false, status: 403 });
+		mockFetch.mockResolvedValue(failure(403));
 
 		await expect(searchReddit('https://example.com')).rejects.toBeInstanceOf(SignInRequiredError);
 	});

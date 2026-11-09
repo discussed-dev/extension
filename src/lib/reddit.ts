@@ -2,6 +2,7 @@ import { searchRedditArchive } from './arctic-shift';
 import { PermissionRequiredError, SignInRequiredError } from './errors';
 import { hasRedditSearchAccess } from './reddit-access';
 import { type RedditSearchOptions, postMatchesTarget } from './reddit-match';
+import { redditRateGuard } from './reddit-rate';
 import type { Discussion } from './types';
 
 interface RedditPost {
@@ -93,6 +94,7 @@ async function lookupSpelling(spelling: string, signal: AbortSignal): Promise<Re
 		headers: { 'User-Agent': 'web:discussed:v0.1.0 (https://discussed.dev)' },
 		signal,
 	});
+	redditRateGuard.observe(response);
 	// Reddit answers logged-out JSON requests with 403; the user's session cookie passes.
 	if (response.status === 403) throw new SignInRequiredError('reddit');
 	if (!response.ok) throw new Error(`Reddit lookup failed: ${response.status}`);
@@ -106,6 +108,7 @@ async function searchLive(
 	options: RedditSearchOptions,
 	signal: AbortSignal,
 ): Promise<Discussion[]> {
+	if (redditRateGuard.isPaused()) throw new Error('Reddit rate limit reached; waiting for reset');
 	const lookups = await Promise.allSettled(
 		exactSpellings(url).map((spelling) => lookupSpelling(spelling, signal)),
 	);

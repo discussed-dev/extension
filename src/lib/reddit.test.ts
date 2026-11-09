@@ -37,6 +37,17 @@ const POST = {
 	permalink: '/r/programming/comments/abc123/example_post/',
 };
 
+const ARCHIVED = {
+	platform: 'reddit' as const,
+	title: 'Archived post',
+	url: 'https://www.reddit.com/r/programming/comments/old999',
+	points: 7,
+	commentCount: 3,
+	createdAt: '2020-01-01T00:00:00.000Z',
+	externalId: 't3_old999',
+	subreddit: 'programming',
+};
+
 describe('searchReddit', () => {
 	beforeEach(() => {
 		mockFetch.mockReset();
@@ -46,8 +57,8 @@ describe('searchReddit', () => {
 		archiveMock.mockRejectedValue(new Error('archive down'));
 	});
 
-	it('returns discussions from Reddit search', async () => {
-		mockFetch.mockResolvedValueOnce(redditResponse([POST]));
+	it('returns discussions from Reddit', async () => {
+		mockFetch.mockResolvedValue(redditResponse([POST]));
 
 		const results = await searchReddit('https://example.com');
 
@@ -64,71 +75,125 @@ describe('searchReddit', () => {
 		});
 	});
 
-	it('queries Reddit with url: prefix', async () => {
-		mockFetch.mockResolvedValueOnce(redditResponse([]));
+	it('looks up each host and trailing-slash spelling on the exact-URL index, since search.json is blocked', async () => {
+		mockFetch.mockResolvedValue(redditResponse([]));
 
 		await searchReddit('https://example.com/page');
 
-		const calledUrl = new URL(mockFetch.mock.calls[0][0]);
-		expect(calledUrl.hostname).toBe('old.reddit.com');
-		expect(calledUrl.pathname).toBe('/search.json');
-		expect(calledUrl.searchParams.get('q')).toBe('url:https://example.com/page');
-		expect(calledUrl.searchParams.get('sort')).toBe('top');
+		const queried = mockFetch.mock.calls.map(([u]) => new URL(u as string));
+		expect(queried.every((u) => u.origin === 'https://old.reddit.com')).toBe(true);
+		expect(queried.every((u) => u.pathname === '/api/info.api')).toBe(true);
+		expect(queried.map((u) => u.searchParams.get('url')).sort()).toEqual([
+			'https://example.com/page',
+			'https://example.com/page/',
+			'https://www.example.com/page',
+			'https://www.example.com/page/',
+		]);
+	});
+
+	it('does not ask for a duplicate spelling of a root URL', async () => {
+		mockFetch.mockResolvedValue(redditResponse([]));
+
+		await searchReddit('https://example.com/');
+
+		const spellings = mockFetch.mock.calls.map(([u]) =>
+			new URL(u as string).searchParams.get('url'),
+		);
+		expect(spellings.sort()).toEqual(['https://example.com/', 'https://www.example.com/']);
+	});
+
+	it('keeps the query string after the trailing slash', async () => {
+		mockFetch.mockResolvedValue(redditResponse([]));
+
+		await searchReddit('https://example.com/watch?v=1');
+
+		const spellings = mockFetch.mock.calls.map(([u]) =>
+			new URL(u as string).searchParams.get('url'),
+		);
+		expect(spellings).toContain('https://example.com/watch/?v=1');
+	});
+
+	it('reports a post found under several spellings once', async () => {
+		mockFetch.mockResolvedValue(redditResponse([POST]));
+
+		const results = await searchReddit('https://example.com/page', { exactMatch: false });
+		expect(results).toHaveLength(1);
 	});
 
 	it('returns empty array on no results', async () => {
-		mockFetch.mockResolvedValueOnce(redditResponse([]));
+		mockFetch.mockResolvedValue(redditResponse([]));
 
 		const results = await searchReddit('https://nothing.example.com');
 		expect(results).toEqual([]);
 	});
 
 	it('throws on fetch failure so the source is marked unavailable', async () => {
-		mockFetch.mockResolvedValueOnce({ ok: false, status: 429 });
+		mockFetch.mockResolvedValue({ ok: false, status: 429 });
 
 		const error = await searchReddit('https://example.com').catch((e: unknown) => e);
 		expect(error).toBeInstanceOf(Error);
 		expect(error).not.toBeInstanceOf(SignInRequiredError);
 	});
 
-	it('falls back to the archive when Reddit refuses the search', async () => {
-		mockFetch.mockResolvedValueOnce({ ok: false, status: 403 });
-		const archived = [
-			{
-				platform: 'reddit' as const,
-				title: 'A',
-				url: 'u',
-				points: 1,
-				commentCount: 1,
-				createdAt: 'c',
-				externalId: 't3_a',
-			},
-		];
-		archiveMock.mockResolvedValueOnce(archived);
+	it('uses the archive when Reddit refuses the lookup', async () => {
+		mockFetch.mockResolvedValue({ ok: false, status: 403 });
+		archiveMock.mockResolvedValueOnce([ARCHIVED]);
 
-		await expect(searchReddit('https://example.com', { exactMatch: true })).resolves.toBe(archived);
+		await expect(searchReddit('https://example.com', { exactMatch: true })).resolves.toEqual([
+			ARCHIVED,
+		]);
 		expect(archiveMock).toHaveBeenCalledWith('https://example.com', { exactMatch: true });
 	});
 
-	it('falls back to the archive when Reddit cannot be reached', async () => {
-		mockFetch.mockRejectedValueOnce(new TypeError('Failed to fetch'));
+	it('uses the archive when Reddit cannot be reached', async () => {
+		mockFetch.mockRejectedValue(new TypeError('Failed to fetch'));
 		archiveMock.mockResolvedValueOnce([]);
 
 		await expect(searchReddit('https://example.com')).resolves.toEqual([]);
 	});
 
+	it('queries Reddit and the archive together and merges what both found', async () => {
+		mockFetch.mockResolvedValue(redditResponse([POST]));
+		archiveMock.mockResolvedValueOnce([ARCHIVED]);
+
+		const results = await searchReddit('https://example.com');
+
+		expect(results.map((d) => d.externalId)).toEqual(['t3_abc123', 't3_old999']);
+	});
+
+	it("prefers Reddit's live counts over the archive snapshot for the same post", async () => {
+		mockFetch.mockResolvedValue(redditResponse([POST]));
+		archiveMock.mockResolvedValueOnce([
+			{ ...ARCHIVED, externalId: 't3_abc123', points: 3, commentCount: 0 },
+		]);
+
+		const results = await searchReddit('https://example.com');
+
+		expect(results).toHaveLength(1);
+		expect(results[0]).toMatchObject({ points: 500, commentCount: 42 });
+	});
+
+	it('returns live results when only the archive fails', async () => {
+		mockFetch.mockResolvedValue(redditResponse([POST]));
+
+		const results = await searchReddit('https://example.com');
+		expect(results.map((d) => d.externalId)).toEqual(['t3_abc123']);
+	});
+
 	it('keeps the sign-in error when the archive also fails', async () => {
-		mockFetch.mockResolvedValueOnce({ ok: false, status: 403 });
+		mockFetch.mockResolvedValue({ ok: false, status: 403 });
 
 		await expect(searchReddit('https://example.com')).rejects.toBeInstanceOf(SignInRequiredError);
 	});
 
-	it('sends the Reddit session cookie with the search request', async () => {
-		mockFetch.mockResolvedValueOnce(redditResponse([]));
+	it('sends the Reddit session cookie with each lookup', async () => {
+		mockFetch.mockResolvedValue(redditResponse([]));
 
 		await searchReddit('https://example.com');
 
-		expect(mockFetch.mock.calls[0][1]).toMatchObject({ credentials: 'include' });
+		for (const [, init] of mockFetch.mock.calls) {
+			expect(init).toMatchObject({ credentials: 'include' });
+		}
 	});
 
 	it('throws PermissionRequiredError without fetching when old.reddit.com access is not granted', async () => {
@@ -138,22 +203,23 @@ describe('searchReddit', () => {
 			PermissionRequiredError,
 		);
 		expect(mockFetch).not.toHaveBeenCalled();
+		expect(archiveMock).not.toHaveBeenCalled();
 	});
 
 	it('throws SignInRequiredError on 403 (Reddit blocks logged-out JSON access)', async () => {
-		mockFetch.mockResolvedValueOnce({ ok: false, status: 403 });
+		mockFetch.mockResolvedValue({ ok: false, status: 403 });
 
 		await expect(searchReddit('https://example.com')).rejects.toBeInstanceOf(SignInRequiredError);
 	});
 
 	it('throws on network error so the source is marked unavailable', async () => {
-		mockFetch.mockRejectedValueOnce(new Error('Network error'));
+		mockFetch.mockRejectedValue(new Error('Network error'));
 
 		await expect(searchReddit('https://example.com')).rejects.toThrow();
 	});
 
 	it('filters out unrelated domains when exactMatch is off', async () => {
-		mockFetch.mockResolvedValueOnce(
+		mockFetch.mockResolvedValue(
 			redditResponse([
 				{
 					...POST,
@@ -167,16 +233,14 @@ describe('searchReddit', () => {
 	});
 
 	it('keeps results with matching domain when exactMatch is off', async () => {
-		mockFetch.mockResolvedValueOnce(
-			redditResponse([{ ...POST, url: 'https://fast.com/some/page' }]),
-		);
+		mockFetch.mockResolvedValue(redditResponse([{ ...POST, url: 'https://fast.com/some/page' }]));
 
 		const results = await searchReddit('https://fast.com/');
 		expect(results).toHaveLength(1);
 	});
 
 	it('keeps results with subdomain match when exactMatch is off', async () => {
-		mockFetch.mockResolvedValueOnce(
+		mockFetch.mockResolvedValue(
 			redditResponse([{ ...POST, url: 'https://en.wikipedia.org/wiki/Example' }]),
 		);
 
@@ -185,14 +249,14 @@ describe('searchReddit', () => {
 	});
 
 	it('keeps results with reverse subdomain match when exactMatch is off', async () => {
-		mockFetch.mockResolvedValueOnce(redditResponse([{ ...POST, url: 'https://example.com/page' }]));
+		mockFetch.mockResolvedValue(redditResponse([{ ...POST, url: 'https://example.com/page' }]));
 
 		const results = await searchReddit('https://blog.example.com/page');
 		expect(results).toHaveLength(1);
 	});
 
 	it('filters posts with null url when exactMatch is off', async () => {
-		mockFetch.mockResolvedValueOnce(redditResponse([{ ...POST, url: null }]));
+		mockFetch.mockResolvedValue(redditResponse([{ ...POST, url: null }]));
 
 		const results = await searchReddit('https://example.com');
 		expect(results).toEqual([]);

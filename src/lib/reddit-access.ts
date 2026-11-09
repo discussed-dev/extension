@@ -1,9 +1,9 @@
 import { browser } from 'wxt/browser';
 
 /**
- * Since 2026-10-20 www.reddit.com blocks /search.json even for signed-in users; old.reddit.com
- * still answers with the session. It is an optional permission so existing installs are not
- * disabled by a permission escalation on update.
+ * Since 2026-10-20 www.reddit.com blocks /search.json even for signed-in users; old.reddit.com's
+ * exact-URL index still answers with the session. It is an optional permission so existing
+ * installs are not disabled by a permission escalation on update.
  */
 // Keep in sync with optional host permissions in wxt.config.ts.
 export const REDDIT_SEARCH_ORIGINS = [

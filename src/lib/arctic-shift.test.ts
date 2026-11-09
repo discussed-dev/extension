@@ -74,4 +74,15 @@ describe('searchRedditArchive', () => {
 
 		await expect(searchRedditArchive('https://example.com/page')).rejects.toThrow('422');
 	});
+
+	it("passes the caller's abort signal to each request", async () => {
+		mockFetch.mockResolvedValue(archiveResponse([]));
+		const signal = new AbortController().signal;
+
+		await searchRedditArchive('https://example.com/page', {}, signal);
+
+		for (const [, init] of mockFetch.mock.calls) {
+			expect(init).toMatchObject({ signal });
+		}
+	});
 });

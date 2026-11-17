@@ -9,6 +9,14 @@
 	--color-canvas: #f4f5f7;
 }
 
+/* Tailwind v4 dropped v3's pointer cursor on buttons, leaving the browser's
+   arrow. Base layer, so cursor-* utilities (backdrops, disabled) still win. */
+@layer base {
+	button:not(:disabled) {
+		cursor: pointer;
+	}
+}
+
 :root {
 	color-scheme: light dark;
 	/* System UI faces only: nothing is bundled, so the stack names what will actually render. */

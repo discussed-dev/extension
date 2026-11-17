@@ -28,7 +28,7 @@ async function grant() {
     <button
       type="button"
       onclick={grant}
-      class="font-medium underline decoration-amber-300 hover:decoration-amber-600"
+      class="cursor-pointer font-medium underline decoration-amber-300 hover:decoration-amber-600"
     >
       {t('redditGrantAccess')}
     </button>
